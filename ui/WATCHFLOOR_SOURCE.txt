@@ -1,0 +1,20 @@
+Watchfloor HTML source extraction sidecar
+source_transcript: /tmp/cursor/cloud-agent-transcripts/2026-07-28T19-40-49Z-1d5e/bc-6050a0e6-1fc2-4ea6-bf34-0578a59010db/transcript.json
+source_message: latest user message containing <!DOCTYPE html> and 'watchfloor org — quant lab' (message index 256; identical to index 175)
+path: /workspace/ui/watchfloor.html
+byte_size: 156224
+sha256: 60b3121e69cb9c8a0067830c6fc5829e44c42f2d5b1f25f86ede0f700c6178ee
+all_checklist_passed: True
+
+checklist:
+  [PASS] starts_with_doctype
+  [PASS] ends_with_html
+  [PASS] contains_function_baseDivisions
+  [PASS] contains_renderBrief
+  [PASS] contains_renderMgrs
+  [PASS] contains_renderFeed
+  [PASS] contains_openAgent
+  [PASS] contains_Daily_Brief
+  [PASS] contains_My_Desk
+  [PASS] size_substantially_larger_than_145348
+
