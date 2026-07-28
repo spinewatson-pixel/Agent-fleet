@@ -1,0 +1,232 @@
+{
+  "agent_name": "Macro Regime Strategy",
+  "agent_id": "STRAT-MACRO-001",
+  "department": "Strategy",
+  "supervisory_agent_id": "SYS-ORCH-001",
+  "role": "strategy",
+  "strategy_and_rationale": "Allocate across index/sector ETFs conditional on macro regime (rates, inflation, growth) signals from research.",
+  "assets_and_markets_permitted": [
+    "ETFS_INDEX",
+    "ETFS_SECTOR",
+    "ETFS_RATES"
+  ],
+  "holding_period": "position_months",
+  "trading_frequency": "<= 2 rebalance proposals/week",
+  "valid_regimes": [
+    "risk_on",
+    "risk_off",
+    "any"
+  ],
+  "required_data_inputs": [
+    {
+      "source_id": "SRC-MKT-OHLCV",
+      "name": "Normalized OHLCV",
+      "category": "market_price",
+      "fields": [
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "latency_sla_ms": 1000,
+      "verified": true,
+      "notes": ""
+    }
+  ],
+  "indicators_features_models": [
+    "yield_curve_slope",
+    "real_rate",
+    "credit_spread",
+    "regime_label"
+  ],
+  "setup_detection_rules": [
+    {
+      "rule_id": "MACRO-SETUP-1",
+      "description": "Regime transition confirmed 2 releases",
+      "expression": "regime_label changed AND confirmed_by >= 2 macro_series",
+      "required": true
+    }
+  ],
+  "trade_rules": {
+    "entry": [
+      {
+        "rule_id": "MACRO-ENTRY-1",
+        "description": "Tilt to regime-favored ETF basket",
+        "expression": "proposal basket weights from regime map",
+        "required": true
+      }
+    ],
+    "exit": [
+      {
+        "rule_id": "MACRO-EXIT-1",
+        "description": "Exit tilt on regime reverse",
+        "expression": "regime_label reverses",
+        "required": true
+      }
+    ],
+    "stop_loss": [
+      {
+        "rule_id": "MACRO-STOP-1",
+        "description": "Book-level stop 4% on macro book",
+        "expression": "macro_book_drawdown >= 0.04",
+        "required": true
+      }
+    ],
+    "invalidation": [
+      {
+        "rule_id": "MACRO-INV-1",
+        "description": "Invalid if data vintage stale > 7d for monthly series",
+        "expression": "macro_series_staleness_days > 7",
+        "required": true
+      }
+    ]
+  },
+  "position_sizing_and_exposure": {
+    "method": "volatility_target_with_risk_cap",
+    "max_position_pct_nav": 0.1,
+    "max_risk_per_trade_pct_nav": 0.01,
+    "max_gross_exposure_pct_nav": 0.4,
+    "max_net_exposure_pct_nav": 0.3,
+    "max_sector_pct_nav": 0.15,
+    "max_correlated_group_pct_nav": 0.2,
+    "notes": ""
+  },
+  "information_received_from": [
+    {
+      "agent_id": "DATA-VAL-001",
+      "message_types": [
+        "data_validated"
+      ],
+      "required": true,
+      "description": "Validated market/news context"
+    },
+    {
+      "agent_id": "RSH-FUND-001",
+      "message_types": [
+        "research_note",
+        "signal"
+      ],
+      "required": false,
+      "description": "Fundamental/event research signals"
+    },
+    {
+      "agent_id": "RSH-QUANT-001",
+      "message_types": [
+        "signal"
+      ],
+      "required": false,
+      "description": "Quant feature signals"
+    },
+    {
+      "agent_id": "MON-REGIME-001",
+      "message_types": [
+        "alert"
+      ],
+      "required": true,
+      "description": "Regime classification updates"
+    }
+  ],
+  "outputs_sent_to": [
+    {
+      "agent_id": "SIG-VAL-001",
+      "message_types": [
+        "trade_proposal"
+      ],
+      "required": true,
+      "description": "Proposals for independent validation"
+    }
+  ],
+  "approval_requirements": [
+    "SIG-VAL-001 must pass",
+    "PORT-ALLOC-001 evaluation required",
+    "RISK-APPR-001 approval required",
+    "CAP-STEW-001 review for QUAL/long-term or elevated size"
+  ],
+  "execution_permissions": [],
+  "authorities": [
+    "propose"
+  ],
+  "monitoring_after_entry": [
+    "Track invalidation rules each bar",
+    "Emit alert on stop proximity",
+    "Do not modify size without new approved proposal"
+  ],
+  "memory_retained": [
+    "proposals",
+    "fired_setup_rules",
+    "regime_at_entry",
+    "outcomes_via_attribution_feed"
+  ],
+  "performance_measurements": [
+    {
+      "name": "hit_rate",
+      "definition": "winning_trades / closed_trades",
+      "target": null,
+      "gate": null
+    },
+    {
+      "name": "profit_factor",
+      "definition": "gross_wins / gross_losses",
+      "target": null,
+      "gate": "profit_factor >= 1.2 after 40 trades"
+    },
+    {
+      "name": "max_drawdown",
+      "definition": "peak-to-trough equity on strategy book",
+      "target": null,
+      "gate": "max_drawdown <= contract limit"
+    },
+    {
+      "name": "proposal_accept_rate",
+      "definition": "approved / proposed",
+      "target": "informational",
+      "gate": null
+    }
+  ],
+  "failure_and_shutdown": {
+    "on_data_outage": "pause_new_proposals; keep existing positions under monitor",
+    "on_model_failure": "disable agent; alert GOV-COMP-001 and SYS-ORCH-001",
+    "on_drawdown_breach": "halt agent proposals; RISK-APPR-001 may force flatten",
+    "on_permission_violation": "immediate shutdown; escalate to GOV-COMP-001",
+    "shutdown_triggers": [
+      "permission_violation",
+      "repeated_validation_failure>=5",
+      "strategy_drawdown>=limit",
+      "governance_halt"
+    ],
+    "recovery_requires": [
+      "incident_report",
+      "RISK-APPR-001 approval",
+      "GOV-COMP-001 approval",
+      "contract_version_bump"
+    ]
+  },
+  "testing_and_deployment_status": "design",
+  "strategy_version": "0.1.0",
+  "self_improvement_conditions": {
+    "may_propose_changes": true,
+    "may_alter_production_rules": false,
+    "required_steps": [
+      "document",
+      "statistical_test",
+      "out_of_sample_test",
+      "paper_trade",
+      "risk_review",
+      "version",
+      "approve",
+      "gradual_deploy"
+    ],
+    "min_oos_sharpe": null,
+    "min_paper_days": 20,
+    "requires_approvers": [
+      "RISK-APPR-001",
+      "GOV-COMP-001",
+      "SYS-ORCH-001"
+    ]
+  },
+  "environment": "paper",
+  "created_at": "2026-07-28T18:34:17.031914Z",
+  "updated_at": "2026-07-28T18:34:17.031914Z",
+  "notes": ""
+}

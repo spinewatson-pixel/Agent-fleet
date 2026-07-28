@@ -1,0 +1,12 @@
+# Risk limits — paper defaults (also encoded in RiskLimits)
+max_position_pct_nav: 0.05
+max_risk_per_trade_pct_nav: 0.005
+max_gross_exposure_pct_nav: 1.0
+max_net_exposure_pct_nav: 0.6
+max_sector_pct_nav: 0.25
+max_strategy_pct_nav: 0.30
+max_correlated_group_pct_nav: 0.35
+max_daily_loss_pct_nav: 0.02
+max_drawdown_pct_nav: 0.10
+min_cash_pct_nav: 0.05
+live_execution_enabled: false

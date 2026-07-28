@@ -1,0 +1,131 @@
+{
+  "agent_name": "Risk Approval",
+  "agent_id": "RISK-APPR-001",
+  "department": "Portfolio and Risk",
+  "supervisory_agent_id": "GOV-COMP-001",
+  "role": "risk",
+  "strategy_and_rationale": "Independent risk approval with veto; enforces firm limits, stress, drawdown, and emergency halt.",
+  "assets_and_markets_permitted": [
+    "*"
+  ],
+  "holding_period": "position_months",
+  "trading_frequency": "continuous_service",
+  "valid_regimes": [
+    "any"
+  ],
+  "required_data_inputs": [],
+  "indicators_features_models": [],
+  "setup_detection_rules": [],
+  "trade_rules": {
+    "entry": [],
+    "exit": [],
+    "stop_loss": [],
+    "invalidation": []
+  },
+  "position_sizing_and_exposure": {
+    "method": "n/a",
+    "max_position_pct_nav": 0.0,
+    "max_risk_per_trade_pct_nav": 0.0,
+    "max_gross_exposure_pct_nav": 0.0,
+    "max_net_exposure_pct_nav": 0.0,
+    "max_sector_pct_nav": 0.0,
+    "max_correlated_group_pct_nav": 0.0,
+    "notes": "Non-strategy agent"
+  },
+  "information_received_from": [],
+  "outputs_sent_to": [
+    {
+      "agent_id": "CAP-STEW-001",
+      "message_types": [
+        "risk_decision"
+      ],
+      "required": true,
+      "description": ""
+    },
+    {
+      "agent_id": "EXEC-PAPER-001",
+      "message_types": [
+        "risk_decision"
+      ],
+      "required": true,
+      "description": ""
+    },
+    {
+      "agent_id": "*",
+      "message_types": [
+        "emergency_halt"
+      ],
+      "required": true,
+      "description": ""
+    }
+  ],
+  "approval_requirements": [],
+  "execution_permissions": [],
+  "authorities": [
+    "approve",
+    "reject",
+    "reduce",
+    "pause",
+    "close",
+    "emergency_halt",
+    "version_approve"
+  ],
+  "monitoring_after_entry": [],
+  "memory_retained": [
+    "service_logs",
+    "audit_events"
+  ],
+  "performance_measurements": [
+    {
+      "name": "availability",
+      "definition": "uptime_ratio",
+      "target": null,
+      "gate": "availability >= 0.995"
+    }
+  ],
+  "failure_and_shutdown": {
+    "on_data_outage": "pause_new_proposals; keep existing positions under monitor",
+    "on_model_failure": "disable agent; alert GOV-COMP-001 and SYS-ORCH-001",
+    "on_drawdown_breach": "halt agent proposals; RISK-APPR-001 may force flatten",
+    "on_permission_violation": "immediate shutdown; escalate to GOV-COMP-001",
+    "shutdown_triggers": [
+      "permission_violation",
+      "repeated_validation_failure>=5",
+      "strategy_drawdown>=limit",
+      "governance_halt"
+    ],
+    "recovery_requires": [
+      "incident_report",
+      "RISK-APPR-001 approval",
+      "GOV-COMP-001 approval",
+      "contract_version_bump"
+    ]
+  },
+  "testing_and_deployment_status": "design",
+  "strategy_version": "0.1.0",
+  "self_improvement_conditions": {
+    "may_propose_changes": true,
+    "may_alter_production_rules": false,
+    "required_steps": [
+      "document",
+      "statistical_test",
+      "out_of_sample_test",
+      "paper_trade",
+      "risk_review",
+      "version",
+      "approve",
+      "gradual_deploy"
+    ],
+    "min_oos_sharpe": null,
+    "min_paper_days": 20,
+    "requires_approvers": [
+      "RISK-APPR-001",
+      "GOV-COMP-001",
+      "SYS-ORCH-001"
+    ]
+  },
+  "environment": "paper",
+  "created_at": "2026-07-28T18:34:17.031511Z",
+  "updated_at": "2026-07-28T18:34:17.031511Z",
+  "notes": ""
+}
