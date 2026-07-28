@@ -1,0 +1,232 @@
+{
+  "agent_name": "Trend Momentum Strategy",
+  "agent_id": "STRAT-MOM-001",
+  "department": "Strategy",
+  "supervisory_agent_id": "SYS-ORCH-001",
+  "role": "strategy",
+  "strategy_and_rationale": "Capture persistent price trends via dual moving-average and breakout confirmation; edge from underreaction to drift.",
+  "assets_and_markets_permitted": [
+    "US_EQUITIES_LIQUID",
+    "ETFS_INDEX"
+  ],
+  "holding_period": "swing_weeks",
+  "trading_frequency": "<= 5 new proposals/week/symbol universe slice",
+  "valid_regimes": [
+    "trending_up",
+    "trending_down",
+    "low_vol"
+  ],
+  "required_data_inputs": [
+    {
+      "source_id": "SRC-MKT-OHLCV",
+      "name": "Normalized OHLCV",
+      "category": "market_price",
+      "fields": [
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "latency_sla_ms": 1000,
+      "verified": true,
+      "notes": ""
+    }
+  ],
+  "indicators_features_models": [
+    "sma_50",
+    "sma_200",
+    "atr_14",
+    "volume_sma_20",
+    "donchian_20"
+  ],
+  "setup_detection_rules": [
+    {
+      "rule_id": "MOM-SETUP-1",
+      "description": "Golden/death cross with volume",
+      "expression": "(sma_50 crosses sma_200) AND volume > 1.2 * volume_sma_20",
+      "required": true
+    }
+  ],
+  "trade_rules": {
+    "entry": [
+      {
+        "rule_id": "MOM-ENTRY-1",
+        "description": "Enter in cross direction on close confirmation",
+        "expression": "close confirms cross AND close beyond donchian_20 in trend direction",
+        "required": true
+      }
+    ],
+    "exit": [
+      {
+        "rule_id": "MOM-EXIT-1",
+        "description": "Exit on opposite cross or trailing ATR stop",
+        "expression": "sma_50 cross opposite OR close < trail_stop_3atr",
+        "required": true
+      }
+    ],
+    "stop_loss": [
+      {
+        "rule_id": "MOM-STOP-1",
+        "description": "Initial stop 2.5 ATR from entry",
+        "expression": "stop = entry - 2.5 * atr_14 * direction",
+        "required": true
+      }
+    ],
+    "invalidation": [
+      {
+        "rule_id": "MOM-INV-1",
+        "description": "Invalid if regime flips to high-vol chop",
+        "expression": "regime in {high_vol, mean_reverting} for 3 sessions",
+        "required": true
+      }
+    ]
+  },
+  "position_sizing_and_exposure": {
+    "method": "volatility_target_with_risk_cap",
+    "max_position_pct_nav": 0.04,
+    "max_risk_per_trade_pct_nav": 0.004,
+    "max_gross_exposure_pct_nav": 0.3,
+    "max_net_exposure_pct_nav": 0.3,
+    "max_sector_pct_nav": 0.15,
+    "max_correlated_group_pct_nav": 0.2,
+    "notes": ""
+  },
+  "information_received_from": [
+    {
+      "agent_id": "DATA-VAL-001",
+      "message_types": [
+        "data_validated"
+      ],
+      "required": true,
+      "description": "Validated market/news context"
+    },
+    {
+      "agent_id": "RSH-FUND-001",
+      "message_types": [
+        "research_note",
+        "signal"
+      ],
+      "required": false,
+      "description": "Fundamental/event research signals"
+    },
+    {
+      "agent_id": "RSH-QUANT-001",
+      "message_types": [
+        "signal"
+      ],
+      "required": false,
+      "description": "Quant feature signals"
+    },
+    {
+      "agent_id": "MON-REGIME-001",
+      "message_types": [
+        "alert"
+      ],
+      "required": true,
+      "description": "Regime classification updates"
+    }
+  ],
+  "outputs_sent_to": [
+    {
+      "agent_id": "SIG-VAL-001",
+      "message_types": [
+        "trade_proposal"
+      ],
+      "required": true,
+      "description": "Proposals for independent validation"
+    }
+  ],
+  "approval_requirements": [
+    "SIG-VAL-001 must pass",
+    "PORT-ALLOC-001 evaluation required",
+    "RISK-APPR-001 approval required",
+    "CAP-STEW-001 review for QUAL/long-term or elevated size"
+  ],
+  "execution_permissions": [],
+  "authorities": [
+    "propose"
+  ],
+  "monitoring_after_entry": [
+    "Track invalidation rules each bar",
+    "Emit alert on stop proximity",
+    "Do not modify size without new approved proposal"
+  ],
+  "memory_retained": [
+    "proposals",
+    "fired_setup_rules",
+    "regime_at_entry",
+    "outcomes_via_attribution_feed"
+  ],
+  "performance_measurements": [
+    {
+      "name": "hit_rate",
+      "definition": "winning_trades / closed_trades",
+      "target": null,
+      "gate": null
+    },
+    {
+      "name": "profit_factor",
+      "definition": "gross_wins / gross_losses",
+      "target": null,
+      "gate": "profit_factor >= 1.2 after 40 trades"
+    },
+    {
+      "name": "max_drawdown",
+      "definition": "peak-to-trough equity on strategy book",
+      "target": null,
+      "gate": "max_drawdown <= contract limit"
+    },
+    {
+      "name": "proposal_accept_rate",
+      "definition": "approved / proposed",
+      "target": "informational",
+      "gate": null
+    }
+  ],
+  "failure_and_shutdown": {
+    "on_data_outage": "pause_new_proposals; keep existing positions under monitor",
+    "on_model_failure": "disable agent; alert GOV-COMP-001 and SYS-ORCH-001",
+    "on_drawdown_breach": "halt agent proposals; RISK-APPR-001 may force flatten",
+    "on_permission_violation": "immediate shutdown; escalate to GOV-COMP-001",
+    "shutdown_triggers": [
+      "permission_violation",
+      "repeated_validation_failure>=5",
+      "strategy_drawdown>=limit",
+      "governance_halt"
+    ],
+    "recovery_requires": [
+      "incident_report",
+      "RISK-APPR-001 approval",
+      "GOV-COMP-001 approval",
+      "contract_version_bump"
+    ]
+  },
+  "testing_and_deployment_status": "design",
+  "strategy_version": "0.1.0",
+  "self_improvement_conditions": {
+    "may_propose_changes": true,
+    "may_alter_production_rules": false,
+    "required_steps": [
+      "document",
+      "statistical_test",
+      "out_of_sample_test",
+      "paper_trade",
+      "risk_review",
+      "version",
+      "approve",
+      "gradual_deploy"
+    ],
+    "min_oos_sharpe": null,
+    "min_paper_days": 20,
+    "requires_approvers": [
+      "RISK-APPR-001",
+      "GOV-COMP-001",
+      "SYS-ORCH-001"
+    ]
+  },
+  "environment": "paper",
+  "created_at": "2026-07-28T18:34:17.031807Z",
+  "updated_at": "2026-07-28T18:34:17.031807Z",
+  "notes": ""
+}

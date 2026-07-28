@@ -1,0 +1,13 @@
+# Permission policy
+strategy_may_propose: true
+strategy_may_approve: false
+strategy_may_execute: false
+strategy_may_self_evaluate_for_live_authority: false
+experimental_may_mutate_production_rules: false
+live_execution_enabled: false
+dual_control_for_production_changes:
+  - RISK-APPR-001
+  - GOV-COMP-001
+emergency_halt_agents:
+  - RISK-APPR-001
+  - GOV-COMP-001

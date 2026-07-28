@@ -1,0 +1,127 @@
+[
+  {
+    "agent_id": "SYS-ORCH-001",
+    "name": "Chief Architecture Orchestrator",
+    "role": "orchestration"
+  },
+  {
+    "agent_id": "DATA-MKT-001",
+    "name": "Market Data Ingestion",
+    "role": "data"
+  },
+  {
+    "agent_id": "DATA-NEWS-001",
+    "name": "News Filings Macro Ingestion",
+    "role": "data"
+  },
+  {
+    "agent_id": "DATA-VAL-001",
+    "name": "Information Validation",
+    "role": "data"
+  },
+  {
+    "agent_id": "RSH-FUND-001",
+    "name": "Fundamental and Event Research",
+    "role": "research"
+  },
+  {
+    "agent_id": "RSH-QUANT-001",
+    "name": "Quantitative Research",
+    "role": "research"
+  },
+  {
+    "agent_id": "SIG-VAL-001",
+    "name": "Independent Signal Validator",
+    "role": "validation"
+  },
+  {
+    "agent_id": "PORT-ALLOC-001",
+    "name": "Portfolio Construction",
+    "role": "portfolio"
+  },
+  {
+    "agent_id": "RISK-APPR-001",
+    "name": "Risk Approval",
+    "role": "risk"
+  },
+  {
+    "agent_id": "CAP-STEW-001",
+    "name": "Capital Stewardship",
+    "role": "capital_stewardship"
+  },
+  {
+    "agent_id": "EXEC-PAPER-001",
+    "name": "Paper Execution",
+    "role": "execution"
+  },
+  {
+    "agent_id": "EXEC-LIVE-001",
+    "name": "Live Execution (DISABLED)",
+    "role": "execution"
+  },
+  {
+    "agent_id": "MON-LIVE-001",
+    "name": "Live Position Monitor",
+    "role": "monitoring"
+  },
+  {
+    "agent_id": "MON-REGIME-001",
+    "name": "Market Regime Classifier",
+    "role": "monitoring"
+  },
+  {
+    "agent_id": "REV-ATTR-001",
+    "name": "Post-Trade Attribution",
+    "role": "attribution"
+  },
+  {
+    "agent_id": "LEARN-CTRL-001",
+    "name": "Controlled Learning Governor",
+    "role": "learning"
+  },
+  {
+    "agent_id": "GOV-COMP-001",
+    "name": "Governance Compliance Operations",
+    "role": "governance"
+  },
+  {
+    "agent_id": "AI-INFRA-001",
+    "name": "AI Infrastructure Router",
+    "role": "infrastructure"
+  },
+  {
+    "agent_id": "STRAT-MOM-001",
+    "name": "Trend Momentum Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-MR-001",
+    "name": "Mean Reversion Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-EVT-001",
+    "name": "Event Earnings Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-MACRO-001",
+    "name": "Macro Regime Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-QUAL-001",
+    "name": "Quality Value Long-Term Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-SECROT-001",
+    "name": "Sector Rotation Strategy",
+    "role": "strategy"
+  },
+  {
+    "agent_id": "STRAT-PAIRS-001",
+    "name": "Statistical Pairs Strategy",
+    "role": "strategy"
+  }
+]

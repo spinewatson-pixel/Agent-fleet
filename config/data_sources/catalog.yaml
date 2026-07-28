@@ -1,0 +1,19 @@
+sources:
+  - source_id: SRC-MKT-OHLCV
+    category: market_price
+    adapter: null  # pluggable
+  - source_id: SRC-NEWS-WIRE
+    category: news
+    adapter: null
+  - source_id: SRC-SEC-FILINGS
+    category: filings
+    adapter: null
+  - source_id: SRC-EARNINGS
+    category: earnings
+    adapter: null
+  - source_id: SRC-MACRO
+    category: macro
+    adapter: null
+  - source_id: SRC-CALENDAR
+    category: calendar
+    adapter: null
