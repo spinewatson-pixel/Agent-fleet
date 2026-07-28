@@ -1,54 +1,36 @@
 # Watchfloor UI
 
-The full single-file **Watchfloor Quant Lab** app should live at [`watchfloor.html`](./watchfloor.html).
+[`watchfloor.html`](./watchfloor.html) is the **full** Watchfloor Quant Lab single-file app (user-provided source of truth for the org front-end).
 
-That app is the org front-end: dark purple theme, `baseDivisions()` roster, Overview / Daily Brief / My Desk / Feed tabs, agent detail overlay + chat, create agent/dept modals, quant+funds consolidated into the Trading tab, and `window.storage` persistence.
+Includes:
 
-The file currently checked in is a **thin shell** that documents this entry point and loads [`watchfloor_bridge.js`](./watchfloor_bridge.js) against the registry. Restore the complete user-provided HTML here when available so fidelity is preserved.
+- Dark purple theme and sticky mobile layout
+- `baseDivisions()` roster (Mission Control → Contractors)
+- Overview web, Daily Brief, My Desk, Feed
+- Division folders, agent cards, detail overlay + chat
+- Create / retire agent & department (persists via `window.storage` when available)
+- Quant + Fund Floor consolidated into the Trading tab as marked wings
 
-## Registry mapping
+Provenance: see [`WATCHFLOOR_SOURCE.txt`](./WATCHFLOOR_SOURCE.txt) (sha256 `60b3121e69cb9c8a0067830c6fc5829e44c42f2d5b1f25f86ede0f700c6178ee`, 156224 bytes).
 
-Machine-readable extract of the UI roster:
+## Backend mapping
 
-| UI concept | Registry field (`config/watchfloor_registry.json`) |
+Machine-readable extract of the same roster:
+
+| UI concept | Registry (`config/watchfloor_registry.json`) |
 |---|---|
-| Org title / version | `organization`, `version` |
-| Source attribution | `source` → `ui/watchfloor.html baseDivisions()` |
-| Hard rules (paper, ceiling, thesis, sizing) | `hard_rules` |
-| Division / department tree | `departments[]` (`division`, `name`, `institutional_role`) |
-| Agent skeletons (id, nick, role, tags, status, kind, authority flags) | `agents[]` |
-| Counts | `counts.total_agents` (279), `proposers`, `executors`, `divisions` (12) |
-| Who may propose / execute | `proposer_ids`, `executor_ids` (`EXEC-1` only) |
+| Hard rules | `hard_rules` |
+| Departments | `departments[]` |
+| Agents | `agents[]` (279) |
+| Proposers / executor | `proposer_ids` / `executor_ids` (`EXEC-1` only) |
 | Approval / veto | `approval_chain`, `veto_agents` |
-| Institutional council seats | `institutional_council_map` |
+| Institutional council | `institutional_council_map` |
 
-### Divisions (`baseDivisions()` IDs)
-
-| ID | Division | Notes |
-|---|---|---|
-| `ctrl` | Mission Control | Council seats, risk & limits |
-| `intel` | Global Intel | World watch, company / bull-bear / sector desks |
-| `pred` | Predictions | Forecast, causal chains, anomalies, micro-signals |
-| `trade` | Trading Floor | Groups A–G; UI Trading tab also surfaces quant+funds |
-| `lab` | Lab | Idea engine, test bench, red team |
-| `quant` | Quant Research | Thesis-exempt wing; consolidated into Trading tab in UI |
-| `funds` | Fund Floor | Style desks; consolidated into Trading tab in UI |
-| `minds` | Great Minds | Polymath / first-principles benches |
-| `learn` | Learning Loop | Scoreboard, lessons, foundry (no prod mutation) |
-| `data` | Data Core | Feeds, DQ, memory, toolshop |
-| `sec` | Perimeter | Keys, watch, blast radius, kill switch |
-| `contr` | Contractors | Marketplace roster |
-
-### Authority flags on each agent
-
-- `may_propose_trades` — strategy / desk may enqueue paper proposals only
-- `may_place_orders` — only `EXEC-1`
-- `can_self_approve` — always false under hard rules
-- `paper_only` — always true; live execution disabled
+Paper trading uses Watchfloor IDs via `WatchfloorOrganization` — open this HTML for the org surface; run `agent-fleet paper-run --agent AAPL-L` for the backend chain.
 
 ## Bridge
 
-[`watchfloor_bridge.js`](./watchfloor_bridge.js) fetches `../config/watchfloor_registry.json` and exposes agent counts plus authority helpers for future UI wiring (`WatchfloorBridge` on `window`).
+[`watchfloor_bridge.js`](./watchfloor_bridge.js) can load the JSON registry for future live wiring. The full HTML currently embeds its own `baseDivisions()` data and does not require the bridge to render.
 
 ## Related docs
 
