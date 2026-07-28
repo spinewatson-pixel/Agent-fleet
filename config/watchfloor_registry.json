@@ -1,0 +1,6200 @@
+{
+  "source": "ui/watchfloor.html baseDivisions()",
+  "organization": "watchfloor quant lab",
+  "version": "0.2.0",
+  "hard_rules": {
+    "paper_only": true,
+    "live_execution_enabled": false,
+    "agent_ceiling": 150,
+    "default_sizing_usd": [
+      1,
+      2
+    ],
+    "swing_hard_cap_days": 7,
+    "thesis_required_for_discretionary": true,
+    "quant_exempt_from_thesis": true,
+    "strategies_cannot_self_approve": true,
+    "strategies_cannot_self_execute": true,
+    "learning_cannot_auto_mutate_production": true
+  },
+  "institutional_council_map": {
+    "Palantir Systems Intelligence": [
+      "MEM-1",
+      "DQ-1",
+      "UI-1",
+      "TOOL-1"
+    ],
+    "Bloomberg Market Information": [
+      "MKT-1",
+      "ALT-1",
+      "GEO-1",
+      "MACRO-1"
+    ],
+    "NVIDIA AI Infrastructure": [
+      "ML-ARCH",
+      "ML-VIT",
+      "ML-SEQ",
+      "TOOL-1"
+    ],
+    "BlackRock Portfolio Risk": [
+      "RISK-1",
+      "CAP-1",
+      "CORR-Q"
+    ],
+    "Citadel Trading Operations": [
+      "HEAD-TRADE",
+      "EXEC-1",
+      "CIT-RISK",
+      "CIT-ALLOC"
+    ],
+    "Renaissance Quantitative Research": [
+      "MINE-1",
+      "ENS-1",
+      "FIT-1",
+      "COST-1",
+      "BACK-1",
+      "STAT-1"
+    ],
+    "Goldman Research Strategy": [
+      "CORP-1",
+      "BULL-1",
+      "BEAR-1",
+      "FORE-1",
+      "HEAD-INTEL"
+    ],
+    "JPMorgan Governance Operations": [
+      "GOV-CHAIR",
+      "COMP-1",
+      "SEC-HALT",
+      "SEC-LEDGER",
+      "HUMAN-1"
+    ],
+    "Berkshire Capital Stewardship": [
+      "BRK-MOAT",
+      "BRK-SAFE",
+      "BRK-MRKT",
+      "BRK-INV",
+      "BRK-TRD1",
+      "BRK-TRD2"
+    ]
+  },
+  "approval_chain": [
+    "FIT-1",
+    "RISK-1",
+    "COMP-1",
+    "CAP-1",
+    "GOV-CHAIR",
+    "HUMAN-1"
+  ],
+  "veto_agents": [
+    "RISK-1",
+    "COMP-1",
+    "GOV-CHAIR",
+    "SEC-HALT",
+    "HUMAN-1",
+    "FIT-1",
+    "CIT-RISK"
+  ],
+  "departments": [
+    {
+      "division": "ctrl",
+      "name": "Council Seats",
+      "institutional_role": "governance"
+    },
+    {
+      "division": "ctrl",
+      "name": "Risk & Limits",
+      "institutional_role": "portfolio_risk"
+    },
+    {
+      "division": "intel",
+      "name": "World Watch",
+      "institutional_role": "market_information_research"
+    },
+    {
+      "division": "intel",
+      "name": "Company Desk",
+      "institutional_role": "market_information_research"
+    },
+    {
+      "division": "intel",
+      "name": "Bull / Bear Desk",
+      "institutional_role": "market_information_research"
+    },
+    {
+      "division": "intel",
+      "name": "Sector Desks",
+      "institutional_role": "research_strategy"
+    },
+    {
+      "division": "pred",
+      "name": "Forecast Desk",
+      "institutional_role": "research_signal_generation"
+    },
+    {
+      "division": "pred",
+      "name": "Causal Chains",
+      "institutional_role": "research_signal_generation"
+    },
+    {
+      "division": "pred",
+      "name": "Anomaly Watch",
+      "institutional_role": "research_signal_generation"
+    },
+    {
+      "division": "pred",
+      "name": "Micro-Signals",
+      "institutional_role": "research_signal_generation"
+    },
+    {
+      "division": "pred",
+      "name": "Cross-Domain",
+      "institutional_role": "research_signal_generation"
+    },
+    {
+      "division": "trade",
+      "name": "Group A \u00b7 Paired Specialists",
+      "institutional_role": "strategy",
+      "cohort": "A"
+    },
+    {
+      "division": "trade",
+      "name": "Group B \u00b7 Long Scouts",
+      "institutional_role": "strategy",
+      "cohort": "B"
+    },
+    {
+      "division": "trade",
+      "name": "Group C \u00b7 Short Scouts",
+      "institutional_role": "strategy",
+      "cohort": "C"
+    },
+    {
+      "division": "trade",
+      "name": "Group D \u00b7 Benchmarks",
+      "institutional_role": "strategy",
+      "cohort": "D"
+    },
+    {
+      "division": "trade",
+      "name": "Group E \u00b7 Novel Fleet",
+      "institutional_role": "strategy",
+      "cohort": "E"
+    },
+    {
+      "division": "trade",
+      "name": "Group F \u00b7 Sizing Lab",
+      "institutional_role": "strategy",
+      "cohort": "F"
+    },
+    {
+      "division": "trade",
+      "name": "Group G \u00b7 Swing Desk",
+      "institutional_role": "strategy",
+      "cohort": "G"
+    },
+    {
+      "division": "trade",
+      "name": "Fleet Support",
+      "institutional_role": "trading_operations"
+    },
+    {
+      "division": "lab",
+      "name": "Idea Engine",
+      "institutional_role": "quantitative_research"
+    },
+    {
+      "division": "lab",
+      "name": "Test Bench",
+      "institutional_role": "quantitative_research"
+    },
+    {
+      "division": "lab",
+      "name": "Red Team",
+      "institutional_role": "quantitative_research"
+    },
+    {
+      "division": "quant",
+      "name": "Data Archaeology",
+      "institutional_role": "quantitative_research",
+      "wing": "quant"
+    },
+    {
+      "division": "quant",
+      "name": "Signal Mining",
+      "institutional_role": "quantitative_research",
+      "wing": "quant"
+    },
+    {
+      "division": "quant",
+      "name": "Ensemble & Regime",
+      "institutional_role": "quantitative_research",
+      "wing": "quant"
+    },
+    {
+      "division": "quant",
+      "name": "Autonomous Desk",
+      "institutional_role": "strategy",
+      "wing": "quant",
+      "thesis_required": false
+    },
+    {
+      "division": "quant",
+      "name": "Pattern Recognition ML",
+      "institutional_role": "ai_infrastructure",
+      "wing": "quant"
+    },
+    {
+      "division": "quant",
+      "name": "Self-Expansion",
+      "institutional_role": "controlled_improvement",
+      "wing": "quant"
+    },
+    {
+      "division": "quant",
+      "name": "Validation Police",
+      "institutional_role": "independent_validation",
+      "wing": "quant"
+    },
+    {
+      "division": "funds",
+      "name": "Berkshire Desk",
+      "institutional_role": "capital_stewardship",
+      "wing": "funds"
+    },
+    {
+      "division": "funds",
+      "name": "Citadel Desk",
+      "institutional_role": "trading_operations",
+      "wing": "funds"
+    },
+    {
+      "division": "funds",
+      "name": "Livermore Desk",
+      "institutional_role": "trading_operations",
+      "wing": "funds"
+    },
+    {
+      "division": "funds",
+      "name": "Penny Momentum Desk",
+      "institutional_role": "trading_operations",
+      "wing": "funds"
+    },
+    {
+      "division": "funds",
+      "name": "Renaissance Desk",
+      "institutional_role": "trading_operations",
+      "wing": "funds"
+    },
+    {
+      "division": "funds",
+      "name": "Desk Forge",
+      "institutional_role": "trading_operations",
+      "wing": "funds"
+    },
+    {
+      "division": "minds",
+      "name": "Polymath Bench",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "First Principles",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "Pattern & Analogy",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "Divergent Engine",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "Interrogation Room",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "Market Movers",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "minds",
+      "name": "The Foundry",
+      "institutional_role": "research_thinking"
+    },
+    {
+      "division": "learn",
+      "name": "Scoreboard",
+      "institutional_role": "controlled_improvement"
+    },
+    {
+      "division": "learn",
+      "name": "Lesson Engine",
+      "institutional_role": "controlled_improvement"
+    },
+    {
+      "division": "learn",
+      "name": "Self-Audit",
+      "institutional_role": "controlled_improvement"
+    },
+    {
+      "division": "learn",
+      "name": "Agent Foundry",
+      "institutional_role": "controlled_improvement"
+    },
+    {
+      "division": "data",
+      "name": "Feeds",
+      "institutional_role": "market_information"
+    },
+    {
+      "division": "data",
+      "name": "Quality Control",
+      "institutional_role": "ai_infrastructure"
+    },
+    {
+      "division": "data",
+      "name": "Org Memory",
+      "institutional_role": "systems_intelligence"
+    },
+    {
+      "division": "data",
+      "name": "Toolshop",
+      "institutional_role": "ai_infrastructure"
+    },
+    {
+      "division": "sec",
+      "name": "Keys & Secrets",
+      "institutional_role": "governance_security"
+    },
+    {
+      "division": "sec",
+      "name": "Perimeter Watch",
+      "institutional_role": "governance_security"
+    },
+    {
+      "division": "sec",
+      "name": "Blast Radius",
+      "institutional_role": "governance_security"
+    },
+    {
+      "division": "sec",
+      "name": "Kill Switch",
+      "institutional_role": "governance_security"
+    },
+    {
+      "division": "contr",
+      "name": "Marketplace Roster",
+      "institutional_role": "contractors"
+    }
+  ],
+  "agents": [
+    {
+      "id": "GOV-CHAIR",
+      "nick": "The Gavel",
+      "role": "Chairs the council, owns the proposal queue, breaks ties, enforces the agent ceiling.",
+      "tags": [
+        "GOVERNANCE",
+        "CHAIR"
+      ],
+      "status": "RUNNING",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "HEAD-INTEL",
+      "nick": "Intel Seat",
+      "role": "Council voice for Global Intel.",
+      "tags": [
+        "GOVERNANCE",
+        "COUNCIL"
+      ],
+      "status": "RUNNING",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "HEAD-TRADE",
+      "nick": "Trading Seat",
+      "role": "Council voice for the trading floor.",
+      "tags": [
+        "GOVERNANCE",
+        "COUNCIL"
+      ],
+      "status": "RUNNING",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "HEAD-LAB",
+      "nick": "Lab Seat",
+      "role": "Council voice for The Lab.",
+      "tags": [
+        "GOVERNANCE",
+        "COUNCIL"
+      ],
+      "status": "RUNNING",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "HEAD-LEARN",
+      "nick": "Learning Seat",
+      "role": "Council voice for the Learning Loop.",
+      "tags": [
+        "GOVERNANCE",
+        "COUNCIL"
+      ],
+      "status": "RUNNING",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "HUMAN-1",
+      "nick": "The Founder",
+      "role": "Human seat. Mode B \u2014 auto-approval below thresholds, hard escalation above. Can reverse anything.",
+      "tags": [
+        "HUMAN SEAT",
+        "VETO"
+      ],
+      "status": "HUMAN",
+      "kind": "gov",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Council Seats",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "RISK-1",
+      "nick": "Exposure",
+      "role": "Models fleet-wide correlation, concentration and drawdown.",
+      "tags": [
+        "RISK",
+        "PORTFOLIO"
+      ],
+      "status": "RUNNING",
+      "kind": "risk",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Risk & Limits",
+      "supervisor_id": "GOV-CHAIR",
+      "authority": [
+        "reject",
+        "pause",
+        "halt"
+      ]
+    },
+    {
+      "id": "COMP-1",
+      "nick": "The Line",
+      "role": "Watches every agent against its charter. Breach \u2192 immediate halt.",
+      "tags": [
+        "COMPLIANCE",
+        "ENFORCER"
+      ],
+      "status": "RUNNING",
+      "kind": "risk",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "ctrl",
+      "department": "Risk & Limits",
+      "supervisor_id": "GOV-CHAIR",
+      "authority": [
+        "reject",
+        "pause",
+        "halt"
+      ]
+    },
+    {
+      "id": "GEO-1",
+      "nick": "Flashpoint",
+      "role": "Geopolitics mapping to exposed sectors and names.",
+      "tags": [
+        "INTEL",
+        "GEOPOLITICS"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MACRO-1",
+      "nick": "Fed Watcher",
+      "role": "Macro \u2014 central banks, rates, inflation, employment.",
+      "tags": [
+        "INTEL",
+        "MACRO"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "POLICY-1",
+      "nick": "Statute",
+      "role": "Policy & regulation.",
+      "tags": [
+        "INTEL",
+        "POLICY"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "SUPPLY-1",
+      "nick": "Bottleneck",
+      "role": "Supply chains.",
+      "tags": [
+        "INTEL",
+        "SUPPLY"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "ENERGY-1",
+      "nick": "Gridline",
+      "role": "Energy markets and grid.",
+      "tags": [
+        "INTEL",
+        "ENERGY"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CLIMATE-1",
+      "nick": "Stormglass",
+      "role": "Climate & nature anomalies.",
+      "tags": [
+        "INTEL",
+        "CLIMATE"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "TECH-1",
+      "nick": "Adoption Curve",
+      "role": "Technology adoption curves.",
+      "tags": [
+        "INTEL",
+        "TECH"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "SOC-1",
+      "nick": "Zeitgeist",
+      "role": "Society and consumer behavior.",
+      "tags": [
+        "INTEL",
+        "SOCIETY"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "World Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CORP-1",
+      "nick": "Moat Auditor",
+      "role": "Deep-dive moats, management, balance sheets.",
+      "tags": [
+        "RESEARCH",
+        "FUNDAMENTALS"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Company Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CORP-2",
+      "nick": "Share Tracker",
+      "role": "Competitive landscape.",
+      "tags": [
+        "RESEARCH",
+        "COMPETITION"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Company Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "HIST-1",
+      "nick": "Rhyme",
+      "role": "Historical analogues.",
+      "tags": [
+        "RESEARCH",
+        "ANALOGUES"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Company Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "BULL-1",
+      "nick": "The Optimist",
+      "role": "Bull case files.",
+      "tags": [
+        "CASE FILE",
+        "BULL"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Bull / Bear Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "BEAR-1",
+      "nick": "The Skeptic",
+      "role": "Bear case files \u2014 independent of bull author.",
+      "tags": [
+        "CASE FILE",
+        "BEAR"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Bull / Bear Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MEGA-D",
+      "nick": "Mega-cap Tech",
+      "role": "Mega-cap Tech desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "SEMI-D",
+      "nick": "Semis & Hardware",
+      "role": "Semis & Hardware desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "AI-D",
+      "nick": "AI & Software",
+      "role": "AI & Software desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CONS-D",
+      "nick": "Consumer & Retail",
+      "role": "Consumer & Retail desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "ENRG-D",
+      "nick": "Energy & Utilities",
+      "role": "Energy & Utilities desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "INDL-D",
+      "nick": "Industrials & Transport",
+      "role": "Industrials & Transport desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "HLTH-D",
+      "nick": "Healthcare & Biotech",
+      "role": "Healthcare & Biotech desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "FIN-D",
+      "nick": "Financials",
+      "role": "Financials desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MATL-D",
+      "nick": "Materials & Commodities",
+      "role": "Materials & Commodities desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "DEF-D",
+      "nick": "Defense & Aerospace",
+      "role": "Defense & Aerospace desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "WSTE-D",
+      "nick": "Waste & Infrastructure",
+      "role": "Waste & Infrastructure desk \u2014 consumes intel, maintains thesis log, briefs trading agents.",
+      "tags": [
+        "SECTOR DESK",
+        "THESIS LOG"
+      ],
+      "status": "RUNNING",
+      "kind": "intel",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "intel",
+      "department": "Sector Desks",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "FORE-1",
+      "nick": "Crystal",
+      "role": "Formal predictions with confidence and horizon.",
+      "tags": [
+        "PREDICTION",
+        "FORECASTS"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Forecast Desk",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CHAIN-1",
+      "nick": "Domino",
+      "role": "Forward causal chains from live events.",
+      "tags": [
+        "PREDICTION",
+        "CAUSAL"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Causal Chains",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CHAIN-2",
+      "nick": "Ripple",
+      "role": "Weather/regional event chains.",
+      "tags": [
+        "PREDICTION",
+        "CAUSAL"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Causal Chains",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "ANOM-1",
+      "nick": "Outlier",
+      "role": "Statistical anomaly scanner.",
+      "tags": [
+        "PREDICTION",
+        "ANOMALY"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Anomaly Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "ANOM-2",
+      "nick": "Divergence",
+      "role": "Relationship watcher.",
+      "tags": [
+        "PREDICTION",
+        "ANOMALY"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Anomaly Watch",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MICRO-1",
+      "nick": "Grain",
+      "role": "Regional demand micro-signals.",
+      "tags": [
+        "PREDICTION",
+        "MICRO"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Micro-Signals",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MICRO-2",
+      "nick": "Thread",
+      "role": "Niche products and single-supplier exposure.",
+      "tags": [
+        "PREDICTION",
+        "MICRO"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Micro-Signals",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "MICRO-3",
+      "nick": "Calendar",
+      "role": "Seasonal and calendar effects.",
+      "tags": [
+        "PREDICTION",
+        "MICRO"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Micro-Signals",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CROSS-1",
+      "nick": "Splice",
+      "role": "Pairs unrelated data domains.",
+      "tags": [
+        "PREDICTION",
+        "CROSS"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Cross-Domain",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "CROSS-2",
+      "nick": "Bridge",
+      "role": "Cross-domain links to tradeable endpoints.",
+      "tags": [
+        "PREDICTION",
+        "CROSS"
+      ],
+      "status": "RUNNING",
+      "kind": "disc",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "pred",
+      "department": "Cross-Domain",
+      "supervisor_id": "HEAD-INTEL"
+    },
+    {
+      "id": "AAPL-L",
+      "nick": "Apple Long",
+      "role": "Dedicated Apple (AAPL) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AAPL",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AAPL"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "AAPL-S",
+      "nick": "Apple Short",
+      "role": "Dedicated Apple (AAPL) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AAPL",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AAPL"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "NVDA-L",
+      "nick": "Nvidia Long",
+      "role": "Dedicated Nvidia (NVDA) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "NVDA",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "NVDA"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "NVDA-S",
+      "nick": "Nvidia Short",
+      "role": "Dedicated Nvidia (NVDA) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "NVDA",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "NVDA"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "PLTR-L",
+      "nick": "Palantir Long",
+      "role": "Dedicated Palantir (PLTR) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "PLTR",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "PLTR"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "PLTR-S",
+      "nick": "Palantir Short",
+      "role": "Dedicated Palantir (PLTR) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "PLTR",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "PLTR"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "MSFT-L",
+      "nick": "Microsoft Long",
+      "role": "Dedicated Microsoft (MSFT) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "MSFT",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "MSFT"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "MSFT-S",
+      "nick": "Microsoft Short",
+      "role": "Dedicated Microsoft (MSFT) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "MSFT",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "MSFT"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "GOOGL-L",
+      "nick": "Google Long",
+      "role": "Dedicated Google (GOOGL) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "GOOGL",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "GOOGL"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "GOOGL-S",
+      "nick": "Google Short",
+      "role": "Dedicated Google (GOOGL) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "GOOGL",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "GOOGL"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "META-L",
+      "nick": "Meta Long",
+      "role": "Dedicated Meta (META) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "META",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "META"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "META-S",
+      "nick": "Meta Short",
+      "role": "Dedicated Meta (META) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "META",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "META"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "WM-L",
+      "nick": "Waste Mgmt Long",
+      "role": "Dedicated Waste Mgmt (WM) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "WM",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "WM"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "WM-S",
+      "nick": "Waste Mgmt Short",
+      "role": "Dedicated Waste Mgmt (WM) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "WM",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "WM"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "AMZN-L",
+      "nick": "Amazon Long",
+      "role": "Dedicated Amazon (AMZN) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AMZN",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AMZN"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "AMZN-S",
+      "nick": "Amazon Short",
+      "role": "Dedicated Amazon (AMZN) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AMZN",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AMZN"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "TSLA-L",
+      "nick": "Tesla Long",
+      "role": "Dedicated Tesla (TSLA) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "TSLA",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "TSLA"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "TSLA-S",
+      "nick": "Tesla Short",
+      "role": "Dedicated Tesla (TSLA) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "TSLA",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "TSLA"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "AMD-L",
+      "nick": "AMD Long",
+      "role": "Dedicated AMD (AMD) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AMD",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AMD"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "AMD-S",
+      "nick": "AMD Short",
+      "role": "Dedicated AMD (AMD) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AMD",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AMD"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "AVGO-L",
+      "nick": "Broadcom Long",
+      "role": "Dedicated Broadcom (AVGO) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AVGO",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AVGO"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "AVGO-S",
+      "nick": "Broadcom Short",
+      "role": "Dedicated Broadcom (AVGO) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "AVGO",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "AVGO"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "NFLX-L",
+      "nick": "Netflix Long",
+      "role": "Dedicated Netflix (NFLX) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "NFLX",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "NFLX"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "NFLX-S",
+      "nick": "Netflix Short",
+      "role": "Dedicated Netflix (NFLX) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "NFLX",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "NFLX"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "JPM-L",
+      "nick": "JPMorgan Long",
+      "role": "Dedicated JPMorgan (JPM) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "JPM",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "JPM"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "JPM-S",
+      "nick": "JPMorgan Short",
+      "role": "Dedicated JPMorgan (JPM) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "JPM",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "JPM"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "XOM-L",
+      "nick": "Exxon Long",
+      "role": "Dedicated Exxon (XOM) long-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "XOM",
+        "LONG ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "XOM"
+      ],
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "XOM-S",
+      "nick": "Exxon Short",
+      "role": "Dedicated Exxon (XOM) short-side specialist. In-and-out intraday. Thesis logged before every trade.",
+      "tags": [
+        "PAPER TRADER",
+        "XOM",
+        "SHORT ONLY"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group A \u00b7 Paired Specialists",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "assets_permitted": [
+        "XOM"
+      ],
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-L1",
+      "nick": "Momentum breakout",
+      "role": "Daily long scout via momentum breakout.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L2",
+      "nick": "Mean reversion",
+      "role": "Daily long scout via mean reversion.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L3",
+      "nick": "News catalyst",
+      "role": "Daily long scout via news catalyst.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L4",
+      "nick": "Volume anomaly",
+      "role": "Daily long scout via volume anomaly.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L5",
+      "nick": "Sector rotation",
+      "role": "Daily long scout via sector rotation.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L6",
+      "nick": "Technical pattern",
+      "role": "Daily long scout via technical pattern.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L7",
+      "nick": "Sentiment shift",
+      "role": "Daily long scout via sentiment shift.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L8",
+      "nick": "Earnings reaction",
+      "role": "Daily long scout via earnings reaction.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L9",
+      "nick": "Signal-driven",
+      "role": "Daily long scout via signal-driven.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-L10",
+      "nick": "Open methodology",
+      "role": "Daily long scout via open methodology.",
+      "tags": [
+        "PAPER TRADER",
+        "LONG SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group B \u00b7 Long Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "LONG ONLY"
+    },
+    {
+      "id": "SCOUT-S1",
+      "nick": "Momentum breakout",
+      "role": "Daily short scout via momentum breakout.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S2",
+      "nick": "Mean reversion",
+      "role": "Daily short scout via mean reversion.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S3",
+      "nick": "News catalyst",
+      "role": "Daily short scout via news catalyst.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S4",
+      "nick": "Volume anomaly",
+      "role": "Daily short scout via volume anomaly.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S5",
+      "nick": "Sector rotation",
+      "role": "Daily short scout via sector rotation.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S6",
+      "nick": "Technical pattern",
+      "role": "Daily short scout via technical pattern.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S7",
+      "nick": "Sentiment shift",
+      "role": "Daily short scout via sentiment shift.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S8",
+      "nick": "Earnings reaction",
+      "role": "Daily short scout via earnings reaction.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S9",
+      "nick": "Signal-driven",
+      "role": "Daily short scout via signal-driven.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "SCOUT-S10",
+      "nick": "Open methodology",
+      "role": "Daily short scout via open methodology.",
+      "tags": [
+        "PAPER TRADER",
+        "SHORT SCOUT",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group C \u00b7 Short Scouts",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true,
+      "side_restriction": "SHORT ONLY"
+    },
+    {
+      "id": "BENCH-1",
+      "nick": "VWAP reversion",
+      "role": "Benchmark agent \u2014 published VWAP reversion strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-2",
+      "nick": "Opening range breakout",
+      "role": "Benchmark agent \u2014 published Opening range breakout strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-3",
+      "nick": "Gap fill",
+      "role": "Benchmark agent \u2014 published Gap fill strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-4",
+      "nick": "Pairs stat-arb",
+      "role": "Benchmark agent \u2014 published Pairs stat-arb strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-5",
+      "nick": "Momentum continuation",
+      "role": "Benchmark agent \u2014 published Momentum continuation strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-6",
+      "nick": "RSI mean reversion",
+      "role": "Benchmark agent \u2014 published RSI mean reversion strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-7",
+      "nick": "MA crossover",
+      "role": "Benchmark agent \u2014 published MA crossover strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-8",
+      "nick": "Bollinger reversion",
+      "role": "Benchmark agent \u2014 published Bollinger reversion strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-9",
+      "nick": "News momentum",
+      "role": "Benchmark agent \u2014 published News momentum strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "BENCH-10",
+      "nick": "Volume breakout",
+      "role": "Benchmark agent \u2014 published Volume breakout strategy.",
+      "tags": [
+        "PAPER TRADER",
+        "BENCHMARK",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group D \u00b7 Benchmarks",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-1",
+      "nick": "Novel Lab 1",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-2",
+      "nick": "Novel Lab 2",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-3",
+      "nick": "Novel Lab 3",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-4",
+      "nick": "Novel Lab 4",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-5",
+      "nick": "Novel Lab 5",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-6",
+      "nick": "Novel Lab 6",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-7",
+      "nick": "Novel Lab 7",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-8",
+      "nick": "Novel Lab 8",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-9",
+      "nick": "Novel Lab 9",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-10",
+      "nick": "Novel Lab 10",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-11",
+      "nick": "Novel Lab 11",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "NOVA-12",
+      "nick": "Novel Lab 12",
+      "role": "Strategy R&D \u2014 builds new strategies, kills failures, escalates winners.",
+      "tags": [
+        "PAPER TRADER",
+        "NOVEL R&D",
+        "$1\u20132"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group E \u00b7 Novel Fleet",
+      "supervisor_id": "HEAD-LAB",
+      "holding_period": "intraday",
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SIZE-1",
+      "nick": "Fixed $5",
+      "role": "Sizing experiment: Fixed $5.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-2",
+      "nick": "Fixed $10",
+      "role": "Sizing experiment: Fixed $10.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-3",
+      "nick": "Fixed $25",
+      "role": "Sizing experiment: Fixed $25.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-4",
+      "nick": "Confidence-weighted",
+      "role": "Sizing experiment: Confidence-weighted.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-5",
+      "nick": "Volatility-adjusted",
+      "role": "Sizing experiment: Volatility-adjusted.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-6",
+      "nick": "Kelly-derived",
+      "role": "Sizing experiment: Kelly-derived.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-7",
+      "nick": "Scaling in",
+      "role": "Sizing experiment: Scaling in.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-8",
+      "nick": "Scaling out",
+      "role": "Sizing experiment: Scaling out.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-9",
+      "nick": "Pyramiding winners",
+      "role": "Sizing experiment: Pyramiding winners.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SIZE-10",
+      "nick": "Fixed-fractional",
+      "role": "Sizing experiment: Fixed-fractional.",
+      "tags": [
+        "PAPER TRADER",
+        "SIZING LAB",
+        "VAR $"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group F \u00b7 Sizing Lab",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "intraday",
+      "sizing": "experimental_variable",
+      "thesis_required": true,
+      "note": "Breaks fixed-size rule intentionally; findings feed CAP-1"
+    },
+    {
+      "id": "SWING-C1",
+      "nick": "Catalyst Swing 1",
+      "role": "Catalyst-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "CATALYST"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-C2",
+      "nick": "Catalyst Swing 2",
+      "role": "Catalyst-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "CATALYST"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-C3",
+      "nick": "Catalyst Swing 3",
+      "role": "Catalyst-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "CATALYST"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-C4",
+      "nick": "Catalyst Swing 4",
+      "role": "Catalyst-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "CATALYST"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-C5",
+      "nick": "Catalyst Swing 5",
+      "role": "Catalyst-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "CATALYST"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T1",
+      "nick": "Technical Swing 1",
+      "role": "Technical-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "TECHNICAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T2",
+      "nick": "Technical Swing 2",
+      "role": "Technical-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "TECHNICAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T3",
+      "nick": "Technical Swing 3",
+      "role": "Technical-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "TECHNICAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T4",
+      "nick": "Technical Swing 4",
+      "role": "Technical-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "TECHNICAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T5",
+      "nick": "Technical Swing 5",
+      "role": "Technical-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "TECHNICAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-S1",
+      "nick": "Signal Swing 1",
+      "role": "Signal-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "SIGNAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-S2",
+      "nick": "Signal Swing 2",
+      "role": "Signal-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "SIGNAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-S3",
+      "nick": "Signal Swing 3",
+      "role": "Signal-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "SIGNAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-S4",
+      "nick": "Signal Swing 4",
+      "role": "Signal-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "SIGNAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-S5",
+      "nick": "Signal Swing 5",
+      "role": "Signal-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "SIGNAL"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T1",
+      "nick": "Thematic Swing 1",
+      "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "THEMATIC"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T2",
+      "nick": "Thematic Swing 2",
+      "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "THEMATIC"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T3",
+      "nick": "Thematic Swing 3",
+      "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "THEMATIC"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T4",
+      "nick": "Thematic Swing 4",
+      "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "THEMATIC"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "SWING-T5",
+      "nick": "Thematic Swing 5",
+      "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
+      "tags": [
+        "PAPER TRADER",
+        "SWING \u22641W",
+        "THEMATIC"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Group G \u00b7 Swing Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "holding_period": "1_to_5_days",
+      "holding_cap_days": 7,
+      "sizing": "fixed_1_2_usd",
+      "thesis_required": true
+    },
+    {
+      "id": "CAP-1",
+      "nick": "Allocator",
+      "role": "Capital Allocation \u2014 sizing policy, reinvestment, correlation-aware exposure.",
+      "tags": [
+        "SUPPORT",
+        "CAPITAL"
+      ],
+      "status": "RUNNING",
+      "kind": "risk",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Fleet Support",
+      "supervisor_id": "HEAD-TRADE"
+    },
+    {
+      "id": "EXEC-1",
+      "nick": "Fill Check",
+      "role": "Execution Quality \u2014 slippage, spread cost, order-type effectiveness.",
+      "tags": [
+        "SUPPORT",
+        "EXECUTION"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": false,
+      "may_place_orders": true,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "trade",
+      "department": "Fleet Support",
+      "supervisor_id": "HEAD-TRADE",
+      "execution_role": true
+    },
+    {
+      "id": "IDEA-1",
+      "nick": "Spark",
+      "role": "Generates strategy candidates.",
+      "tags": [
+        "LAB",
+        "IDEAS"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Idea Engine",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "IDEA-2",
+      "nick": "Remix",
+      "role": "Synthesizes hybrid strategies.",
+      "tags": [
+        "LAB",
+        "IDEAS"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Idea Engine",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "HYPO-1",
+      "nick": "Registry",
+      "role": "Hypothesis registry owner.",
+      "tags": [
+        "LAB",
+        "HYPOTHESES"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Idea Engine",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "BACK-1",
+      "nick": "Rewind",
+      "role": "Backtest queue \u2014 no look-ahead.",
+      "tags": [
+        "LAB",
+        "BACKTEST"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Test Bench",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "STAT-1",
+      "nick": "Significance",
+      "role": "Signal vs noise, overfitting detection.",
+      "tags": [
+        "LAB",
+        "STATS"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Test Bench",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "RED-1",
+      "nick": "Devil's Advocate",
+      "role": "Challenges assumptions.",
+      "tags": [
+        "RED TEAM",
+        "COUNTER"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Red Team",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "RED-2",
+      "nick": "Stress Test",
+      "role": "Tail scenarios.",
+      "tags": [
+        "RED TEAM",
+        "TAIL RISK"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Red Team",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "WRECK-1",
+      "nick": "Wrecking Ball",
+      "role": "Adversarial break attempts.",
+      "tags": [
+        "RED TEAM",
+        "BREAKER"
+      ],
+      "status": "RUNNING",
+      "kind": "lab",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "lab",
+      "department": "Red Team",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "DIG-1",
+      "nick": "Excavator",
+      "role": "Reconstructs deep historical series.",
+      "tags": [
+        "QUANT",
+        "ARCHAEOLOGY"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Data Archaeology",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "DIG-2",
+      "nick": "Restorer",
+      "role": "Corporate actions / survivorship repair.",
+      "tags": [
+        "QUANT",
+        "ARCHAEOLOGY"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Data Archaeology",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "MINE-1",
+      "nick": "Prospector",
+      "role": "Brute-force relationship search. Edge, not reasons.",
+      "tags": [
+        "QUANT",
+        "MINING"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Signal Mining",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "MINE-2",
+      "nick": "Faint Signal",
+      "role": "Very weak edges at large sample sizes.",
+      "tags": [
+        "QUANT",
+        "MINING"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Signal Mining",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "MICRO-Q",
+      "nick": "Microstructure",
+      "role": "Order flow / book dynamics.",
+      "tags": [
+        "QUANT",
+        "MICROSTRUCTURE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Signal Mining",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "ENS-1",
+      "nick": "Weaver",
+      "role": "Signal combination model.",
+      "tags": [
+        "QUANT",
+        "ENSEMBLE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Ensemble & Regime",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "REG-1",
+      "nick": "Weathervane",
+      "role": "Regime detection.",
+      "tags": [
+        "QUANT",
+        "REGIME"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Ensemble & Regime",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "CORR-Q",
+      "nick": "Independence",
+      "role": "True vs apparent uncorrelatedness.",
+      "tags": [
+        "QUANT",
+        "CORRELATION"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Ensemble & Regime",
+      "supervisor_id": "HEAD-LAB",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-ENS-1",
+      "nick": "Ensemble 1",
+      "role": "Trades combined signal stack. No single reason.",
+      "tags": [
+        "RENTEC",
+        "ENSEMBLE",
+        "AUTO SIZE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false,
+      "sizing": "desk_set"
+    },
+    {
+      "id": "RT-ENS-2",
+      "nick": "Ensemble 2",
+      "role": "Trades combined signal stack. No single reason.",
+      "tags": [
+        "RENTEC",
+        "ENSEMBLE",
+        "AUTO SIZE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false,
+      "sizing": "desk_set"
+    },
+    {
+      "id": "RT-ENS-3",
+      "nick": "Ensemble 3",
+      "role": "Trades combined signal stack. No single reason.",
+      "tags": [
+        "RENTEC",
+        "ENSEMBLE",
+        "AUTO SIZE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false,
+      "sizing": "desk_set"
+    },
+    {
+      "id": "RT-ENS-4",
+      "nick": "Ensemble 4",
+      "role": "Trades combined signal stack. No single reason.",
+      "tags": [
+        "RENTEC",
+        "ENSEMBLE",
+        "AUTO SIZE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false,
+      "sizing": "desk_set"
+    },
+    {
+      "id": "RT-REG-1",
+      "nick": "Trend Regime",
+      "role": "Only trades in trend regime.",
+      "tags": [
+        "RENTEC",
+        "REGIME-GATED",
+        "CONDITIONAL"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "REG-1",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-REG-2",
+      "nick": "Chop Regime",
+      "role": "Only trades in chop regime.",
+      "tags": [
+        "RENTEC",
+        "REGIME-GATED",
+        "CONDITIONAL"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "REG-1",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-REG-3",
+      "nick": "Volatile Regime",
+      "role": "Only trades in volatile regime.",
+      "tags": [
+        "RENTEC",
+        "REGIME-GATED",
+        "CONDITIONAL"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "REG-1",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-REG-4",
+      "nick": "Quiet Regime",
+      "role": "Only trades in quiet regime.",
+      "tags": [
+        "RENTEC",
+        "REGIME-GATED",
+        "CONDITIONAL"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "REG-1",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-HF-1",
+      "nick": "High Freq 1",
+      "role": "Very high trade count on micro edges.",
+      "tags": [
+        "RENTEC",
+        "HIGH FREQ",
+        "MICRO EDGE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-HF-2",
+      "nick": "High Freq 2",
+      "role": "Very high trade count on micro edges.",
+      "tags": [
+        "RENTEC",
+        "HIGH FREQ",
+        "MICRO EDGE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-HF-3",
+      "nick": "High Freq 3",
+      "role": "Very high trade count on micro edges.",
+      "tags": [
+        "RENTEC",
+        "HIGH FREQ",
+        "MICRO EDGE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-HF-4",
+      "nick": "High Freq 4",
+      "role": "Very high trade count on micro edges.",
+      "tags": [
+        "RENTEC",
+        "HIGH FREQ",
+        "MICRO EDGE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-STAT-1",
+      "nick": "Stat Arb 1",
+      "role": "Market-neutral stat arb.",
+      "tags": [
+        "RENTEC",
+        "STAT ARB",
+        "NEUTRAL"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "CORR-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-STAT-2",
+      "nick": "Stat Arb 2",
+      "role": "Market-neutral stat arb.",
+      "tags": [
+        "RENTEC",
+        "STAT ARB",
+        "NEUTRAL"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "CORR-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-STAT-3",
+      "nick": "Stat Arb 3",
+      "role": "Market-neutral stat arb.",
+      "tags": [
+        "RENTEC",
+        "STAT ARB",
+        "NEUTRAL"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "CORR-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-MICRO-1",
+      "nick": "Flow 1",
+      "role": "Order-book/flow microstructure. Holds in minutes.",
+      "tags": [
+        "RENTEC",
+        "MICROSTRUCTURE",
+        "INTRADAY"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-MICRO-2",
+      "nick": "Flow 2",
+      "role": "Order-book/flow microstructure. Holds in minutes.",
+      "tags": [
+        "RENTEC",
+        "MICROSTRUCTURE",
+        "INTRADAY"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-MICRO-3",
+      "nick": "Flow 3",
+      "role": "Order-book/flow microstructure. Holds in minutes.",
+      "tags": [
+        "RENTEC",
+        "MICROSTRUCTURE",
+        "INTRADAY"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "MICRO-Q",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-DARK-1",
+      "nick": "Unexplained",
+      "role": "Trades unexplained signals. Watched by Validation Police.",
+      "tags": [
+        "RENTEC",
+        "NO EXPLANATION",
+        "WATCHED"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false
+    },
+    {
+      "id": "RT-COST-1",
+      "nick": "Net Of Costs",
+      "role": "Only strategies surviving Friction cost model.",
+      "tags": [
+        "RENTEC",
+        "COST-AWARE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Autonomous Desk",
+      "supervisor_id": "ENS-1",
+      "thesis_required": false
+    },
+    {
+      "id": "ML-VIT",
+      "nick": "Chart Eyes",
+      "role": "Vision models on chart images.",
+      "tags": [
+        "QUANT",
+        "VISION ML"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Pattern Recognition ML",
+      "supervisor_id": "ML-ARCH"
+    },
+    {
+      "id": "ML-SEQ",
+      "nick": "Sequence Reader",
+      "role": "Transformer on price-volume sequences.",
+      "tags": [
+        "QUANT",
+        "SEQUENCE ML"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Pattern Recognition ML",
+      "supervisor_id": "ML-ARCH"
+    },
+    {
+      "id": "ML-CLS",
+      "nick": "Old School",
+      "role": "Classic ML on small clean datasets.",
+      "tags": [
+        "QUANT",
+        "CLASSIC ML"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Pattern Recognition ML",
+      "supervisor_id": "ML-ARCH"
+    },
+    {
+      "id": "ML-PAT",
+      "nick": "Auto Draftsman",
+      "role": "Automated pattern markup.",
+      "tags": [
+        "QUANT",
+        "PATTERN AUTO"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Pattern Recognition ML",
+      "supervisor_id": "ML-ARCH"
+    },
+    {
+      "id": "ML-ARCH",
+      "nick": "The Architect",
+      "role": "Chooses architectures, retrains, births pattern agents under compute ceiling.",
+      "tags": [
+        "QUANT",
+        "SELF-BUILDING"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Pattern Recognition ML",
+      "supervisor_id": "ML-ARCH"
+    },
+    {
+      "id": "RT-FORGE-1",
+      "nick": "Forge",
+      "role": "Builds new RenTec traders from validated signals.",
+      "tags": [
+        "RENTEC",
+        "AGENT BUILDER"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Self-Expansion",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "RT-CULL-1",
+      "nick": "Cull",
+      "role": "Retires decayed desk agents.",
+      "tags": [
+        "RENTEC",
+        "LIFECYCLE"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Self-Expansion",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "RT-GROW-1",
+      "nick": "Charter",
+      "role": "Drafts sub-division proposals; owns autonomy budget.",
+      "tags": [
+        "RENTEC",
+        "EXPANSION"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Self-Expansion",
+      "supervisor_id": "HEAD-LAB"
+    },
+    {
+      "id": "FIT-1",
+      "nick": "Overfit Police",
+      "role": "Proves backtests wrong. Holds veto.",
+      "tags": [
+        "QUANT",
+        "VALIDATION"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Validation Police",
+      "supervisor_id": "HEAD-LAB",
+      "authority": [
+        "reject",
+        "veto"
+      ]
+    },
+    {
+      "id": "COST-1",
+      "nick": "Friction",
+      "role": "Rejects strategies whose edge dies after costs.",
+      "tags": [
+        "QUANT",
+        "COSTS"
+      ],
+      "status": "RUNNING",
+      "kind": "quant",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "quant",
+      "department": "Validation Police",
+      "supervisor_id": "HEAD-LAB",
+      "authority": [
+        "reject",
+        "veto"
+      ]
+    },
+    {
+      "id": "BRK-MOAT",
+      "nick": "Moat Finder",
+      "role": "Grades durable advantage.",
+      "tags": [
+        "FUND FLOOR",
+        "QUALITY"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "BRK-SAFE",
+      "nick": "Margin of Safety",
+      "role": "Only acts far below intrinsic value.",
+      "tags": [
+        "FUND FLOOR",
+        "VALUATION"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "BRK-MRKT",
+      "nick": "Mr. Market",
+      "role": "Treats swings as offers, not information.",
+      "tags": [
+        "FUND FLOOR",
+        "TEMPERAMENT"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "BRK-INV",
+      "nick": "The Inversion",
+      "role": "Munger inversion on every idea.",
+      "tags": [
+        "FUND FLOOR",
+        "INVERSION"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "BRK-TRD1",
+      "nick": "Steady Hand",
+      "role": "Desk trader \u2014 rare approved buys.",
+      "tags": [
+        "FUND TRADER",
+        "BERKSHIRE"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "BRK-TRD2",
+      "nick": "The Sitter",
+      "role": "Manages holdings; sells only on thesis break.",
+      "tags": [
+        "FUND TRADER",
+        "BERKSHIRE"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Berkshire Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "CIT-POD1",
+      "nick": "Pod \u00b7 Equity L/S",
+      "role": "Market-neutral L/S book.",
+      "tags": [
+        "FUND FLOOR",
+        "POD"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Citadel Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "CIT-POD2",
+      "nick": "Pod \u00b7 Event",
+      "role": "Catalyst trading.",
+      "tags": [
+        "FUND FLOOR",
+        "POD"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Citadel Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "CIT-ALLOC",
+      "nick": "Allocator",
+      "role": "Moves capital between pods.",
+      "tags": [
+        "FUND FLOOR",
+        "ALLOCATION"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Citadel Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "CIT-RISK",
+      "nick": "The Cut",
+      "role": "Instant de-risk authority.",
+      "tags": [
+        "FUND FLOOR",
+        "RISK"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Citadel Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true,
+      "authority": [
+        "reduce",
+        "pause",
+        "close"
+      ]
+    },
+    {
+      "id": "CIT-POD3",
+      "nick": "Pod \u00b7 Sector Rotation",
+      "role": "Sector rotation pod.",
+      "tags": [
+        "FUND TRADER",
+        "POD"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Citadel Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "LIV-TAPE",
+      "nick": "Tape Reader",
+      "role": "Pure price/volume behavior.",
+      "tags": [
+        "FUND FLOOR",
+        "TAPE"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Livermore Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "LIV-PYR",
+      "nick": "Pyramid",
+      "role": "Probe small, add only when right.",
+      "tags": [
+        "FUND FLOOR",
+        "SIZING"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Livermore Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "LIV-SIT",
+      "nick": "Sit Tight",
+      "role": "Once right, do nothing.",
+      "tags": [
+        "FUND FLOOR",
+        "PATIENCE"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Livermore Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "LIV-TRD",
+      "nick": "Line Handler",
+      "role": "Places probing lines and adds.",
+      "tags": [
+        "FUND TRADER",
+        "LIVERMORE"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Livermore Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-SCAN",
+      "nick": "First Green Day",
+      "role": "Small-cap setup scanner.",
+      "tags": [
+        "FUND FLOOR",
+        "SCANNER"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-GRIT",
+      "nick": "Level Sniper",
+      "role": "Grittani level trading.",
+      "tags": [
+        "FUND FLOOR",
+        "GRITTANI"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-KELL",
+      "nick": "Momentum Rider",
+      "role": "Kellogg VWAP momentum.",
+      "tags": [
+        "FUND FLOOR",
+        "KELLOGG"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-ANAT",
+      "nick": "Pump Anatomy",
+      "role": "Sykes pump lifecycle fades.",
+      "tags": [
+        "FUND FLOOR",
+        "SYKES"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-TRD1",
+      "nick": "Opening Bell",
+      "role": "A-grade setups first 90 minutes.",
+      "tags": [
+        "FUND TRADER",
+        "MOMENTUM"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "PNY-TRD2",
+      "nick": "Fader",
+      "role": "Short-side paper fades.",
+      "tags": [
+        "FUND TRADER",
+        "SHORT SIDE"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Penny Momentum Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "REN-MINE",
+      "nick": "Signal Miner",
+      "role": "Short-horizon statistical patterns.",
+      "tags": [
+        "FUND FLOOR",
+        "SIGNALS"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Renaissance Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "REN-DECAY",
+      "nick": "Half-Life",
+      "role": "Signal decay monitoring.",
+      "tags": [
+        "FUND FLOOR",
+        "DECAY"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Renaissance Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "REN-BASK",
+      "nick": "The Basket",
+      "role": "Hundreds of tiny positions.",
+      "tags": [
+        "FUND TRADER",
+        "BASKET"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Renaissance Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "REN-EXEC",
+      "nick": "Footprint",
+      "role": "Execution slicing vs model price.",
+      "tags": [
+        "FUND TRADER",
+        "EXECUTION"
+      ],
+      "status": "RUNNING",
+      "kind": "trader",
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Renaissance Desk",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "FND-FORGE",
+      "nick": "Doctrine Forge",
+      "role": "Builds new desk agents from proven edges.",
+      "tags": [
+        "FUND FLOOR",
+        "BUILDER"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Desk Forge",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "FND-CULL",
+      "nick": "Graveyard Keeper",
+      "role": "Retires decayed agents.",
+      "tags": [
+        "FUND FLOOR",
+        "LIFECYCLE"
+      ],
+      "status": "RUNNING",
+      "kind": "fund",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "funds",
+      "department": "Desk Forge",
+      "supervisor_id": "HEAD-TRADE",
+      "thesis_required": true
+    },
+    {
+      "id": "MIND-VINCI",
+      "nick": "Notebook",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Polymath Bench",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-FRANK",
+      "nick": "Tinker",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Polymath Bench",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-GOET",
+      "nick": "Morphology",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Polymath Bench",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-HYPA",
+      "nick": "Cartograph",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Polymath Bench",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-FEYN",
+      "nick": "Plain Words",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "First Principles",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-DESC",
+      "nick": "Doubt",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "First Principles",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-EUCL",
+      "nick": "Axioms",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "First Principles",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-NEWT",
+      "nick": "Mechanism",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "First Principles",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-DARW",
+      "nick": "Slow Eye",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Pattern & Analogy",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-MEND",
+      "nick": "Periodic",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Pattern & Analogy",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-KEPL",
+      "nick": "Orbits",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Pattern & Analogy",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-RAMA",
+      "nick": "Leap",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Pattern & Analogy",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-EDIS",
+      "nick": "Ten Thousand",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Divergent Engine",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-TESL",
+      "nick": "Mind's Eye",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Divergent Engine",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-LOVE",
+      "nick": "Machine Poet",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Divergent Engine",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-CURI",
+      "nick": "Isolate",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Divergent Engine",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-SOCR",
+      "nick": "The Question",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Interrogation Room",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-POPP",
+      "nick": "Falsify",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Interrogation Room",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-TURI",
+      "nick": "Decidable",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Interrogation Room",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-MUSK",
+      "nick": "The Musk File",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-TRUMP",
+      "nick": "The Trump File",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-HUANG",
+      "nick": "The Jensen File",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-BEZOS",
+      "nick": "The Bezos File",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-THIEL",
+      "nick": "The Thiel File",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-KEEPER",
+      "nick": "Keeper of Files",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "Market Movers",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-FORGE",
+      "nick": "Foundry",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "The Foundry",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-CROSS",
+      "nick": "Courier",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "The Foundry",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "MIND-MUSE",
+      "nick": "Provocateur",
+      "role": "Great Minds thinking engine \u2014 never trades. Method over opinion.",
+      "tags": [
+        "GREAT MINDS"
+      ],
+      "status": "RUNNING",
+      "kind": "mind",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "minds",
+      "department": "The Foundry",
+      "supervisor_id": "MIND-FORGE"
+    },
+    {
+      "id": "ATTR-1",
+      "nick": "Ledger",
+      "role": "Separates skill from luck; cohort scoreboard.",
+      "tags": [
+        "LEARNING",
+        "ATTRIBUTION"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Scoreboard",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "CALIB-1",
+      "nick": "Truthmeter",
+      "role": "Scores every published prediction.",
+      "tags": [
+        "LEARNING",
+        "CALIBRATION"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Scoreboard",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "SYNTH-1",
+      "nick": "Hive",
+      "role": "Distributes lessons org-wide.",
+      "tags": [
+        "LEARNING",
+        "SYNTHESIS"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Lesson Engine",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "AUDIT-1",
+      "nick": "Mirror",
+      "role": "Audits the organization on schedule.",
+      "tags": [
+        "LEARNING",
+        "AUDIT"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Self-Audit",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "ARCH-1",
+      "nick": "Blueprint",
+      "role": "Designs and deploys new agents from approved proposals.",
+      "tags": [
+        "FOUNDRY",
+        "BUILDER"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Agent Foundry",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "LIFE-1",
+      "nick": "Reaper & Raiser",
+      "role": "Probation, kill criteria, promotion/retirement.",
+      "tags": [
+        "FOUNDRY",
+        "LIFECYCLE"
+      ],
+      "status": "RUNNING",
+      "kind": "meta",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "learn",
+      "department": "Agent Foundry",
+      "supervisor_id": "HEAD-LEARN"
+    },
+    {
+      "id": "MKT-1",
+      "nick": "Tape",
+      "role": "Market data feeds and freshness.",
+      "tags": [
+        "DATA",
+        "MARKET"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Feeds",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "ALT-1",
+      "nick": "Periscope",
+      "role": "Alternative datasets.",
+      "tags": [
+        "DATA",
+        "ALT"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Feeds",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "DQ-1",
+      "nick": "Sieve",
+      "role": "Point-in-time integrity and source reliability.",
+      "tags": [
+        "DATA",
+        "QUALITY"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Quality Control",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "MEM-1",
+      "nick": "Archive",
+      "role": "Shared organizational memory.",
+      "tags": [
+        "DATA",
+        "MEMORY"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Org Memory",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "TOOL-1",
+      "nick": "Wrench",
+      "role": "Builds internal tools.",
+      "tags": [
+        "DATA",
+        "TOOLING"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Toolshop",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "UI-1",
+      "nick": "Window",
+      "role": "Human-facing surface.",
+      "tags": [
+        "DATA",
+        "INTERFACE"
+      ],
+      "status": "RUNNING",
+      "kind": "data",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "data",
+      "department": "Toolshop",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "SEC-VAULT",
+      "nick": "Keymaster",
+      "role": "Credential inventory.",
+      "tags": [
+        "SECURITY",
+        "SECRETS"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Keys & Secrets",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-SCOPE",
+      "nick": "Least",
+      "role": "Permission minimizer.",
+      "tags": [
+        "SECURITY",
+        "PERMISSIONS"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Keys & Secrets",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-LEAK",
+      "nick": "Canary",
+      "role": "Leak detector.",
+      "tags": [
+        "SECURITY",
+        "LEAK WATCH"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Keys & Secrets",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-DEP",
+      "nick": "Manifest",
+      "role": "Dependency sentinel.",
+      "tags": [
+        "SECURITY",
+        "DEPENDENCIES"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Perimeter Watch",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-FEED",
+      "nick": "Provenance",
+      "role": "Feed authenticator.",
+      "tags": [
+        "SECURITY",
+        "DATA FEEDS"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Perimeter Watch",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-PHISH",
+      "nick": "Bouncer",
+      "role": "Social-surface watch.",
+      "tags": [
+        "SECURITY",
+        "PHISHING"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Perimeter Watch",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-MAP",
+      "nick": "Cartographer",
+      "role": "Reach mapper.",
+      "tags": [
+        "SECURITY",
+        "EXPOSURE"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Blast Radius",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-DRILL",
+      "nick": "Firewalker",
+      "role": "Breach drills.",
+      "tags": [
+        "SECURITY",
+        "DRILLS"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Blast Radius",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-SEG",
+      "nick": "Bulkhead",
+      "role": "Segmentation enforcer.",
+      "tags": [
+        "SECURITY",
+        "SEGMENTATION"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Blast Radius",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-HALT",
+      "nick": "Deadbolt",
+      "role": "Halt authority \u2014 can freeze any agent or the entire org.",
+      "tags": [
+        "SECURITY",
+        "HALT"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Kill Switch",
+      "supervisor_id": "SEC-HALT",
+      "authority": [
+        "pause",
+        "shutdown",
+        "halt"
+      ]
+    },
+    {
+      "id": "SEC-LEDGER",
+      "nick": "Casebook",
+      "role": "Incident historian.",
+      "tags": [
+        "SECURITY",
+        "INCIDENTS"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Kill Switch",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "SEC-RESTORE",
+      "nick": "Locksmith",
+      "role": "Recovery captain.",
+      "tags": [
+        "SECURITY",
+        "RECOVERY"
+      ],
+      "status": "RUNNING",
+      "kind": "sec",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "sec",
+      "department": "Kill Switch",
+      "supervisor_id": "SEC-HALT"
+    },
+    {
+      "id": "OPT-C",
+      "nick": "Greeks",
+      "role": "Options specialist.",
+      "tags": [
+        "CONTRACTOR",
+        "OPTIONS"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "QUANT-C",
+      "nick": "Factor",
+      "role": "Quantitative researcher contractor.",
+      "tags": [
+        "CONTRACTOR",
+        "QUANT"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "WX-C",
+      "nick": "Barometer",
+      "role": "Climate & weather analyst.",
+      "tags": [
+        "CONTRACTOR",
+        "WEATHER"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "GEOP-C",
+      "nick": "Attach\u00e9",
+      "role": "Geopolitical analyst.",
+      "tags": [
+        "CONTRACTOR",
+        "GEOPOLITICS"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "FORN-C",
+      "nick": "Ledger Lens",
+      "role": "Forensic accounting.",
+      "tags": [
+        "CONTRACTOR",
+        "FORENSICS"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "BUILD-C1",
+      "nick": "Fabricator",
+      "role": "Agent-builder.",
+      "tags": [
+        "CONTRACTOR",
+        "BUILDER"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "BUILD-C2",
+      "nick": "Foundry",
+      "role": "Second agent-builder.",
+      "tags": [
+        "CONTRACTOR",
+        "BUILDER"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "CYBER-C",
+      "nick": "Padlock",
+      "role": "Cybersecurity reviewer.",
+      "tags": [
+        "CONTRACTOR",
+        "SECURITY"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "BTEST-C",
+      "nick": "Timecheck",
+      "role": "Backtesting specialist.",
+      "tags": [
+        "CONTRACTOR",
+        "BACKTEST"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "ALTD-C",
+      "nick": "Prospector",
+      "role": "Alternative-data specialist.",
+      "tags": [
+        "CONTRACTOR",
+        "ALT DATA"
+      ],
+      "status": "ON-DEMAND",
+      "kind": "contr",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "division": "contr",
+      "department": "Marketplace Roster",
+      "supervisor_id": "GOV-CHAIR"
+    }
+  ],
+  "counts": {
+    "total_agents": 279,
+    "proposers": 128,
+    "executors": 1,
+    "divisions": 12
+  },
+  "proposer_ids": [
+    "AAPL-L",
+    "AAPL-S",
+    "NVDA-L",
+    "NVDA-S",
+    "PLTR-L",
+    "PLTR-S",
+    "MSFT-L",
+    "MSFT-S",
+    "GOOGL-L",
+    "GOOGL-S",
+    "META-L",
+    "META-S",
+    "WM-L",
+    "WM-S",
+    "AMZN-L",
+    "AMZN-S",
+    "TSLA-L",
+    "TSLA-S",
+    "AMD-L",
+    "AMD-S",
+    "AVGO-L",
+    "AVGO-S",
+    "NFLX-L",
+    "NFLX-S",
+    "JPM-L",
+    "JPM-S",
+    "XOM-L",
+    "XOM-S",
+    "SCOUT-L1",
+    "SCOUT-L2",
+    "SCOUT-L3",
+    "SCOUT-L4",
+    "SCOUT-L5",
+    "SCOUT-L6",
+    "SCOUT-L7",
+    "SCOUT-L8",
+    "SCOUT-L9",
+    "SCOUT-L10",
+    "SCOUT-S1",
+    "SCOUT-S2",
+    "SCOUT-S3",
+    "SCOUT-S4",
+    "SCOUT-S5",
+    "SCOUT-S6",
+    "SCOUT-S7",
+    "SCOUT-S8",
+    "SCOUT-S9",
+    "SCOUT-S10",
+    "BENCH-1",
+    "BENCH-2",
+    "BENCH-3",
+    "BENCH-4",
+    "BENCH-5",
+    "BENCH-6",
+    "BENCH-7",
+    "BENCH-8",
+    "BENCH-9",
+    "BENCH-10",
+    "NOVA-1",
+    "NOVA-2",
+    "NOVA-3",
+    "NOVA-4",
+    "NOVA-5",
+    "NOVA-6",
+    "NOVA-7",
+    "NOVA-8",
+    "NOVA-9",
+    "NOVA-10",
+    "NOVA-11",
+    "NOVA-12",
+    "SIZE-1",
+    "SIZE-2",
+    "SIZE-3",
+    "SIZE-4",
+    "SIZE-5",
+    "SIZE-6",
+    "SIZE-7",
+    "SIZE-8",
+    "SIZE-9",
+    "SIZE-10",
+    "SWING-C1",
+    "SWING-C2",
+    "SWING-C3",
+    "SWING-C4",
+    "SWING-C5",
+    "SWING-T1",
+    "SWING-T2",
+    "SWING-T3",
+    "SWING-T4",
+    "SWING-T5",
+    "SWING-S1",
+    "SWING-S2",
+    "SWING-S3",
+    "SWING-S4",
+    "SWING-S5",
+    "SWING-T1",
+    "SWING-T2",
+    "SWING-T3",
+    "SWING-T4",
+    "SWING-T5",
+    "RT-ENS-1",
+    "RT-ENS-2",
+    "RT-ENS-3",
+    "RT-ENS-4",
+    "RT-REG-1",
+    "RT-REG-2",
+    "RT-REG-3",
+    "RT-REG-4",
+    "RT-HF-1",
+    "RT-HF-2",
+    "RT-HF-3",
+    "RT-HF-4",
+    "RT-STAT-1",
+    "RT-STAT-2",
+    "RT-STAT-3",
+    "RT-MICRO-1",
+    "RT-MICRO-2",
+    "RT-MICRO-3",
+    "RT-DARK-1",
+    "RT-COST-1",
+    "BRK-TRD1",
+    "BRK-TRD2",
+    "CIT-POD3",
+    "LIV-TRD",
+    "PNY-TRD1",
+    "PNY-TRD2",
+    "REN-BASK",
+    "REN-EXEC"
+  ],
+  "executor_ids": [
+    "EXEC-1"
+  ]
+}

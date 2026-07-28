@@ -1,85 +1,42 @@
 # 00 — Audit of Current Agent Setup
 
-**Council date:** 2026-07-28  
-**Subject repository:** `spinewatson-pixel/Agent-fleet`  
-**Environment under review:** `main` @ initial commit `6fbef43`
+**Council date:** 2026-07-28 (amended after Watchfloor UI delivery)  
+**Subject repository:** `spinewatson-pixel/Agent-fleet`
 
-## Finding (Chief Architecture)
+## Finding (amended)
 
-The repository contains **no executable multi-agent trading system**. The only artifact is:
+### Initial git audit
+At first commit the git tree contained only `README.md` → `# Agent-fleet`. No Python agents were in the repository.
 
-```
-README.md  →  "# Agent-fleet"
-```
+### Correction — Watchfloor skeleton is the real org
+The user subsequently provided the **Watchfloor Quant Lab** single-file org UI: the complete agent-skeleton fleet across Mission Control, Global Intel, Predictions, Trading Floor, The Lab, Quant Research, Fund Floor, Great Minds, Learning Loop, Data Core, Perimeter, and Contractors.
 
-There are no agent skeletons, strategy modules, message schemas, risk controls, data connectors, tests, or deployment configs in git history.
+**Canonical machine extract:** `config/watchfloor_registry.json` (**279 agents**, 128 proposers, executor `EXEC-1` only).  
+**Human/org UI:** `ui/watchfloor.html` (registry-backed; preserves Watchfloor design language).  
+**Reconciliation:** `docs/14_watchfloor_reconciliation.md`.
 
-**Implication:** The Institutional Design Council cannot “preserve existing agent wiring” because none exists in this repository. Useful components to preserve are limited to:
+## What was preserved
 
 | Component | Status | Council action |
 |-----------|--------|----------------|
-| Repository name / identity (`Agent-fleet`) | Present | Keep |
-| README stub | Present | Replace with institutional operating README |
-| Implied intent (multi-agent trading fleet) | Inferred from user brief | Materialize as contracts + paper org |
+| Watchfloor division/department/agent roster | Provided by user | Extracted to registry; UI restored |
+| Paper sandbox / thesis-before-trade / $1–2 sizing | Present in skeleton rules | Encoded in `hard_rules` |
+| Human Mode B, RISK/COMP halt, SEC-HALT | Present | Wired into approval + kill switch |
+| Quant thesis-exempt wing | Present | Honored in validation |
+| Provisional STRAT-* roster from Phase 0 | Temporary | Demoted to legacy compatibility only |
 
-## Independent institutional audits
+## Institutional council mapped onto Watchfloor seats
 
-### Palantir-inspired Systems Intelligence (`SYS-INTEL-001`)
-- **Missing:** decision graph, data lineage, permissions model, audit event store, shared context bus.
-- **Weakness:** unnamed agents cannot be mapped into a connected decision system.
-- **Recommendation:** adopt `MessageEnvelope` + append-only `EventStore` as the system of record for every handoff.
-
-### Bloomberg-inspired Market Information (`MKT-INFO-001`)
-- **Missing:** market feeds, news/filings/earnings/macro calendars, source verification, normalization, tagging, agent-specific delivery.
-- **Recommendation:** define `MarketEvent` contract first; wire paper feed; defer vendor APIs behind adapters.
-
-### NVIDIA-inspired AI Infrastructure (`AI-INFRA-001`)
-- **Missing:** model routing, compute plan, inference SLOs, embeddings store, local/cloud split, failover.
-- **Recommendation:** Phase 0–1 runs deterministic agents locally (no LLM required for paper path). Reserve model-routing interface for Phase 2+.
-
-### BlackRock-inspired Portfolio & Risk (`PORT-RISK-001`)
-- **Missing:** capital allocation, exposure/correlation limits, stress tests, drawdown halts, liquidity caps.
-- **Unsafe default if built naively:** strategy-local sizing treated as binding capital.
-- **Recommendation:** strategies emit *suggested* size only; `PORT-RISK-001` owns binding limits and veto.
-
-### Citadel-inspired Trading Operations (`TRADE-OPS-001`)
-- **Missing:** OMS, regime engine, slippage ledger, multi-strategy coordination.
-- **Recommendation:** paper OMS (`EXEC-OMS-001`) with hard `live_execution_enabled=false`.
-
-### Renaissance-inspired Quant Research (`QUANT-RES-001`)
-- **Missing:** hypothesis registry, feature store, OOS/walk-forward harness, multiple-testing controls.
-- **Recommendation:** controlled improvement pipeline; no production self-mutation.
-
-### Goldman-inspired Research & Strategy (`FUND-RES-001`)
-- **Missing:** standardized research→signal schema.
-- **Recommendation:** `ResearchSignal` as the only research output strategies may consume.
-
-### JPMorgan-inspired Governance (`GOV-OPS-001`)
-- **Missing:** approval authority, reconciliation, incident management, escalation, documentation.
-- **Recommendation:** governance veto + shutdown switch; mandatory audit on every message.
-
-### Berkshire-inspired Capital Stewardship (`CAP-STEW-001`)
-- **Missing:** quality/valuation discipline; activity veto against trading-for-its-own-sake.
-- **Recommendation:** edge/cost hurdle + short-horizon low-conviction veto.
-
-## Cross-critique summary
-
-| Team | Critique of others | Resolution by `ARCH-CHIEF-001` |
-|------|--------------------|--------------------------------|
-| Risk vs Trading Ops | Ops wanted strategy-local kill switches; Risk requires portfolio-level halt primacy | Portfolio halt overrides strategy; Ops may pause sleeves |
-| Quant vs Fundamental | Competing signal formats | Single `ResearchSignal` schema; both may publish |
-| Stewardship vs Momentum/MR | Stewardship argued short-horizon strategies are harmful | Keep MR/MOM in paper roster with stewardship veto on low edge/conviction |
-| Infra vs Info | Infra proposed cloud-first; Info needs offline paper replay | Local-first paper; cloud adapters optional |
-
-**Vetoes exercised:** Risk + Governance veto any design where strategies approve/execute/self-grade. Stewardship vetoes designs that incentivize fill-rate over expected edge.
+See `docs/14_watchfloor_reconciliation.md` and `institutional_council_map` in the registry.
 
 ## Unified design decision
 
-Build a **paper-trading institutional organization** with:
+Operate a **paper-trading Watchfloor organization** where:
 
-1. Nine departmental supervisors + chief architecture  
-2. Eight strategy agents with complete operating contracts  
-3. Independent validation → portfolio/risk → stewardship → governance → execution chain  
-4. Live execution **disabled** until Phase 5 explicit authorization  
+1. Watchfloor agent IDs are canonical  
+2. Proposers never approve/execute/self-grade  
+3. `EXEC-1` alone places authorized paper orders  
+4. Live execution remains hard-disabled  
+5. Controlled learning cannot mutate production rules  
 
-Evidence: empty repo audit; user-mandated operating chain; separation of propose / approve / execute / review roles.
+Evidence: user-provided Watchfloor skeleton; separation-of-duties mandate; Phase-1 paper objective.

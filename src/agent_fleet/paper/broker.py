@@ -29,6 +29,7 @@ class PaperBroker:
     positions: dict[str, PaperPosition] = field(default_factory=dict)
     slippage_bps_default: float = 5.0
     live_execution_enabled: bool = False
+    execution_agent_id: str = "EXEC-1"
 
     def __post_init__(self) -> None:
         if self.live_execution_enabled or LIVE_EXECUTION_ENABLED:
@@ -40,7 +41,7 @@ class PaperBroker:
         if not decision.execution_authorized:
             return ExecutionReport(
                 proposal_id=proposal.proposal_id,
-                execution_agent_id="EXEC-OMS-001",
+                execution_agent_id=self.execution_agent_id,
                 symbol=proposal.symbol,
                 side=proposal.side,
                 requested_qty=0,
@@ -71,7 +72,7 @@ class PaperBroker:
         )
         return ExecutionReport(
             proposal_id=proposal.proposal_id,
-            execution_agent_id="EXEC-OMS-001",
+            execution_agent_id=self.execution_agent_id,
             symbol=proposal.symbol,
             side=proposal.side,
             requested_qty=qty,

@@ -1,72 +1,53 @@
-# Agent Fleet
+# Agent Fleet / Watchfloor Quant Lab
 
-Institutional-grade **multi-agent paper-trading organization**.
+Institutional-grade **multi-agent paper-trading organization** built on the Watchfloor agent fleet.
 
-Live brokerage execution is **hard-disabled** until Phase 5+ explicit authorization.
+Live brokerage execution is **hard-disabled**.
 
-## What this is
+## Canonical sources
 
-Not a pile of generic chatbot agents. This repository implements:
-
-- An Institutional Design Council redesign (9 departmental roles + chief architecture)
-- Enforceable **Agent Operating Contracts** for every agent
-- A full operating chain:
-
-```
-Data ingestion → information validation → research → signal generation
-→ strategy proposal → independent validation → portfolio evaluation
-→ risk approval → execution → live monitoring → post-trade attribution
-→ controlled improvement
-```
-
-- Separation of duties: strategies **propose**; risk/portfolio **decide**; execution **places authorized paper orders**; review **measures** and may only **propose** changes
+| Artifact | Role |
+|----------|------|
+| `config/watchfloor_registry.json` | Machine-readable roster (279 agents) |
+| `ui/watchfloor.html` | Org UI (registry-backed) |
+| `docs/14_watchfloor_reconciliation.md` | Council mapping onto Watchfloor seats |
+| `docs/00_audit.md` … `docs/13_*.md` | Institutional redesign deliverables |
 
 ## Quick start
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest -q
-agent-fleet paper-run --symbol AAPL --price 190 --strategy STRAT-MOM-001
-agent-fleet export-contracts
+agent-fleet registry
+agent-fleet authority-map
+agent-fleet paper-run --symbol AAPL --price 190 --agent AAPL-L
 ```
 
-## Documentation (read in order)
+Open the org UI:
 
-1. `docs/00_audit.md` — audit of the prior empty skeleton  
-2. `docs/01_missing_information.md` — targeted questions (live-blocking only)  
-3. `docs/02_organizational_map.md`  
-4. `docs/03_agent_communication_map.md`  
-5. `docs/04_authority_approval_map.md`  
-6. `docs/05_data_information_flow.md`  
-7. `docs/06_agent_operating_contracts.md`  
-8. `docs/07_missing_agents.md`  
-9. `docs/08_duplicates_consolidation.md`  
-10. `docs/09_risk_emergency_controls.md`  
-11. `docs/10_memory_learning.md`  
-12. `docs/11_backtesting_paper_trading.md`  
-13. `docs/12_implementation_phases.md`  
-14. `docs/13_acceptance_tests.md`  
-15. `docs/council/unified_design.md`
+```bash
+open ui/watchfloor.html   # or serve the file in a browser
+```
 
-## Layout
+## Operating chain (Watchfloor IDs)
 
 ```
-config/organization.yaml     # limits, departments, strategy roster
-src/agent_fleet/
-  schemas/                   # messages, contracts, enums
-  core/                      # authority, bus, events, memory
-  agents/                    # institutional + strategy agents
-  paper/                     # paper broker
-  workflow/                  # full operating pipeline
-docs/                        # council redesign deliverables
-tests/                       # unit, integration, acceptance
+MKT-1 / ALT-1 / DQ-1
+  → intel + pred research
+  → Watchfloor proposer (AAPL-L, SCOUT-*, RT-*, BRK-TRD*, …)
+  → FIT-1 validation
+  → RISK-1 / CAP-1 portfolio-risk
+  → BRK-SAFE stewardship veto
+  → COMP-1 / GOV-CHAIR / HUMAN-1 (Mode B)
+  → EXEC-1 paper fill
+  → COMP-1 monitor · ATTR-1 attribution · SYNTH-1 controlled improvement
 ```
 
 ## Non-negotiables
 
-- Strategies cannot self-approve, self-execute, set binding capital, or grade themselves
-- Risk, governance, and capital stewardship hold veto power
+- Strategies **propose only**
+- Only **EXEC-1** places authorized paper orders
+- Risk / governance / stewardship / security hold veto / halt power
 - Experimental learning never writes production rules
-- Paper organization first; autonomous live remains off
+- Autonomous live remains off until Phase 5+ explicit authorization

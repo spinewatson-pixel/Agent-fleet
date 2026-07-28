@@ -52,7 +52,11 @@ class Organization:
         if self.live_execution_enabled:
             raise PermissionError("Live execution remains disabled for this organization")
         self.authority = AuthorityResolver(live_execution_enabled=False)
-        self.broker = PaperBroker(nav_usd=self.nav_usd, cash_usd=self.nav_usd)
+        self.broker = PaperBroker(
+            nav_usd=self.nav_usd,
+            cash_usd=self.nav_usd,
+            execution_agent_id="EXEC-OMS-001",
+        )
         self.bus = MessageBus(event_store=self.event_store)
 
         # Institutional layer
