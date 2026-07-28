@@ -21,8 +21,27 @@ pip install -e ".[dev]"
 pytest -q
 agent-fleet registry
 agent-fleet authority-map
+agent-fleet enhance                 # Design Council → docs/council/enhancement_plan.*
 agent-fleet paper-run --symbol AAPL --price 190 --agent AAPL-L
 ```
+
+## Institutional Design Council (enhance fleet)
+
+Nine specialty teams + chief architecture audit Watchfloor and emit a prioritized plan:
+
+| Team | Inspired by | Role |
+|------|-------------|------|
+| Systems Intelligence | Palantir | lineage, permissions, audit |
+| Market Information | Bloomberg | feeds, verification, delivery |
+| AI Infrastructure | NVIDIA | model routing, compute |
+| Portfolio and Risk | BlackRock | limits, stress (**veto**) |
+| Trading Operations | Citadel | OMS, slippage, coordination |
+| Quantitative Research | Renaissance | hypotheses, anti-overfit |
+| Research and Strategy | Goldman | research → signals |
+| Governance and Operations | JPMorgan | controls, escalation (**veto**) |
+| Capital Stewardship | Berkshire | quality, activity (**veto**) |
+
+Council agents **design and supervise only** — they do not propose or execute trades. Run `agent-fleet enhance` to refresh `docs/council/enhancement_plan.md`.
 
 Open the org UI:
 

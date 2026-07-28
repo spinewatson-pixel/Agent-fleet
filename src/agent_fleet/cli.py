@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from agent_fleet.council import InstitutionalDesignCouncil, plan_to_markdown
 from agent_fleet.registry.watchfloor import load_watchfloor_registry
 from agent_fleet.workflow.pipeline import Organization
 from agent_fleet.workflow.watchfloor_org import WatchfloorOrganization
@@ -27,6 +28,21 @@ def main(argv: list[str] | None = None) -> int:
 
     auth = sub.add_parser("authority-map", help="Print Watchfloor authority map JSON")
     reg = sub.add_parser("registry", help="Print Watchfloor registry summary")
+
+    enhance = sub.add_parser(
+        "enhance",
+        help="Run Institutional Design Council audits and write enhancement plan",
+    )
+    enhance.add_argument(
+        "--out-dir",
+        default="docs/council",
+        help="Directory for enhancement_plan.json and enhancement_plan.md",
+    )
+    enhance.add_argument(
+        "--stdout",
+        action="store_true",
+        help="Also print a short task summary to stdout",
+    )
 
     args = parser.parse_args(argv)
 
@@ -73,6 +89,27 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "registry":
         registry = load_watchfloor_registry()
         print(json.dumps(registry["counts"], indent=2))
+        return 0
+    if args.cmd == "enhance":
+        council = InstitutionalDesignCouncil()
+        plan = council.run()
+        out_dir = Path(args.out_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        json_path = out_dir / "enhancement_plan.json"
+        md_path = out_dir / "enhancement_plan.md"
+        json_path.write_text(json.dumps(plan.to_dict(), indent=2), encoding="utf-8")
+        md_path.write_text(plan_to_markdown(plan), encoding="utf-8")
+        summary = {
+            "wrote": [str(json_path), str(md_path)],
+            "teams": [t.team_id for t in council.teams],
+            "finding_count": len(plan.findings),
+            "veto_count": len(plan.vetoes),
+            "task_counts": {k: len(v) for k, v in plan.tasks_by_priority.items()},
+            "p0_titles": [t["title"] for t in plan.tasks_by_priority.get("P0", [])],
+        }
+        print(json.dumps(summary, indent=2))
+        if args.stdout:
+            print(plan_to_markdown(plan))
         return 0
     return 1
 
