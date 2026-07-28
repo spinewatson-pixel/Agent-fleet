@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>watchfloor org — quant lab</title>
+  <style>
+    :root {
+      --bg: #0b0a14;
+      --surface: #141225;
+      --purple: #8b7cf6;
+      --text: #e8e4f8;
+      --muted: #9a93b8;
+      --line: #2a2540;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #1a1533 0%, var(--bg) 55%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+    }
+    main {
+      max-width: 42rem;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      padding: 2rem 1.75rem;
+    }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.65rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--purple);
+    }
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    p { line-height: 1.55; color: var(--text); }
+    code {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.9em;
+      color: var(--purple);
+    }
+    ul { margin: 1rem 0 0; padding-left: 1.2rem; color: var(--muted); }
+    li { margin: 0.35rem 0; }
+    #bridge-status {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Agent-fleet · org front-end</p>
+    <h1>watchfloor org — quant lab</h1>
+    <p>
+      This file is the Watchfloor UI shell: the org front-end for Mission Control,
+      Global Intel, Predictions, Trading (quant + funds consolidated), Lab,
+      Great Minds, Learning Loop, Data Core, Perimeter, and Contractors.
+    </p>
+    <p>
+      The full single-file Quant Lab application (tabs, agent overlays, chat,
+      create-agent/dept modals, <code>window.storage</code> persistence, and
+      <code>baseDivisions()</code> roster) belongs here at
+      <code>ui/watchfloor.html</code>. Until that complete HTML is restored from
+      the preserved user source, this page documents the intended entry point and
+      loads the registry bridge for future wiring.
+    </p>
+    <ul>
+      <li>Machine-readable roster: <code>config/watchfloor_registry.json</code></li>
+      <li>Bridge API: <code>ui/watchfloor_bridge.js</code></li>
+      <li>Source-of-truth notes: <code>docs/watchfloor/00_source_of_truth.md</code></li>
+    </ul>
+    <div id="bridge-status">Loading registry bridge…</div>
+  </main>
+  <script src="./watchfloor_bridge.js"></script>
+  <script>
+    (async () => {
+      const el = document.getElementById("bridge-status");
+      try {
+        const reg = await WatchfloorBridge.loadRegistry();
+        const summary = WatchfloorBridge.summary(reg);
+        el.textContent =
+          `Registry loaded · ${summary.totalAgents} agents · ` +
+          `${summary.divisions} divisions · proposers ${summary.proposers} · ` +
+          `executor ${summary.executors.join(", ")} · paper_only=${summary.paperOnly}`;
+      } catch (err) {
+        el.textContent = `Registry bridge unavailable: ${err.message}`;
+      }
+    })();
+  </script>
+</body>
+</html>
