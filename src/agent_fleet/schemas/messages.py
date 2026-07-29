@@ -102,12 +102,14 @@ class TradeProposal(BaseModel):
     take_profit: Optional[float] = None
     invalidation_rules: list[str]
     suggested_size_pct_nav: float = Field(gt=0.0, le=5.0)
+    suggested_size_usd: Optional[float] = Field(default=None, gt=0.0)
     holding_period_days_min: int
     holding_period_days_max: int
     valid_regimes: list[MarketRegime]
     current_regime: MarketRegime
     required_data_inputs: list[str]
     research_signal_ids: list[str] = Field(default_factory=list)
+    evidence_package_id: Optional[str] = None
     confidence: float = Field(ge=0.0, le=1.0)
     expected_edge_bps: float
     max_slippage_bps: float = 15.0
@@ -137,6 +139,7 @@ class PortfolioVerdict(BaseModel):
     portfolio_agent_id: str
     action: ActionType
     approved_size_pct_nav: Optional[float] = None
+    approved_size_usd: Optional[float] = None
     reasons: list[str]
     exposure_after: dict[str, float] = Field(default_factory=dict)
     correlation_flags: list[str] = Field(default_factory=list)
@@ -147,6 +150,7 @@ class RiskVerdict(BaseModel):
     risk_agent_id: str
     action: ActionType
     approved_size_pct_nav: Optional[float] = None
+    approved_size_usd: Optional[float] = None
     stress_pnl_pct: Optional[float] = None
     limit_breaches: list[str] = Field(default_factory=list)
     reasons: list[str]
@@ -157,6 +161,7 @@ class ApprovalDecision(BaseModel):
     proposal_id: str
     status: ApprovalStatus
     final_size_pct_nav: Optional[float] = None
+    final_size_usd: Optional[float] = None
     approving_agents: list[str]
     rejecting_agents: list[str] = Field(default_factory=list)
     authority_chain: list[str]

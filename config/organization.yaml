@@ -5,13 +5,13 @@
 environment: paper
 live_execution_enabled: false
 paper_capital_usd: 1_000_000
-agent_ceiling: 150
+agent_ceiling: 300
 source_of_truth: config/watchfloor_registry.json
 ui: ui/watchfloor.html
 
 organization:
   name: Watchfloor Quant Lab
-  version: "0.2.0"
+  version: "0.3.0"
   chief_architecture_agent: GOV-CHAIR
 
 departments:

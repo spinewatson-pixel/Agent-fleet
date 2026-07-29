@@ -102,6 +102,7 @@ class AuthorityResolver:
         approving.append(validation.validator_agent_id)
 
         size = proposal.suggested_size_pct_nav
+        size_usd = proposal.suggested_size_usd
         status = ApprovalStatus.APPROVED
 
         for verdict in (portfolio, risk, capital_stewardship, governance):
@@ -117,6 +118,7 @@ class AuthorityResolver:
                     proposal_id=proposal.proposal_id,
                     status=ApprovalStatus.REJECTED,
                     final_size_pct_nav=None,
+                    final_size_usd=None,
                     approving_agents=approving,
                     rejecting_agents=rejecting,
                     authority_chain=self.chain,
@@ -130,6 +132,7 @@ class AuthorityResolver:
                     proposal_id=proposal.proposal_id,
                     status=ApprovalStatus.PAUSED,
                     final_size_pct_nav=None,
+                    final_size_usd=None,
                     approving_agents=approving,
                     rejecting_agents=rejecting,
                     authority_chain=self.chain,
@@ -141,10 +144,22 @@ class AuthorityResolver:
                 approved = verdict.approved_size_pct_nav
                 if approved is not None:
                     size = min(size, approved)
+                if getattr(verdict, "approved_size_usd", None) is not None:
+                    size_usd = (
+                        verdict.approved_size_usd
+                        if size_usd is None
+                        else min(size_usd, verdict.approved_size_usd)
+                    )
                 reasons.extend(verdict.reasons)
             approving.append(agent)
             if verdict.approved_size_pct_nav is not None:
                 size = min(size, verdict.approved_size_pct_nav)
+            if getattr(verdict, "approved_size_usd", None) is not None:
+                size_usd = (
+                    verdict.approved_size_usd
+                    if size_usd is None
+                    else min(size_usd, verdict.approved_size_usd)
+                )
 
         # Strategy may never authorize its own execution.
         if proposal.strategy_agent_id in approving:
@@ -170,6 +185,7 @@ class AuthorityResolver:
             proposal_id=proposal.proposal_id,
             status=status,
             final_size_pct_nav=size if status != ApprovalStatus.REJECTED else None,
+            final_size_usd=size_usd if status != ApprovalStatus.REJECTED else None,
             approving_agents=approving,
             rejecting_agents=rejecting,
             authority_chain=self.chain,

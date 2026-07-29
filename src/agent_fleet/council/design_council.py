@@ -77,14 +77,19 @@ class CouncilTeam:
 
 
 def _proposers_without_setup_rules(registry: dict[str, Any]) -> list[str]:
-    missing = []
-    for agent in registry["agents"]:
-        if not agent.get("may_propose_trades"):
-            continue
-        # Watchfloor registry stores role text but not measurable setup rules yet
-        if not agent.get("setup_detection_rules") and not agent.get("entry_exit"):
-            missing.append(agent["id"])
-    return missing
+    """Prefer generated contract store; fall back to registry field inspection."""
+    try:
+        from agent_fleet.agents.watchfloor_contracts import incomplete_proposer_ids
+
+        return incomplete_proposer_ids()
+    except Exception:
+        missing = []
+        for agent in registry["agents"]:
+            if not agent.get("may_propose_trades"):
+                continue
+            if not agent.get("setup_detection_rules") and not agent.get("entry_exit"):
+                missing.append(agent["id"])
+        return missing
 
 
 def audit_systems_intelligence(registry: dict[str, Any]) -> list[Finding]:
@@ -94,19 +99,18 @@ def audit_systems_intelligence(registry: dict[str, Any]) -> list[Finding]:
         Finding(
             team_id="IDC-PALANTIR",
             team_name="Systems Intelligence",
-            kind=FindingKind.MISSING,
-            title="No persistent decision graph across Watchfloor runtime",
+            kind=FindingKind.IMPROVEMENT,
+            title="Durable EventStore path exists; UI still lacks MEM-1 audit export",
             detail=(
-                "MEM-1 / DQ-1 exist as seats, but agent-to-agent lineage is only "
-                "implemented inside the Python paper org, not as a shared Watchfloor "
-                "event bus every division writes to."
+                "Paper org now writes lineage to data/audit/events.jsonl by default. "
+                "Remaining gap: Watchfloor UI does not surface or export that graph."
             ),
-            evidence=["Paper EventStore is process-local", "UI has no audit export"],
+            evidence=["WatchfloorOrganization EventStore path", "ui/watchfloor.html"],
             watchfloor_ids=["MEM-1", "DQ-1", "UI-1", "TOOL-1"],
-            priority=Priority.P1,
+            priority=Priority.P2,
             implementation_task=(
-                "Add durable EventStore path + Watchfloor message schema bridge so "
-                "every proposal/approval/fill writes lineage readable by MEM-1."
+                "Add MEM-1 audit export endpoint/bridge so the UI can read "
+                "data/audit/events.jsonl lineage for each proposal_id."
             ),
         ),
         Finding(
@@ -219,33 +223,35 @@ def audit_portfolio_risk(registry: dict[str, Any]) -> list[Finding]:
         Finding(
             team_id="IDC-BLACKROCK",
             team_name="Portfolio and Risk",
-            kind=FindingKind.WEAKNESS,
-            title="Comparable $1–2 sizing not applied as binding NAV policy in paper broker",
+            kind=FindingKind.IMPROVEMENT,
+            title="Fixed-dollar cohort sizing wired; fund/quant sleeves still %NAV",
             detail=(
-                "Watchfloor mandates fixed $1–2 for cohort comparability, but paper "
-                "fills currently size by %NAV suggestions."
+                "PaperBroker + RISK-1 honor suggested_size_usd for fixed_1_2_usd cohorts. "
+                "Continue separating paper experiment capital from stewardship sleeve capital."
             ),
             evidence=[f"default_sizing_usd={rules.get('default_sizing_usd')}"],
             watchfloor_ids=["CAP-1", "RISK-1", "EXEC-1"],
-            priority=Priority.P1,
+            priority=Priority.P2,
             implementation_task=(
-                "Teach PaperBroker + RISK-1 to convert fixed-dollar cohort sizes and "
-                "keep %NAV only for fund/quant desk sleeves that declare it."
+                "Expose paper_experiment_capital_usd vs stewardship_sleeve_capital_usd "
+                "in portfolio state exports for BRK-SAFE."
             ),
         ),
         Finding(
             team_id="IDC-BLACKROCK",
             team_name="Portfolio and Risk",
-            kind=FindingKind.MISSING,
-            title="Correlation cluster limits declared but not computed",
-            detail="CORR-Q and RISK-1 lack a live correlation matrix feeding max_correlated_cluster_pct.",
-            evidence=["organization.yaml max_correlated_cluster_pct", "no matrix in WatchfloorOrganization"],
+            kind=FindingKind.IMPROVEMENT,
+            title="Same-symbol cluster check exists; full correlation matrix still missing",
+            detail=(
+                "RISK-1 rejects when same-symbol cluster exceeds max_correlated_cluster_pct. "
+                "Cross-name rolling correlation matrix remains a P2 gap."
+            ),
+            evidence=["WatchfloorOrganization.portfolio_risk cluster check"],
             watchfloor_ids=["RISK-1", "CORR-Q", "CAP-1"],
-            priority=Priority.P1,
-            implementation_task="Add rolling correlation cluster check before RISK-1 approval.",
+            priority=Priority.P2,
+            implementation_task="Add rolling cross-name correlation matrix feeding CORR-Q.",
         ),
     ]
-    # Unsafe if any proposer can execute
     bad = [a["id"] for a in registry["agents"] if a.get("may_propose_trades") and a.get("may_place_orders")]
     if bad:
         findings.append(
@@ -271,24 +277,27 @@ def audit_trading_operations(registry: dict[str, Any]) -> list[Finding]:
         Finding(
             team_id="IDC-CITADEL",
             team_name="Trading Operations",
-            kind=FindingKind.MISSING,
-            title="No regime engine owned by HEAD-TRADE / REG-1 wired into discretionary admission",
-            detail="Proposers accept regimes loosely; WatchfloorOrganization does not consult REG-1.",
-            evidence=["REG-1 seat in quant", "no regime gate in propose_from_watchfloor_agent"],
+            kind=FindingKind.IMPROVEMENT,
+            title="REG-1 regime service admits proposals; richer regime engine still needed",
+            detail=(
+                "RegimeService gates FIT-1 admission against contract valid/invalid regimes. "
+                "Next: data-driven regime labels owned by HEAD-TRADE / REG-1."
+            ),
+            evidence=["agent_fleet.core.regime.RegimeService"],
             watchfloor_ids=["HEAD-TRADE", "REG-1", "EXEC-1"],
-            priority=Priority.P1,
-            implementation_task="Add regime label service; block invalid-regime discretionary proposals.",
+            priority=Priority.P2,
+            implementation_task="Replace static regime labels with tape/vol feature classifier.",
         ),
         Finding(
             team_id="IDC-CITADEL",
             team_name="Trading Operations",
             kind=FindingKind.IMPROVEMENT,
-            title="Multi-strategy coordination needs order schedule + slippage ledger",
-            detail=f"{len(trade)} trading-division agents can flood the same name without ADV throttling.",
-            evidence=[f"trade_division_count={len(trade)}"],
+            title="Per-symbol daily order cap live; slippage ledger still thin",
+            detail=f"{len(trade)} trading-division agents share a per-symbol daily cap of 20.",
+            evidence=[f"trade_division_count={len(trade)}", "orders_today_by_symbol"],
             watchfloor_ids=["EXEC-1", "CAP-1", "HEAD-TRADE"],
-            priority=Priority.P1,
-            implementation_task="Implement per-symbol daily order cap and slippage ledger on EXEC-1.",
+            priority=Priority.P2,
+            implementation_task="Persist EXEC-1 slippage scorecards per fill for ATTR-1.",
         ),
         Finding(
             team_id="IDC-CITADEL",
@@ -309,48 +318,75 @@ def audit_trading_operations(registry: dict[str, Any]) -> list[Finding]:
 
 def audit_quant_research(registry: dict[str, Any]) -> list[Finding]:
     missing_rules = _proposers_without_setup_rules(registry)
-    return [
-        Finding(
-            team_id="IDC-RENTECH",
-            team_name="Quantitative Research",
-            kind=FindingKind.MISSING,
-            title="Proposers lack measurable setup-detection rules in registry",
-            detail=(
-                f"{len(missing_rules)} proposers have role text only. Operating contracts "
-                "require exact setup expressions before promotion beyond design."
+    findings: list[Finding] = []
+    if missing_rules:
+        findings.append(
+            Finding(
+                team_id="IDC-RENTECH",
+                team_name="Quantitative Research",
+                kind=FindingKind.MISSING,
+                title="Proposers lack measurable setup-detection rules in registry",
+                detail=(
+                    f"{len(missing_rules)} proposers still lack complete operating contracts."
+                ),
+                evidence=missing_rules[:12]
+                + ([f"…+{len(missing_rules)-12}"] if len(missing_rules) > 12 else []),
+                watchfloor_ids=["FIT-1", "STAT-1", "HYPO-1", "BACK-1"],
+                priority=Priority.P0,
+                implementation_task=(
+                    "Generate AgentOperatingContract stubs for every proposer with "
+                    "setup_detection_rules, entry/exit/stop, and invalidation fields; "
+                    "block paper proposal if contract incomplete."
+                ),
+            )
+        )
+    else:
+        findings.append(
+            Finding(
+                team_id="IDC-RENTECH",
+                team_name="Quantitative Research",
+                kind=FindingKind.IMPROVEMENT,
+                title="Proposer contract stubs complete; promote from stub to validated",
+                detail=(
+                    "All proposers have measurable setup/entry/exit stubs and FIT-1 "
+                    "blocks incomplete contracts. Next: empirically validate expressions."
+                ),
+                evidence=["agent_fleet.agents.watchfloor_contracts"],
+                watchfloor_ids=["FIT-1", "STAT-1", "HYPO-1", "BACK-1"],
+                priority=Priority.P2,
+                implementation_task=(
+                    "Run BACK-1/STAT-1 validation packs per contract; mark "
+                    "contract_completeness=validated_v1 when OOS gates pass."
+                ),
+            )
+        )
+    findings.extend(
+        [
+            Finding(
+                team_id="IDC-RENTECH",
+                team_name="Quantitative Research",
+                kind=FindingKind.MISSING,
+                title="No walk-forward / OOS harness wired to HYPO-1 and BACK-1",
+                detail="Lab seats exist; controlled improvement sequence is documented but not automated.",
+                evidence=["ImprovementProposal required_tests exist", "no backtest runner module"],
+                watchfloor_ids=["HYPO-1", "BACK-1", "STAT-1", "FIT-1", "COST-1"],
+                priority=Priority.P2,
+                implementation_task="Build hypothesis registry + point-in-time backtest queue with FIT-1/COST-1 veto.",
             ),
-            evidence=missing_rules[:12] + ([f"…+{len(missing_rules)-12}"] if len(missing_rules) > 12 else []),
-            watchfloor_ids=["FIT-1", "STAT-1", "HYPO-1", "BACK-1"],
-            priority=Priority.P0,
-            implementation_task=(
-                "Generate AgentOperatingContract stubs for every proposer with "
-                "setup_detection_rules, entry/exit/stop, and invalidation fields; "
-                "block paper proposal if contract incomplete."
+            Finding(
+                team_id="IDC-RENTECH",
+                team_name="Quantitative Research",
+                kind=FindingKind.IMPROVEMENT,
+                title="Quant evidence_package_id gate is live; packages still synthetic in paper",
+                detail="FIT-1 requires evidence_package_id on RT/quant proposals before RISK-1.",
+                evidence=["validate_proposal evidence_package_present"],
+                watchfloor_ids=["FIT-1", "COST-1", "ENS-1"],
+                priority=Priority.P2,
+                implementation_task="Replace paper stub packages with FIT-1/COST-1 signed evidence objects.",
             ),
-        ),
-        Finding(
-            team_id="IDC-RENTECH",
-            team_name="Quantitative Research",
-            kind=FindingKind.MISSING,
-            title="No walk-forward / OOS harness wired to HYPO-1 and BACK-1",
-            detail="Lab seats exist; controlled improvement sequence is documented but not automated.",
-            evidence=["ImprovementProposal required_tests exist", "no backtest runner module"],
-            watchfloor_ids=["HYPO-1", "BACK-1", "STAT-1", "FIT-1", "COST-1"],
-            priority=Priority.P2,
-            implementation_task="Build hypothesis registry + point-in-time backtest queue with FIT-1/COST-1 veto.",
-        ),
-        Finding(
-            team_id="IDC-RENTECH",
-            team_name="Quantitative Research",
-            kind=FindingKind.IMPROVEMENT,
-            title="Quant thesis-exempt path must still require OOS evidence package",
-            detail="Exemption from narrative thesis is not exemption from validation.",
-            evidence=["quant_exempt_from_thesis true"],
-            watchfloor_ids=["FIT-1", "COST-1", "ENS-1"],
-            priority=Priority.P1,
-            implementation_task="Require evidence_package_id on RT-* proposals before RISK-1 sees them.",
-        ),
-    ]
+        ]
+    )
+    return findings
 
 
 def audit_research_strategy(registry: dict[str, Any]) -> list[Finding]:
@@ -389,36 +425,75 @@ def audit_research_strategy(registry: dict[str, Any]) -> list[Finding]:
 def audit_governance(registry: dict[str, Any]) -> list[Finding]:
     counts = registry["counts"]
     ceiling = registry["hard_rules"].get("agent_ceiling", 150)
-    findings = [
-        Finding(
-            team_id="IDC-JPM",
-            team_name="Governance and Operations",
-            kind=FindingKind.WEAKNESS,
-            title="Agent ceiling exceeded by roster design",
-            detail=(
-                f"Registry has {counts['total_agents']} agents vs ceiling {ceiling}. "
-                "Either raise ceiling via council vote or prune/retire cohorts."
-            ),
-            evidence=[f"total_agents={counts['total_agents']}", f"ceiling={ceiling}"],
-            watchfloor_ids=["GOV-CHAIR", "HUMAN-1", "LIFE-1"],
-            priority=Priority.P0,
-            vetoable=True,
-            implementation_task=(
-                "Open GOV-CHAIR proposal: (a) raise ceiling with written rationale, or "
-                "(b) mark excess cohorts ON-DEMAND/RETIRED until under ceiling."
-            ),
-        ),
-        Finding(
-            team_id="IDC-JPM",
-            team_name="Governance and Operations",
-            kind=FindingKind.MISSING,
-            title="No reconciliation agent between internal book and paper broker",
-            detail="RECON seat planned but absent; breaks cannot halt new risk today.",
-            evidence=["docs/07_missing_agents.md RECON-001"],
-            watchfloor_ids=["COMP-1", "EXEC-1", "SEC-LEDGER"],
-            priority=Priority.P1,
-            implementation_task="Add RECON-1 agent; mismatch → COMP-1 halt on new proposals.",
-        ),
+    ids = {a["id"] for a in registry["agents"]}
+    findings: list[Finding] = []
+    if counts["total_agents"] > ceiling:
+        findings.append(
+            Finding(
+                team_id="IDC-JPM",
+                team_name="Governance and Operations",
+                kind=FindingKind.WEAKNESS,
+                title="Agent ceiling exceeded by roster design",
+                detail=(
+                    f"Registry has {counts['total_agents']} agents vs ceiling {ceiling}. "
+                    "Either raise ceiling via council vote or prune/retire cohorts."
+                ),
+                evidence=[f"total_agents={counts['total_agents']}", f"ceiling={ceiling}"],
+                watchfloor_ids=["GOV-CHAIR", "HUMAN-1", "LIFE-1"],
+                priority=Priority.P0,
+                vetoable=True,
+                implementation_task=(
+                    "Open GOV-CHAIR proposal: (a) raise ceiling with written rationale, or "
+                    "(b) mark excess cohorts ON-DEMAND/RETIRED until under ceiling."
+                ),
+            )
+        )
+    else:
+        findings.append(
+            Finding(
+                team_id="IDC-JPM",
+                team_name="Governance and Operations",
+                kind=FindingKind.IMPROVEMENT,
+                title="Agent ceiling decision in force; enforce in UI create flow",
+                detail=(
+                    f"Roster {counts['total_agents']} ≤ ceiling {ceiling} "
+                    "(GOV-CEIL-2026-07-28). UI still needs hard gate."
+                ),
+                evidence=["docs/council/decisions/GOV-CEIL-2026-07-28.md"],
+                watchfloor_ids=["GOV-CHAIR", "HUMAN-1", "LIFE-1", "UI-1"],
+                priority=Priority.P1,
+                implementation_task="Wire UI agent creation to agent_ceiling + GOV-CHAIR proposal queue.",
+            )
+        )
+    if "RECON-1" not in ids:
+        findings.append(
+            Finding(
+                team_id="IDC-JPM",
+                team_name="Governance and Operations",
+                kind=FindingKind.MISSING,
+                title="No reconciliation agent between internal book and paper broker",
+                detail="RECON seat planned but absent; breaks cannot halt new risk today.",
+                evidence=["docs/07_missing_agents.md RECON-001"],
+                watchfloor_ids=["COMP-1", "EXEC-1", "SEC-LEDGER"],
+                priority=Priority.P1,
+                implementation_task="Add RECON-1 agent; mismatch → COMP-1 halt on new proposals.",
+            )
+        )
+    else:
+        findings.append(
+            Finding(
+                team_id="IDC-JPM",
+                team_name="Governance and Operations",
+                kind=FindingKind.IMPROVEMENT,
+                title="RECON-1 seat added; automate book vs broker mismatch halt",
+                detail="Seat exists under COMP-1; runtime recon loop still to implement.",
+                evidence=["RECON-1 in registry"],
+                watchfloor_ids=["RECON-1", "COMP-1", "EXEC-1", "SEC-LEDGER"],
+                priority=Priority.P2,
+                implementation_task="Implement RECON-1 daily check; mismatch → COMP-1 halt.",
+            )
+        )
+    findings.append(
         Finding(
             team_id="IDC-JPM",
             team_name="Governance and Operations",
@@ -429,8 +504,8 @@ def audit_governance(registry: dict[str, Any]) -> list[Finding]:
             watchfloor_ids=["SEC-HALT", "SEC-DRILL", "SEC-RESTORE", "SEC-LEDGER"],
             priority=Priority.P2,
             implementation_task="Add docs/runbooks/halt_drill.md and automate SEC-DRILL quarterly checklist.",
-        ),
-    ]
+        )
+    )
     return findings
 
 
@@ -458,12 +533,12 @@ def audit_capital_stewardship(registry: dict[str, Any]) -> list[Finding]:
             team_id="IDC-BERKSHIRE",
             team_name="Capital Stewardship",
             kind=FindingKind.IMPROVEMENT,
-            title="Berkshire desk traders need quality gate before RISK-1",
-            detail="BRK-TRD1/2 should require BRK-MOAT + BRK-SAFE scores on the proposal metadata.",
-            evidence=["BRK desk agents in funds division"],
+            title="Berkshire desk moat/MOS gate is live; scorecards still manual",
+            detail="BRK-TRD* proposals require moat_score and margin_of_safety metadata before RISK-1.",
+            evidence=["WatchfloorOrganization.stewardship BRK-TRD gate"],
             watchfloor_ids=["BRK-MOAT", "BRK-SAFE", "BRK-TRD1", "BRK-TRD2"],
-            priority=Priority.P1,
-            implementation_task="Require moat_score and margin_of_safety fields on BRK-* TradeProposals.",
+            priority=Priority.P2,
+            implementation_task="Have BRK-MOAT/BRK-SAFE publish signed score objects instead of free-form metadata.",
         ),
         Finding(
             team_id="IDC-BERKSHIRE",

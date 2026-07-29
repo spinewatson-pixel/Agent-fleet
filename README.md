@@ -22,6 +22,7 @@ pytest -q
 agent-fleet registry
 agent-fleet authority-map
 agent-fleet enhance                 # Design Council → docs/council/enhancement_plan.*
+agent-fleet export-contracts --watchfloor
 agent-fleet paper-run --symbol AAPL --price 190 --agent AAPL-L
 ```
 

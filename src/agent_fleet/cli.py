@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from agent_fleet.agents.watchfloor_contracts import contracts_as_dicts
 from agent_fleet.council import InstitutionalDesignCouncil, plan_to_markdown
 from agent_fleet.registry.watchfloor import load_watchfloor_registry
 from agent_fleet.workflow.pipeline import Organization
@@ -23,8 +24,13 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--legacy-strategy", default="", help="Optional legacy STRAT-* path")
     run.add_argument("--conviction", type=float, default=0.75)
 
-    exp = sub.add_parser("export-contracts", help="Export legacy agent operating contracts")
+    exp = sub.add_parser("export-contracts", help="Export agent operating contracts")
     exp.add_argument("--out", default="docs/agent_contracts/contracts.json")
+    exp.add_argument(
+        "--watchfloor",
+        action="store_true",
+        help="Export Watchfloor proposer contract stubs instead of legacy STRAT-*",
+    )
 
     auth = sub.add_parser("authority-map", help="Print Watchfloor authority map JSON")
     reg = sub.add_parser("registry", help="Print Watchfloor registry summary")
@@ -65,11 +71,19 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(result, indent=2, default=str))
         return 0
     if args.cmd == "export-contracts":
-        org = Organization()
         path = Path(args.out)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(org.contracts(), indent=2), encoding="utf-8")
-        print(f"Wrote {path}")
+        if args.watchfloor:
+            if path.name == "contracts.json":
+                path = Path("docs/agent_contracts/watchfloor_contracts.json")
+                path.parent.mkdir(parents=True, exist_ok=True)
+            payload = contracts_as_dicts()
+            path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            print(json.dumps({"wrote": str(path), "proposers": len(payload)}, indent=2))
+        else:
+            org = Organization()
+            path.write_text(json.dumps(org.contracts(), indent=2), encoding="utf-8")
+            print(f"Wrote {path}")
         return 0
     if args.cmd == "authority-map":
         registry = load_watchfloor_registry()

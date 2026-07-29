@@ -1,11 +1,11 @@
 {
   "source": "ui/watchfloor.html baseDivisions()",
   "organization": "watchfloor quant lab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "hard_rules": {
     "paper_only": true,
     "live_execution_enabled": false,
-    "agent_ceiling": 150,
+    "agent_ceiling": 300,
     "default_sizing_usd": [
       1,
       2
@@ -15,7 +15,13 @@
     "quant_exempt_from_thesis": true,
     "strategies_cannot_self_approve": true,
     "strategies_cannot_self_execute": true,
-    "learning_cannot_auto_mutate_production": true
+    "learning_cannot_auto_mutate_production": true,
+    "compute_ceiling": {
+      "max_autonomous_jobs": 4,
+      "require_gov_above": true
+    },
+    "dual_source_macro": true,
+    "max_orders_per_symbol_per_day": 20
   },
   "institutional_council_map": {
     "Palantir Systems Intelligence": [
@@ -67,7 +73,8 @@
       "COMP-1",
       "SEC-HALT",
       "SEC-LEDGER",
-      "HUMAN-1"
+      "HUMAN-1",
+      "RECON-1"
     ],
     "Berkshire Capital Stewardship": [
       "BRK-MOAT",
@@ -3408,7 +3415,7 @@
       "thesis_required": true
     },
     {
-      "id": "SWING-T1",
+      "id": "SWING-M1",
       "nick": "Thematic Swing 1",
       "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
       "tags": [
@@ -3431,7 +3438,7 @@
       "thesis_required": true
     },
     {
-      "id": "SWING-T2",
+      "id": "SWING-M2",
       "nick": "Thematic Swing 2",
       "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
       "tags": [
@@ -3454,7 +3461,7 @@
       "thesis_required": true
     },
     {
-      "id": "SWING-T3",
+      "id": "SWING-M3",
       "nick": "Thematic Swing 3",
       "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
       "tags": [
@@ -3477,7 +3484,7 @@
       "thesis_required": true
     },
     {
-      "id": "SWING-T4",
+      "id": "SWING-M4",
       "nick": "Thematic Swing 4",
       "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
       "tags": [
@@ -3500,7 +3507,7 @@
       "thesis_required": true
     },
     {
-      "id": "SWING-T5",
+      "id": "SWING-M5",
       "nick": "Thematic Swing 5",
       "role": "Thematic-driven swing. Holds 1\u20135 days. Hard cap: one week.",
       "tags": [
@@ -6056,10 +6063,29 @@
       "division": "contr",
       "department": "Marketplace Roster",
       "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "RECON-1",
+      "nick": "Book Recon",
+      "role": "Reconciles internal Watchfloor book vs paper broker. Mismatch halts new proposals via COMP-1.",
+      "division": "ctrl",
+      "department": "Risk & Limits",
+      "kind": "control",
+      "status": "ACTIVE",
+      "tags": [
+        "SUPPORT",
+        "GOVERNANCE",
+        "RECON"
+      ],
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "COMP-1"
     }
   ],
   "counts": {
-    "total_agents": 279,
+    "total_agents": 280,
     "proposers": 128,
     "executors": 1,
     "divisions": 12

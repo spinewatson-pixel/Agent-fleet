@@ -52,7 +52,10 @@ class PaperBroker:
                 paper=True,
             )
         size_pct = decision.final_size_pct_nav or 0.0
-        notional = self.nav_usd * (size_pct / 100.0)
+        if decision.final_size_usd is not None and decision.final_size_usd > 0:
+            notional = float(decision.final_size_usd)
+        else:
+            notional = self.nav_usd * (size_pct / 100.0)
         price = proposal.entry_price_target
         slip = min(self.slippage_bps_default, proposal.max_slippage_bps)
         if proposal.side in {Side.BUY, Side.COVER}:
