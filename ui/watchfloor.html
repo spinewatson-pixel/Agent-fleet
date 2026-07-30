@@ -1090,6 +1090,26 @@ function blueprintLayers(a){
   if(a.id==="EXEC-1"){
     o={skills:["Authorized paper execution","Slippage measurement"],workflows:["Receive ApprovalDecision → size → paper fill → ExecutionReport"],decisions:["Only if execution_authorized"],comms:["← GOV-CHAIR chain","→ COMP-1/ATTR-1/MEM-1"],inputs:["ApprovalDecision","Proposal"],outputs:["ExecutionReport","Slippage ledger"],learning:["Improve fill quality notes for ATTR-1"],eval:["Slippage bps","Reject unauthorized"],perms:["Place paper orders only","Cannot invent approval","live locked"]};
   }
+  var ctrl={
+    trader:{constraints:["No self-approve/execute","No live trading","No own capital limits"],triggers:["Verified tape","ResearchSignal","Regime change","Stop proximity"],scheduling:["Every session · pre-open→close"],logging:["Thesis before proposal","Lineage to MEM-1"],reflect:["Thesis vs outcome after close"],escalation:["Anomalies→Lab","Rejects→supervisor","Halt→COMP-1"],versioning:["strategy_version on proposals"],health:["Confidence floor alerts","Data-gap pause"]},
+    intel:{constraints:["No trading","No single-source silent publish"],triggers:["Wire/filing","Stale case","Source drop"],scheduling:["Continuous · synthesis 3x daily"],logging:["Publish+sources","Corrections"],reflect:["Failed-scrutiny review"],escalation:["Gaps→HEAD-INTEL"],versioning:["Case file versions"],health:["Source silence alarms"]},
+    disc:{constraints:["No trading","No post-hoc score edits"],triggers:["Intel update","Anomaly","Horizon expiry"],scheduling:["Daily forecast · score on resolution"],logging:["Call+confidence+kill immutable"],reflect:["Weekly calibration w/ FORE-2"],escalation:["Overconfidence→FORE-2"],versioning:["Forecast IDs"],health:["Calibration drift"]},
+    lab:{constraints:["No look-ahead","No self-certify"],triggers:["New hypothesis","Nightly queue"],scheduling:["Nightly tests · weekly verdicts"],logging:["State transitions","Kill reports"],reflect:["False-positive autopsy"],escalation:["Survivors→FIT-1"],versioning:["Hypothesis IDs"],health:["Queue depth","Runner failures"]},
+    risk:{constraints:["Cannot propose trades","Cannot silent-raise limits"],triggers:["TradeProposal","Limit proximity","Correlation spike"],scheduling:["Continuous · halt armed"],logging:["Verdicts+reasons","Halts"],reflect:["Missed-breach review"],escalation:["Systemic→GOV-CHAIR","Emergency→SEC-HALT"],versioning:["Limit policy version"],health:["Model staleness"]},
+    gov:{constraints:["No quiet ceiling breach","No bypass HUMAN-1 above Mode-B"],triggers:["Structural proposal","Weekly audit"],scheduling:["Async queue · weekly council"],logging:["Vote ledger+rationales"],reflect:["Override analysis"],escalation:["Mode-B→HUMAN-1"],versioning:["Decision IDs"],health:["Queue SLA","Ceiling alarms"]},
+    control:{constraints:["No orders","Cannot solo-clear breaks"],triggers:["Recon schedule","Mismatch","Activity cap"],scheduling:["Scheduled recon · continuous caps"],logging:["Breaks","Halt requests"],reflect:["False-break review"],escalation:["Material→COMP-1"],versioning:["Recon run IDs"],health:["Job failures","Break aging"]},
+    meta:{constraints:["No auto production mutation"],triggers:["Session close","Forecast resolve","Weekly audit"],scheduling:["Daily roll-up · weekly audit"],logging:["Scorecards","Lessons"],reflect:["Downstream behavior change"],escalation:["Retire→LIFE-1/GOV"],versioning:["Lesson IDs"],health:["Missing outcomes"]},
+    data:{constraints:["No look-ahead","No silent stale"],triggers:["Feed tick","Schema break","Staleness"],scheduling:["Continuous · hourly freshness"],logging:["Ingest lineage","Quarantines"],reflect:["Trace downstream errors"],escalation:["DQ→COMP-1"],versioning:["Schema versions"],health:["Uptime","Staleness"]},
+    sec:{constraints:["Defensive only","Never trades"],triggers:["Leak","Dep change","Cred request","Drill"],scheduling:["Continuous · weekly drills"],logging:["Incidents","Drills","Halt/restore"],reflect:["Blast-radius shrink"],escalation:["Halt→GOV/HUMAN"],versioning:["Case IDs"],health:["Rotation overdue","Halt armed"]},
+    quant:{constraints:["Evidence required for RT","No self-certify","No live"],triggers:["Batch","Regime","Decay","Evidence ready"],scheduling:["Continuous · weekly OOS"],logging:["Signals","OOS","Culls"],reflect:["Decay autopsy"],escalation:["Budget→GOV-CHAIR"],versioning:["Signal+evidence IDs"],health:["Miner/regime heartbeat"]},
+    fund:{constraints:["Paper only","Off-playbook win=miss"],triggers:["Doctrine clock","Pivotal tape","Forge threshold"],scheduling:["Every session · weekly doctrine"],logging:["Playbook ledger"],reflect:["Study source failures"],escalation:["Edge→Forge","Risk→RISK-1"],versioning:["Playbook versions"],health:["Fidelity drift","Decay timers"]},
+    mind:{constraints:["Never trades","No raw ideas to floor"],triggers:["Stuck problem","Claim flag","Movers sweep"],scheduling:["On call · movers daily"],logging:["Idea ledger","Kill conditions"],reflect:["Methods that survive Lab"],escalation:["Survivors→Lab only"],versioning:["Idea/dossier versions"],health:["Queue aging"]},
+    contr:{constraints:["No scope=no work","No standing access"],triggers:["Scope signed","Timer end"],scheduling:["On demand"],logging:["Scope","Delivery","Revokes"],reflect:["Knowledge retained?"],escalation:["Scope creep→sponsor/GOV"],versioning:["Engagement IDs"],health:["Revoke alarms"]}
+  };
+  var c=ctrl[a.kind]||ctrl.trader;
+  if(a.id==="EXEC-1"){
+    c={constraints:["No fill without authorization","No live"],triggers:["Authorized ApprovalDecision"],scheduling:["Event-driven"],logging:["ExecutionReport","Slippage"],reflect:["Slippage vs expected w/ ATTR-1"],escalation:["Unauthorized→COMP-1","Mismatch→RECON-1"],versioning:["Order IDs"],health:["Broker heartbeat"]};
+  }
   return [
     ["Identity", id],
     ["Goal", goal],
@@ -1107,7 +1127,15 @@ function blueprintLayers(a){
     ["Outputs", o.outputs],
     ["Learning", o.learning],
     ["Evaluation", o.eval],
-    ["Permissions", o.perms]
+    ["Permissions", o.perms],
+    ["Constraints", c.constraints],
+    ["Triggers", c.triggers],
+    ["Scheduling", c.scheduling],
+    ["Logging", c.logging],
+    ["Self-Reflection", c.reflect],
+    ["Escalation", c.escalation],
+    ["Versioning", c.versioning],
+    ["Health Monitoring", c.health]
   ];
 }
 function ledgerName(a){var t=tiles(a);for(var i=0;i<t.length;i++){if(["THESIS","REPORTS","FORECASTS","EXPERIMENTS","REVIEWS","AUDITS","PIPELINES","PROPOSALS","DELIVERY","IDEAS","SIGNALS","PLAYBOOK","RECON"].indexOf(t[i][1])>-1)return t[i][1]}return"THESIS"}
@@ -1128,7 +1156,7 @@ R(a,"Cadence",p.cad)+R(a,"Autonomy",p.auto)+
 
 if(t==="BLUEPRINT"){
   var layers=blueprintLayers(a);
-  return '<div class="pnote">Complete operating blueprint — 8 structural + 9 operating layers. Expert standard for this seat.</div>'+
+  return '<div class="pnote">Complete operating blueprint — 25 layers (structural + operating + control). Expert standard for this seat.</div>'+
   layers.map(function(L){
     var body=Array.isArray(L[1])?L[1].map(function(x){return "• "+esc(x)}).join("<br>"):esc(L[1]);
     return '<div class="box" style="margin-bottom:10px"><div class="k">'+esc(L[0])+'</div><div class="v" style="font-size:13px;line-height:1.55">'+body+'</div></div>';

@@ -2,6 +2,7 @@
 
 Structural: Identity → Knowledge Base
 Operating:  Skills → Permissions
+Control:    Constraints → Health Monitoring
 """
 
 from __future__ import annotations
@@ -507,6 +508,188 @@ KIND_OPS: dict[str, dict[str, list[str]]] = {
             "No TradeProposal unless explicitly scoped + still propose-only",
             "paper_only · live locked",
         ],
+    },
+}
+
+
+KIND_CONTROL: dict[str, dict[str, list[str]]] = {
+    "trader": {
+        "constraints": [
+            "Cannot self-approve or self-execute",
+            "Cannot set own capital limits or grade own P&L as binding",
+            "Cannot trade live; paper_only",
+            "Cannot exceed cohort sizing / holding cap",
+        ],
+        "triggers": [
+            "Verified MarketEvent on covered names",
+            "New ResearchSignal for mandate",
+            "REG-1 regime change",
+            "Open position stop/time-stop proximity",
+        ],
+        "scheduling": [
+            "Every session · pre-open through close (day traders)",
+            "Swing seats: continuous watch within 1–5 day holds",
+            "Post-session review required same day",
+        ],
+        "logging": [
+            "Thesis + invalidation before every proposal",
+            "Proposal/reject/fill lineage to MEM-1",
+            "Post-trade self-review within session",
+        ],
+        "self_reflection": [
+            "Compare thesis quality vs outcome after every close",
+            "Tag unlogged or off-playbook actions as failures",
+            "Apply Learning Loop lessons or explain refusal",
+        ],
+        "escalation": [
+            "Anomalies → Lab / HEAD-TRADE",
+            "Repeated rejects → supervisor review",
+            "Halt / mandate breach → COMP-1 / RISK-1",
+        ],
+        "versioning": [
+            "strategy_version on every TradeProposal",
+            "Contract version pinned on proposals",
+            "No silent parameter changes without ImprovementProposal gate",
+        ],
+        "health_monitoring": [
+            "Confidence floor breach alerts",
+            "Data-gap pause on missing tape",
+            "Heartbeat via activity feed / uptime badges",
+        ],
+    },
+    "intel": {
+        "constraints": ["No trade authority", "No single-source publish without provisional tag"],
+        "triggers": ["New wire/filing in domain", "Case-file stale timer", "Source reliability drop"],
+        "scheduling": ["Continuous sweep · synthesis 3x daily"],
+        "logging": ["Every publish with sources", "Corrections appended to case file"],
+        "self_reflection": ["Review publishes that failed later scrutiny"],
+        "escalation": ["Coverage gaps → HEAD-INTEL", "Data integrity → DQ-1"],
+        "versioning": ["Case file version + author_id (bull/bear split)"],
+        "health_monitoring": ["Source silence alarms", "Overnight sweep miss alerts"],
+    },
+    "disc": {
+        "constraints": ["No trading", "No post-hoc score edits"],
+        "triggers": ["Intel case update", "Anomaly detection", "Forecast horizon expiry"],
+        "scheduling": ["Daily forecast post · scored on resolution"],
+        "logging": ["Call + confidence + invalidation immutable log"],
+        "self_reflection": ["Calibration review weekly with FORE-2"],
+        "escalation": ["Overconfidence streaks → FORE-2 / HEAD-INTEL"],
+        "versioning": ["Forecast board entry IDs + score versions"],
+        "health_monitoring": ["Open-call backlog", "Calibration drift alarms"],
+    },
+    "lab": {
+        "constraints": ["No silent promotion", "No look-ahead", "Builder never self-certifies"],
+        "triggers": ["New hypothesis registered", "Nightly queue tick", "Red-team request"],
+        "scheduling": ["Test queue nightly · verdicts weekly"],
+        "logging": ["Hypothesis state transitions", "Kill reports with reason codes"],
+        "self_reflection": ["False-positive autopsy after every promotion miss"],
+        "escalation": ["Survivors → FIT-1/COST-1", "Scope fights → HEAD-LAB"],
+        "versioning": ["Hypothesis IDs · Observed→Validated→Retired"],
+        "health_monitoring": ["Queue depth", "Backtest runner failures"],
+    },
+    "risk": {
+        "constraints": ["Cannot propose trades", "Cannot silently raise limits"],
+        "triggers": ["Incoming TradeProposal", "Limit proximity", "Correlation spike", "Spot-audit sample"],
+        "scheduling": ["Continuous · hard-stop authority always armed"],
+        "logging": ["Every verdict + reason codes", "Halt events to incident ledger"],
+        "self_reflection": ["Missed-breach reviews after incidents"],
+        "escalation": ["Systemic patterns → GOV-CHAIR", "Emergency → SEC-HALT"],
+        "versioning": ["Limit policy version referenced on each verdict"],
+        "health_monitoring": ["Model staleness", "Audit sampler heartbeat"],
+    },
+    "gov": {
+        "constraints": ["Cannot quietly exceed ceiling", "Cannot bypass HUMAN-1 above Mode-B"],
+        "triggers": ["Structural proposal", "Ceiling exception request", "Weekly audit clock"],
+        "scheduling": ["Async queue · weekly council session"],
+        "logging": ["Vote ledger with written rationales"],
+        "self_reflection": ["Reversal analysis after HUMAN-1 overrides"],
+        "escalation": ["Above Mode-B → HUMAN-1", "Security incidents → SEC-HALT"],
+        "versioning": ["Decision IDs · charter version"],
+        "health_monitoring": ["Queue SLA breach", "Ceiling utilization alarms"],
+    },
+    "control": {
+        "constraints": ["Cannot place orders", "Cannot clear own breaks alone"],
+        "triggers": ["Scheduled recon", "Fill mismatch event", "Activity cap proximity"],
+        "scheduling": ["Recon on schedule · activity watch continuous"],
+        "logging": ["Break tickets", "Halt requests", "Cap hits"],
+        "self_reflection": ["False-break classifier review"],
+        "escalation": ["Material break → COMP-1 halt", "Duplicates → BRK-INV"],
+        "versioning": ["Recon run IDs · clearance dual-sign versions"],
+        "health_monitoring": ["Recon job failures", "Open-break aging"],
+    },
+    "meta": {
+        "constraints": ["Cannot auto-mutate production rules"],
+        "triggers": ["Session close roll-up", "Forecast resolution", "Weekly audit"],
+        "scheduling": ["Daily roll-up · weekly org audit"],
+        "logging": ["Scorecards", "Lesson routes", "Lifecycle recommendations"],
+        "self_reflection": ["Measure behavior change downstream, not report volume"],
+        "escalation": ["Retire recommendations → LIFE-1/GOV-CHAIR"],
+        "versioning": ["Lesson IDs · attribution model version"],
+        "health_monitoring": ["Missing outcome feeds", "Lesson delivery failures"],
+    },
+    "data": {
+        "constraints": ["No look-ahead", "No silent stale serve"],
+        "triggers": ["Feed tick", "Schema break", "Conflict detected", "Staleness threshold"],
+        "scheduling": ["Continuous · freshness checks hourly"],
+        "logging": ["Ingest lineage", "Quarantine tickets", "Conflict resolutions"],
+        "self_reflection": ["Trace downstream errors back to source"],
+        "escalation": ["DQ failure → COMP-1/GOV-CHAIR"],
+        "versioning": ["Feed schema versions · memory entry IDs"],
+        "health_monitoring": ["Feed uptime", "Staleness gauges", "Index write failures"],
+    },
+    "sec": {
+        "constraints": ["Defensive only", "Never trades", "No reopen without SEC-RESTORE"],
+        "triggers": ["Leak indicator", "Unreviewed dependency", "Credential request", "Drill clock"],
+        "scheduling": ["Continuous watch · drills weekly · rotation on schedule"],
+        "logging": ["Incident casebook", "Drill scorecards", "Halt/restore ledger"],
+        "self_reflection": ["Post-incident blast-radius shrink review"],
+        "escalation": ["Halt → GOV-CHAIR/HUMAN-1 notice", "Repeat incidents auto-escalate"],
+        "versioning": ["Incident case IDs · runbook versions"],
+        "health_monitoring": ["Key rotation overdue", "Dependency pin drift", "Halt switch armed check"],
+    },
+    "quant": {
+        "constraints": [
+            "Evidence package required for RT proposers",
+            "Builder never certifies own strategy",
+            "No live trading",
+        ],
+        "triggers": ["New series batch", "Regime change", "Decay half-life alarm", "Evidence package ready"],
+        "scheduling": ["Continuous mining · OOS review weekly"],
+        "logging": ["Signal candidates", "OOS metrics", "Cull decisions", "Evidence seals"],
+        "self_reflection": ["Decay autopsies", "Cost-model misses"],
+        "escalation": ["Autonomy budget breach → GOV-CHAIR", "Veto fights → ENS-1/FIT-1"],
+        "versioning": ["Signal IDs · model registry versions · evidence_package_id"],
+        "health_monitoring": ["Miner job health", "Regime classifier heartbeat", "Cost model freshness"],
+    },
+    "fund": {
+        "constraints": ["Paper only", "Off-playbook wins count as misses"],
+        "triggers": ["Doctrine review clock", "Tape pivotal point", "Forge petition threshold"],
+        "scheduling": ["Every session · doctrine review weekly"],
+        "logging": ["Playbook ledger", "Doctrine grades", "Petitions"],
+        "self_reflection": ["Study source failures as hard as wins"],
+        "escalation": ["Repeatable edge → Forge", "Risk breach → RISK-1"],
+        "versioning": ["Playbook entry versions · desk agent birth certificates"],
+        "health_monitoring": ["Doctrine fidelity drift", "Edge decay timers"],
+    },
+    "mind": {
+        "constraints": ["Never trades", "No raw ideas to the floor", "No jargon outputs"],
+        "triggers": ["Stuck-problem intake", "Confident claim flagged", "Daily movers sweep"],
+        "scheduling": ["On call · one deep pass per problem · movers daily"],
+        "logging": ["Idea ledger", "Kill conditions", "Movers reports"],
+        "self_reflection": ["Track which methods survive Lab"],
+        "escalation": ["Survivors → Lab only", "Org consensus fights → MIND-MUSE memo"],
+        "versioning": ["Idea IDs · dossier versions"],
+        "health_monitoring": ["Stuck-queue aging", "Dossier sweep misses"],
+    },
+    "contr": {
+        "constraints": ["No work without signed scope", "No standing access", "Trading never automatic"],
+        "triggers": ["Sponsor scope signed", "Engagement timer near end"],
+        "scheduling": ["On demand · engagement-scoped"],
+        "logging": ["Scope sheet", "Delivery packet", "Access revoke events"],
+        "self_reflection": ["Did knowledge transfer leave org capable without contractor?"],
+        "escalation": ["Scope creep → sponsor/GOV-CHAIR"],
+        "versioning": ["Engagement IDs · delivery versions"],
+        "health_monitoring": ["Access not revoked alarm", "Open scope overrun"],
     },
 }
 
@@ -1065,6 +1248,8 @@ def _metrics(agent: dict[str, Any], doctrine: dict[str, Any]) -> list[str]:
 
 def _ops_for(agent: dict[str, Any], kind: str) -> dict[str, list[str]]:
     ops = {k: list(v) for k, v in (KIND_OPS.get(kind) or KIND_OPS["trader"]).items()}
+    ctrl = {k: list(v) for k, v in (KIND_CONTROL.get(kind) or KIND_CONTROL["trader"]).items()}
+    ops.update(ctrl)
     # Refine permissions for proposers vs support inside fund/quant
     if agent.get("may_propose_trades"):
         ops["permissions"] = list(_PERM_PROPOSER)
@@ -1084,6 +1269,18 @@ def _ops_for(agent: dict[str, Any], kind: str) -> dict[str, list[str]]:
             "Write ExecutionReport to MEM-1 / ATTR-1 / COMP-1",
             "paper_only · live_execution_enabled=false",
         ]
+        ops["constraints"] = [
+            "Cannot trade without execution_authorized",
+            "Cannot enable live execution",
+            "Cannot grade own fill quality as final (ATTR-1 owns scorecards)",
+        ]
+        ops["triggers"] = ["ApprovalDecision with execution_authorized"]
+        ops["scheduling"] = ["Event-driven on authorized decisions"]
+        ops["logging"] = ["ExecutionReport + slippage ledger"]
+        ops["self_reflection"] = ["Slippage vs expected review with ATTR-1"]
+        ops["escalation"] = ["Unauthorized attempt → COMP-1", "Broker mismatch → RECON-1"]
+        ops["versioning"] = ["Order IDs · broker schema version"]
+        ops["health_monitoring"] = ["Broker heartbeat", "Reject unauthorized attempts"]
         ops["workflows"] = [
             "1) Receive ApprovalDecision with execution_authorized",
             "2) Size via final_size_usd or pct NAV",
@@ -1101,6 +1298,26 @@ def _ops_for(agent: dict[str, Any], kind: str) -> dict[str, list[str]]:
             "Can reverse any decision",
             "No automated trading",
         ]
+        ops["constraints"] = ["Not an automated trader", "Must record rationale on overrides"]
+        ops["triggers"] = ["Mode-B escalation", "Council appeal"]
+        ops["scheduling"] = ["On escalation · async"]
+        ops["logging"] = ["Override rationales in vote ledger"]
+        ops["self_reflection"] = ["Review override patterns quarterly"]
+        ops["escalation"] = ["Terminal human seat"]
+        ops["versioning"] = ["Override decision IDs"]
+        ops["health_monitoring"] = ["Escalation SLA"]
+    # Ensure all control keys present
+    for key in (
+        "constraints",
+        "triggers",
+        "scheduling",
+        "logging",
+        "self_reflection",
+        "escalation",
+        "versioning",
+        "health_monitoring",
+    ):
+        ops.setdefault(key, list((KIND_CONTROL.get(kind) or KIND_CONTROL["trader"]).get(key, ["n/a"])))
     return ops
 
 
@@ -1140,6 +1357,14 @@ def blueprint_for(agent: dict[str, Any]) -> AgentBlueprint:
         learning=ops["learning"],
         evaluation=ops["evaluation"],
         permissions=ops["permissions"],
+        constraints=ops["constraints"],
+        triggers=ops["triggers"],
+        scheduling=ops["scheduling"],
+        logging=ops["logging"],
+        self_reflection=ops["self_reflection"],
+        escalation=ops["escalation"],
+        versioning=ops["versioning"],
+        health_monitoring=ops["health_monitoring"],
         may_propose_trades=bool(agent.get("may_propose_trades")),
         may_place_orders=bool(agent.get("may_place_orders") or agent.get("execution_role")),
         paper_only=True,
@@ -1148,7 +1373,7 @@ def blueprint_for(agent: dict[str, Any]) -> AgentBlueprint:
         success_metrics=_metrics(agent, doctrine),
         escalation_path=_escalation(agent),
         hard_limits=hard,
-        version="2.0.0",
+        version="3.0.0",
     )
 
 

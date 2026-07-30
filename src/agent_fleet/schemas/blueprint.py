@@ -1,10 +1,13 @@
-"""Complete Agent Blueprint — structural + operating layers for every Watchfloor agent.
+"""Complete Agent Blueprint — structural + operating + control layers.
 
-Structural layers:
+Structural:
   Identity · Goal · Responsibilities · Functions · Tools · Capabilities · Memory · Knowledge Base
 
-Operating layers:
+Operating:
   Skills · Workflows · Decision Rules · Communication · Inputs · Outputs · Learning · Evaluation · Permissions
+
+Control / runtime:
+  Constraints · Triggers · Scheduling · Logging · Self-Reflection · Escalation · Versioning · Health Monitoring
 """
 
 from __future__ import annotations
@@ -30,7 +33,7 @@ class AgentBlueprint(BaseModel):
     kind: str
     status: str = "RUNNING"
 
-    # --- Structural (who / what / with what) ---
+    # --- Structural ---
     identity: str = Field(description="Who the agent is")
     goal: str = Field(description="What success looks like")
     responsibilities: list[str] = Field(description="What it owns")
@@ -40,7 +43,7 @@ class AgentBlueprint(BaseModel):
     memory: list[str] = Field(description="What it remembers")
     knowledge_base: list[str] = Field(description="Information it knows")
 
-    # --- Operating (how it works day to day) ---
+    # --- Operating ---
     skills: list[str] = Field(description="Specialized expertise")
     workflows: list[str] = Field(description="Step-by-step procedures")
     decision_rules: list[str] = Field(description="When it acts")
@@ -51,7 +54,17 @@ class AgentBlueprint(BaseModel):
     evaluation: list[str] = Field(description="How performance is measured")
     permissions: list[str] = Field(description="What it is allowed to access")
 
-    # Operating constraints (non-negotiables)
+    # --- Control / runtime ---
+    constraints: list[str] = Field(description="What it cannot do")
+    triggers: list[str] = Field(description="What causes it to wake up")
+    scheduling: list[str] = Field(description="How often it runs")
+    logging: list[str] = Field(description="Records everything it does")
+    self_reflection: list[str] = Field(description="Reviews mistakes")
+    escalation: list[str] = Field(description="Knows when to ask for help")
+    versioning: list[str] = Field(description="Tracks improvements")
+    health_monitoring: list[str] = Field(description="Detects failures")
+
+    # Machine flags
     may_propose_trades: bool = False
     may_place_orders: bool = False
     paper_only: bool = True
@@ -60,7 +73,7 @@ class AgentBlueprint(BaseModel):
     success_metrics: list[str] = Field(default_factory=list)
     escalation_path: list[str] = Field(default_factory=list)
     hard_limits: list[str] = Field(default_factory=list)
-    version: str = "2.0.0"
+    version: str = "3.0.0"
 
     def to_dict(self) -> dict[str, Any]:
         return self.model_dump(mode="json")
@@ -91,6 +104,14 @@ class AgentBlueprint(BaseModel):
             ("Learning", join(self.learning)),
             ("Evaluation", join(self.evaluation)),
             ("Permissions", join(self.permissions)),
+            ("Constraints", join(self.constraints)),
+            ("Triggers", join(self.triggers)),
+            ("Scheduling", join(self.scheduling)),
+            ("Logging", join(self.logging)),
+            ("Self-Reflection", join(self.self_reflection)),
+            ("Escalation", join(self.escalation)),
+            ("Versioning", join(self.versioning)),
+            ("Health Monitoring", join(self.health_monitoring)),
         ]
 
 
@@ -117,4 +138,15 @@ OPERATING_LAYERS = [
     "permissions",
 ]
 
-ALL_BLUEPRINT_LAYERS = STRUCTURAL_LAYERS + OPERATING_LAYERS
+CONTROL_LAYERS = [
+    "constraints",
+    "triggers",
+    "scheduling",
+    "logging",
+    "self_reflection",
+    "escalation",
+    "versioning",
+    "health_monitoring",
+]
+
+ALL_BLUEPRINT_LAYERS = STRUCTURAL_LAYERS + OPERATING_LAYERS + CONTROL_LAYERS
