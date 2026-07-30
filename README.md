@@ -44,6 +44,27 @@ Nine specialty teams + chief architecture audit Watchfloor and emit a prioritize
 
 Council agents **design and supervise only** — they do not propose or execute trades. Run `agent-fleet enhance` to refresh `docs/council/enhancement_plan.md`.
 
+## Eight-layer agent blueprints
+
+Every Watchfloor agent has an expert operating blueprint:
+
+| Layer | Purpose |
+|-------|---------|
+| Identity | Who the agent is |
+| Goal | What success looks like |
+| Responsibilities | What it owns |
+| Functions | What it can do |
+| Tools | What systems it can use |
+| Capabilities | What it’s intellectually able to perform |
+| Memory | What it remembers |
+| Knowledge Base | Information it knows |
+
+```bash
+agent-fleet blueprints   # → docs/agent_blueprints/blueprints.json
+```
+
+Open any agent in `ui/watchfloor.html` → **BLUEPRINT** tile.
+
 Open the org UI:
 
 ```bash

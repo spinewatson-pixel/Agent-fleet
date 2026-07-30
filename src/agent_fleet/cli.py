@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from agent_fleet.agents.blueprints import blueprints_as_dicts, incomplete_blueprint_ids
 from agent_fleet.agents.watchfloor_contracts import contracts_as_dicts
 from agent_fleet.council import InstitutionalDesignCouncil, plan_to_markdown
 from agent_fleet.registry.watchfloor import load_watchfloor_registry
@@ -50,6 +51,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Also print a short task summary to stdout",
     )
 
+    bp = sub.add_parser(
+        "blueprints",
+        help="Export 8-layer expert blueprints for every Watchfloor agent",
+    )
+    bp.add_argument("--out", default="docs/agent_blueprints/blueprints.json")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "paper-run":
@@ -79,7 +86,20 @@ def main(argv: list[str] | None = None) -> int:
                 path.parent.mkdir(parents=True, exist_ok=True)
             payload = contracts_as_dicts()
             path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            print(json.dumps({"wrote": str(path), "proposers": len(payload)}, indent=2))
+            print(
+                json.dumps(
+                    {
+                        "wrote": str(path),
+                        "agents": len(payload),
+                        "proposers": sum(
+                            1
+                            for c in payload.values()
+                            if c.get("execution", {}).get("may_propose_trades")
+                        ),
+                    },
+                    indent=2,
+                )
+            )
         else:
             org = Organization()
             path.write_text(json.dumps(org.contracts(), indent=2), encoding="utf-8")
@@ -124,6 +144,32 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(summary, indent=2))
         if args.stdout:
             print(plan_to_markdown(plan))
+        return 0
+    if args.cmd == "blueprints":
+        path = Path(args.out)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        payload = blueprints_as_dicts()
+        path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        print(
+            json.dumps(
+                {
+                    "wrote": str(path),
+                    "agents": len(payload),
+                    "incomplete": incomplete_blueprint_ids(),
+                    "layers": [
+                        "Identity",
+                        "Goal",
+                        "Responsibilities",
+                        "Functions",
+                        "Tools",
+                        "Capabilities",
+                        "Memory",
+                        "Knowledge Base",
+                    ],
+                },
+                indent=2,
+            )
+        )
         return 0
     return 1
 

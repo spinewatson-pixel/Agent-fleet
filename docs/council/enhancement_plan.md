@@ -1,8 +1,8 @@
 # Institutional Design Council — Enhancement Plan
 
-Generated: `2026-07-29T00:54:41.041778+00:00`
-Organization: **watchfloor quant lab** (registry v0.3.0)
-Agents: `{'total_agents': 280, 'proposers': 128, 'executors': 1, 'divisions': 12}`
+Generated: `2026-07-30T06:38:01.145480+00:00`
+Organization: **watchfloor quant lab** (registry v0.5.0)
+Agents: `{'total_agents': 285, 'proposers': 128, 'executors': 1, 'divisions': 12}`
 
 ## Reasoning
 Council ran independent audits against the Watchfloor registry and paper-org wiring, cross-critiqued trading vs risk vs stewardship tensions, applied standing live-execution vetoes, and ordered implementation by P0→P3.
@@ -127,7 +127,7 @@ Council ran independent audits against the Watchfloor registry and paper-org wir
 - `P2` `recommended_improvement` **Trading Operations**: REG-1 regime service admits proposals; richer regime engine still needed
   - RegimeService gates FIT-1 admission against contract valid/invalid regimes. Next: data-driven regime labels owned by HEAD-TRADE / REG-1.
 - `P2` `recommended_improvement` **Trading Operations**: Per-symbol daily order cap live; slippage ledger still thin
-  - 102 trading-division agents share a per-symbol daily cap of 20.
+  - 103 trading-division agents share a per-symbol daily cap of 20.
 - `P2` `structural_weakness` **Trading Operations**: EXEC-1 is both quality analyst and sole order placer
   - Watchfloor nick 'Fill Check' mixes measurement with authority. Keep execution authority, but split attribution of fill quality to ATTR-1.
 - `P2` `recommended_improvement` **Quantitative Research**: Proposer contract stubs complete; promote from stub to validated
@@ -141,7 +141,7 @@ Council ran independent audits against the Watchfloor registry and paper-org wir
 - `P2` `recommended_improvement` **Research and Strategy**: Bull/Bear split authors need conflict metadata on case files
   - BULL-1 and BEAR-1 must never share authorship on the same case version.
 - `P1` `recommended_improvement` **Governance and Operations**: Agent ceiling decision in force; enforce in UI create flow
-  - Roster 280 ≤ ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.
+  - Roster 285 ≤ ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.
 - `P2` `recommended_improvement` **Governance and Operations**: RECON-1 seat added; automate book vs broker mismatch halt
   - Seat exists under COMP-1; runtime recon loop still to implement.
 - `P2` `recommended_improvement` **Governance and Operations**: Incident runbooks for SEC-HALT drills not versioned in repo

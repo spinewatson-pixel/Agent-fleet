@@ -29,6 +29,21 @@ def test_all_proposers_have_complete_contracts():
         assert contract.approval.can_self_approve is False
 
 
+def test_all_agents_have_complete_contracts():
+    from agent_fleet.agents.watchfloor_contracts import (
+        all_agent_contracts,
+        incomplete_agent_ids,
+    )
+
+    contracts = all_agent_contracts()
+    assert len(contracts) >= 280
+    assert incomplete_agent_ids() == []
+    assert "RECON-1" in contracts
+    assert "GOV-CHAIR" in contracts
+    assert contracts["EXEC-1"].execution.may_place_orders is True
+    assert contracts["AAPL-L"].execution.may_propose_trades is True
+
+
 def test_agent_ceiling_covers_roster():
     reg = load_watchfloor_registry()
     assert reg["hard_rules"]["agent_ceiling"] >= reg["counts"]["total_agents"]

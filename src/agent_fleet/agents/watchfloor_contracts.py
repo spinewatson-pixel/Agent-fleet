@@ -17,14 +17,18 @@ from agent_fleet.agents.contracts_factory import (
     strategy_approval,
     strategy_execution_perms,
 )
-from agent_fleet.registry.watchfloor import hard_rules, proposers
+from agent_fleet.registry.watchfloor import all_agents, hard_rules, proposers
 from agent_fleet.schemas.contracts import (
     AgentOperatingContract,
+    ApprovalRequirements,
     EntryExitRules,
+    ExecutionPermissions,
+    FailureShutdownBehavior,
     PositionSizingRules,
+    SelfImprovementGate,
     SetupDetectionRule,
 )
-from agent_fleet.schemas.enums import DeploymentStatus, MarketRegime
+from agent_fleet.schemas.enums import AgentRole, DeploymentStatus, MarketRegime
 
 
 def _ticker_from_agent(agent: dict[str, Any]) -> str | None:
@@ -289,7 +293,7 @@ def contract_for_proposer(agent: dict[str, Any]) -> AgentOperatingContract:
         information_received_from=["MKT-1", "CORP-1", "FORE-1", "REG-1", "MEM-1"],
         outputs_sent_to=["FIT-1", "RISK-1", "MEM-1"],
         monitoring_after_entry=["stop_distance", "thesis_intact", "regime_valid"],
-        strategy_version="watchfloor-0.3.0",
+        strategy_version="watchfloor-0.4.0",
         department=agent.get("department") or agent.get("division") or "trade",
     )
     # Watchfloor escalate targets (not legacy PORT-RISK ids)
@@ -310,13 +314,156 @@ def contract_for_proposer(agent: dict[str, Any]) -> AgentOperatingContract:
 
 
 def contract_is_complete(contract: AgentOperatingContract) -> bool:
+    if contract.role == AgentRole.STRATEGY and contract.execution.may_propose_trades:
+        return bool(
+            contract.setup_detection_rules
+            and contract.entry_exit.entry_rules
+            and contract.entry_exit.stop_loss_rule
+            and contract.entry_exit.invalidation_rules
+            and contract.position_sizing.max_pct_nav > 0
+        )
+    # Support / control seats: mandate triggers + escalation path required
     return bool(
         contract.setup_detection_rules
-        and contract.entry_exit.entry_rules
-        and contract.entry_exit.stop_loss_rule
         and contract.entry_exit.invalidation_rules
-        and contract.position_sizing.max_pct_nav > 0
+        and contract.failure_shutdown.escalate_to
+        and contract.agent_id
     )
+
+
+def _role_for_support(agent: dict[str, Any]) -> AgentRole:
+    aid = agent["id"]
+    kind = agent.get("kind") or ""
+    division = agent.get("division") or ""
+    if aid == "EXEC-1":
+        return AgentRole.EXECUTION
+    if aid in {"FIT-1", "COST-1", "STAT-1", "BACK-1"}:
+        return AgentRole.VALIDATION
+    if aid in {"ATTR-1", "CALIB-1"}:
+        return AgentRole.ATTRIBUTION
+    if aid in {"SYNTH-1", "LIFE-1", "ARCH-1", "AUDIT-1"}:
+        return AgentRole.LEARNING_CONTROL
+    if aid in {"COMP-1", "RECON-1"}:
+        return AgentRole.MONITORING
+    if aid in {"RISK-1", "CAP-1", "CORR-Q", "CIT-RISK", "CIT-ALLOC"}:
+        return AgentRole.PORTFOLIO_RISK
+    if aid in {"MKT-1", "ALT-1", "DQ-1"}:
+        return AgentRole.MARKET_INFORMATION
+    if aid in {"ML-ARCH", "ML-VIT", "ML-SEQ", "ML-CLS", "ML-PAT", "TOOL-1", "UI-1"}:
+        return AgentRole.AI_INFRASTRUCTURE
+    if aid in {"MEM-1"} or kind == "mind":
+        return AgentRole.SYSTEMS_INTELLIGENCE
+    if kind in {"gov", "sec", "control"} or division in {"ctrl", "sec"}:
+        return AgentRole.GOVERNANCE
+    if kind in {"intel", "disc"} or division in {"intel", "pred"}:
+        return AgentRole.FUNDAMENTAL_RESEARCH
+    if kind == "lab" or division == "lab":
+        return AgentRole.QUANTITATIVE_RESEARCH
+    if kind == "quant" or division == "quant":
+        return AgentRole.QUANTITATIVE_RESEARCH
+    if kind == "fund" or division == "funds":
+        return AgentRole.CAPITAL_STEWARDSHIP
+    if aid.startswith("BRK-"):
+        return AgentRole.CAPITAL_STEWARDSHIP
+    return AgentRole.SYSTEMS_INTELLIGENCE
+
+
+def contract_for_support(agent: dict[str, Any]) -> AgentOperatingContract:
+    """Operating contract for non-proposing Watchfloor seats."""
+    supervisor = agent.get("supervisor_id") or "GOV-CHAIR"
+    role = _role_for_support(agent)
+    aid = agent["id"]
+    mandate = SetupDetectionRule(
+        rule_id=f"{aid}-MANDATE-01",
+        description="Seat activates on matching org events within mandate",
+        expression=(
+            f"event.recipient_ids CONTAINS '{aid}' OR event.tags OVERLAP mandate_tags"
+        ),
+        required_inputs=["event_type", "payload", "correlation_id"],
+        lookback=1,
+    )
+    may_execute = aid == "EXEC-1"
+    return AgentOperatingContract(
+        agent_name=agent.get("nick") or aid,
+        agent_id=aid,
+        department=agent.get("department") or agent.get("division") or "support",
+        supervisory_agent_id=supervisor,
+        role=role,
+        strategy=(agent.get("role") or aid)[:240],
+        economic_rationale=(
+            f"Watchfloor {role.value} seat — does not propose trades; "
+            f"owns mandate outputs and escalations only."
+        ),
+        assets_permitted=["N/A"],
+        markets_permitted=["US_EQUITIES"],
+        holding_period_days_min=0,
+        holding_period_days_max=0,
+        trading_frequency="event_driven",
+        valid_regimes=list(MarketRegime),
+        invalid_regimes=[],
+        required_data_inputs=["org_events", "mem_1_namespace"],
+        data_sources={"org_events": "MEM-1", "halt": "SEC-HALT"},
+        indicators_features_models=[],
+        setup_detection_rules=[mandate],
+        entry_exit=EntryExitRules(
+            entry_rules=[f"activate on mandate event for {aid}"],
+            exit_rules=["release after output written to MEM-1"],
+            stop_loss_rule="escalate_on_repeated_failure",
+            invalidation_rules=["mandate_breach", "halt", "permission_denied"],
+            time_stop_days=None,
+        ),
+        position_sizing=PositionSizingRules(
+            method="fixed_fraction",
+            max_pct_nav=0.0001,
+            min_pct_nav=0.0,
+            max_concurrent_positions=0,
+            max_sector_pct=0.0,
+            notes="Non-trading seat — no capital authority",
+        ),
+        information_received_from=["MEM-1", supervisor],
+        outputs_sent_to=["MEM-1", supervisor, "GOV-CHAIR"],
+        approval=ApprovalRequirements(
+            requires_independent_validation=False,
+            requires_portfolio_evaluation=False,
+            requires_risk_approval=False,
+            requires_capital_stewardship_review=False,
+            requires_governance_check=True,
+            can_self_approve=False,
+            can_self_execute=False,
+            can_set_own_capital_limits=False,
+            can_evaluate_own_performance=False,
+        ),
+        execution=ExecutionPermissions(
+            may_propose_trades=False,
+            may_place_orders=may_execute,
+            may_cancel_orders=may_execute,
+            may_force_close=False,
+            paper_only=True,
+            live_enabled=False,
+            max_notional_usd=0.0 if not may_execute else 1_000_000.0,
+        ),
+        monitoring_after_entry=["mandate_sla", "escalation_latency"],
+        memory_retained=["outputs", "escalations", "rejects"],
+        performance_measurements=["sla_hit_rate", "escalation_quality", "false_alarm_rate"],
+        failure_shutdown=default_shutdown([supervisor, "GOV-CHAIR", "SEC-HALT"]),
+        testing_deployment_status=DeploymentStatus.PAPER,
+        strategy_version="watchfloor-0.4.0",
+        self_improvement=default_improvement(),
+        owns_stages=[],
+        authority_actions=[],
+        extra={
+            "watchfloor_division": agent.get("division"),
+            "watchfloor_kind": agent.get("kind"),
+            "contract_completeness": "stub_measurable_v1",
+            "non_trading": True,
+        },
+    )
+
+
+def contract_for_agent(agent: dict[str, Any]) -> AgentOperatingContract:
+    if agent.get("may_propose_trades"):
+        return contract_for_proposer(agent)
+    return contract_for_support(agent)
 
 
 @lru_cache(maxsize=1)
@@ -324,6 +471,14 @@ def all_proposer_contracts() -> dict[str, AgentOperatingContract]:
     out: dict[str, AgentOperatingContract] = {}
     for agent in proposers():
         out[agent["id"]] = contract_for_proposer(agent)
+    return out
+
+
+@lru_cache(maxsize=1)
+def all_agent_contracts() -> dict[str, AgentOperatingContract]:
+    out: dict[str, AgentOperatingContract] = {}
+    for agent in all_agents():
+        out[agent["id"]] = contract_for_agent(agent)
     return out
 
 
@@ -335,9 +490,19 @@ def incomplete_proposer_ids() -> list[str]:
     ]
 
 
-def contracts_as_dicts() -> dict[str, Any]:
-    return {aid: c.model_dump(mode="json") for aid, c in all_proposer_contracts().items()}
+def incomplete_agent_ids() -> list[str]:
+    return [
+        aid
+        for aid, contract in all_agent_contracts().items()
+        if not contract_is_complete(contract)
+    ]
+
+
+def contracts_as_dicts(*, proposers_only: bool = False) -> dict[str, Any]:
+    src = all_proposer_contracts() if proposers_only else all_agent_contracts()
+    return {aid: c.model_dump(mode="json") for aid, c in src.items()}
 
 
 def clear_contract_cache() -> None:
     all_proposer_contracts.cache_clear()
+    all_agent_contracts.cache_clear()

@@ -432,12 +432,12 @@ var grpC=B_METH.map(function(m,i){return A("SCOUT-S"+(i+1),m,"Daily short scout 
 var grpD=D_STRAT.map(function(s,i){return A("BENCH-"+(i+1),s,"Benchmark agent — runs the published "+s+" strategy faithfully. The baseline the novel fleet must beat.",["PAPER TRADER","BENCHMARK","$1–2"])});
 var grpE=[];for(var i=1;i<=12;i++)grpE.push(A("NOVA-"+i,"Novel Lab "+i,"Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",["PAPER TRADER","NOVEL R&D","$1–2"]));
 var grpF=F_SIZE.map(function(s,i){return A("SIZE-"+(i+1),s,"Sizing experiment — comparable entry logic with capital deployment isolated as the variable: "+s+". Findings feed Capital Allocation.",["PAPER TRADER","SIZING LAB","VAR $"])});
-var grpG=[];["Catalyst","Technical","Signal","Thematic"].forEach(function(k){for(var j=1;j<=5;j++)grpG.push(A("SWING-"+k[0]+j,k+" Swing "+j,k+"-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",["PAPER TRADER","SWING ≤1W",k.toUpperCase()]))});
+var grpG=[];[["Catalyst","C"],["Technical","T"],["Signal","S"],["Thematic","M"]].forEach(function(pair){var k=pair[0],pfx=pair[1];for(var j=1;j<=5;j++)grpG.push(A("SWING-"+pfx+j,k+" Swing "+j,k+"-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",["PAPER TRADER","SWING ≤1W",k.toUpperCase()]))});
 
 return [
 {key:"ctrl",em:"🎛️",name:"MISSION CONTROL",tab:"Control",label:"APPROVES STRUCTURE · NEVER TRADES",
 desc:"The council every structural decision routes through — new agents, new departments, contractors, capital authority. Plus the hard limits that keep the lab honest.",
-pills:["MODE B · THRESHOLDS","CEILING 150","HALT POWER"],depts:[
+pills:["MODE B · THRESHOLDS","CEILING 300","HALT POWER"],depts:[
 {name:"Council Seats",sub:"WEEKLY AUDIT · ASYNC QUEUE",desc:"Five senior agents plus the human seat. Approve, reject or modify every proposal. Weekly full-org audit.",pills:["6 SEATS","HUMAN VETO"],open:true,agents:[
 A("GOV-CHAIR","The Gavel","Chairs the council, owns the proposal queue, breaks ties, enforces the agent ceiling.",["GOVERNANCE","CHAIR"],{kind:"gov"}),
 A("HEAD-INTEL","Intel Seat","Council voice for Global Intel — coverage, sector desks and case files.",["GOVERNANCE","COUNCIL"],{kind:"gov"}),
@@ -445,9 +445,11 @@ A("HEAD-TRADE","Trading Seat","Council voice for the trading floor — cohort de
 A("HEAD-LAB","Lab Seat","Council voice for The Lab — experiments, testing standards and red-team scope.",["GOVERNANCE","COUNCIL"],{kind:"gov"}),
 A("HEAD-LEARN","Learning Seat","Council voice for the Learning Loop — lifecycle, attribution and audit findings.",["GOVERNANCE","COUNCIL"],{kind:"gov"}),
 A("HUMAN-1","The Founder","Human seat. Mode B — auto-approval below thresholds, hard escalation above. Can reverse anything.",["HUMAN SEAT","VETO"],{kind:"gov",status:"HUMAN"})]},
-{name:"Risk & Limits",sub:"HARD BOUNDARIES · HALT AUTHORITY",desc:"Fleet-wide exposure and the rules that never bend: paper-only, size ceilings, the one-week swing cap, mandate adherence.",pills:["CORRELATION WATCH"],agents:[
+{name:"Risk & Limits",sub:"HARD BOUNDARIES · HALT AUTHORITY",desc:"Fleet-wide exposure and the rules that never bend: paper-only, size ceilings, the one-week swing cap, mandate adherence.",pills:["CORRELATION WATCH","BOOK RECON","ACTIVITY BUDGET"],agents:[
 A("RISK-1","Exposure","Models fleet-wide correlation, concentration and drawdown — are 40 agents accidentally in the same trade.",["RISK","PORTFOLIO"],{kind:"risk"}),
-A("COMP-1","The Line","Watches every agent against its charter. Breach → immediate halt → council and human alert.",["COMPLIANCE","ENFORCER"],{kind:"risk"})]}]},
+A("COMP-1","The Line","Watches every agent against its charter. Breach → immediate halt → council and human alert.",["COMPLIANCE","ENFORCER"],{kind:"risk"}),
+A("RECON-1","Book Recon","Reconciles internal Watchfloor book vs paper broker. Mismatch → COMP-1 halt on new proposals.",["GOVERNANCE","RECON"],{kind:"control"}),
+A("ACT-1","Throttle","Activity budget officer — caps new discretionary proposals per cohort per day and flags duplicate thesis families to BRK-INV.",["GOVERNANCE","ACTIVITY"],{kind:"control"})]}]},
 
 {key:"intel",em:"🌍",name:"GLOBAL INTEL",tab:"Intel",label:"WHAT CHANGED IN THE WORLD TODAY",
 desc:"News and research across everything that can move a stock — geopolitics to weather to tech adoption — plus deep company research. Every covered name keeps a live bull case and bear case.",
@@ -475,7 +477,8 @@ agents:SECTORS.map(function(s){return A(s[0],s[1],s[1]+" desk — consumes intel
 desc:"Turns intel into explicit forecasts. Builds multi-hop causal chains — cold winter in Spain → jacket demand → who sells the jackets — hunts anomalies, and publishes predictions with confidence levels that get scored later.",
 pills:["11 AGENTS","EVERY CALL SCORED"],depts:[
 {name:"Forecast Desk",sub:"EXPLICIT CALLS · CONFIDENCE · HORIZON",desc:"Publishes concrete predictions — direction, magnitude, time horizon, confidence. The Learning Loop scores every one, right or wrong.",pills:["CALIBRATION TRACKED"],open:true,agents:[
-A("FORE-1","Crystal","Publishes the division's formal predictions with confidence and horizon; owns the open-forecast board.",["PREDICTION","FORECASTS"],{kind:"disc"})]},
+A("FORE-1","Crystal","Publishes the division's formal predictions with confidence and horizon; owns the open-forecast board.",["PREDICTION","FORECASTS"],{kind:"disc"}),
+A("FORE-2","Metronome","Calibration specialist — keeps Brier scores honest, refuses post-hoc revisions, and flags overconfident desks.",["PREDICTION","CALIBRATION"],{kind:"disc"})]},
 {name:"Causal Chains",sub:"SECOND & THIRD ORDER",desc:"Explicit reasoning chains: event → cost → margin → demand → substitute → beneficiary. Every hop carries confidence, lag and invalidation conditions.",pills:["MULTI-HOP"],agents:[
 A("CHAIN-1","Domino","Forward chains from live events — shortage to margin to share shift to substitute winners.",["PREDICTION","CAUSAL"],{kind:"disc"}),
 A("CHAIN-2","Ripple","Weather and regional events downstream — heating, apparel, logistics, insurance, retail.",["PREDICTION","CAUSAL"],{kind:"disc"})]},
@@ -500,9 +503,10 @@ pills:["100 AGENTS","7 COHORTS"],depts:[
 {name:"Group E · Novel Fleet",sub:"NEW STRATEGIES · KILL OR SCALE",desc:"Deploys the strategies The Lab clears. Kills failures fast; winners get proposed for their own dedicated agent.",pills:["12 AGENTS","FEEDS COUNCIL"],agents:grpE},
 {name:"Group F · Sizing Lab",sub:"SIZING AS THE ONLY VARIABLE",desc:"Deliberately breaks the fixed-size rule to isolate how much sizing matters relative to selection.",pills:["10 AGENTS","VAR $"],agents:grpF},
 {name:"Group G · Swing Desk",sub:"1–5 DAYS · HARD CAP ONE WEEK",desc:"The 20 non-day-traders. Catalyst, technical, signal-driven and thematic swings. The one-week cap is never exceeded.",pills:["20 AGENTS","≤1 WEEK"],agents:grpG},
-{name:"Fleet Support",sub:"SIZING POLICY · FILL QUALITY",desc:"Capital allocation is its own specialization, not embedded in traders. Execution quality separates fill problems from strategy problems.",pills:["2 AGENTS"],agents:[
+{name:"Fleet Support",sub:"SIZING POLICY · FILL QUALITY · LIQUIDITY",desc:"Capital allocation is its own specialization, not embedded in traders. Execution quality separates fill problems from strategy problems. Liquidity throttles keep the sandbox honest.",pills:["3 AGENTS"],agents:[
 A("CAP-1","Allocator","Capital Allocation — future owner of sizing policy, reinvestment and correlation-aware exposure.",["SUPPORT","CAPITAL"]),
-A("EXEC-1","Fill Check","Execution Quality — slippage, spread cost, order-type effectiveness.",["SUPPORT","EXECUTION"])]}]},
+A("EXEC-1","Fill Check","Execution Quality — slippage, spread cost, order-type effectiveness. Sole seat authorized to place paper orders.",["SUPPORT","EXECUTION"]),
+A("ADV-1","Depth","Liquidity / ADV throttle — blocks proposals that would exceed per-symbol daily order caps or unrealistic participation.",["SUPPORT","LIQUIDITY"],{kind:"risk"})]}]},
 
 {key:"lab",em:"🧪",name:"THE LAB",tab:"Lab",label:"IDEAS → HYPOTHESES → TESTS → VERDICTS",
 desc:"Where new theories are born and tried to destruction. Idea generation, hypothesis testing, backtesting against honest history, statistical validation, and a permanent red team attacking everything before it ships.",
@@ -554,7 +558,8 @@ A("RT-CULL-1","Cull","Retires desk agents whose edge decayed. Runs the post-mort
 A("RT-GROW-1","Charter","Drafts sub-division proposals when a method outgrows a single agent. Owns the desk's autonomy budget and ceiling.",["RENTEC","EXPANSION"],{kind:"quant"})]},
 {name:"Validation Police",sub:"VETO POWER · BUILDER NEVER CERTIFIES",desc:"Independent adversaries who assume every backtest is a curve-fitted lie until proven otherwise, and who kill strategies whose edge evaporates after realistic costs. The researcher who built a strategy never certifies it.",pills:["KILL AUTHORITY"],agents:[
 A("FIT-1","Overfit Police","Proves backtests wrong — data snooping, curve fitting, hidden look-ahead, too many knobs. Holds veto.",["QUANT","VALIDATION"],{kind:"quant"}),
-A("COST-1","Friction","Models slippage, spread and impact at realistic size — rejects strategies whose edge dies after costs.",["QUANT","COSTS"],{kind:"quant"})]}]},
+A("COST-1","Friction","Models slippage, spread and impact at realistic size — rejects strategies whose edge dies after costs.",["QUANT","COSTS"],{kind:"quant"}),
+A("EVID-1","Seal","Evidence Package Officer — signs OOS packages for RT-* proposers; unsigned packages never reach RISK-1.",["QUANT","EVIDENCE"],{kind:"quant"})]}]},
 
 {key:"funds",em:"🏛️",name:"FUND FLOOR",tab:"Funds",label:"GREAT INVESTORS · REBUILT AS DESKS · EACH GROWS ITSELF",
 desc:"Six desks, each a miniature fund running the actual method of a legendary investor or firm — not the mythology, the mechanics. Every desk is staffed like a real shop: the doctrine at the top, analysts in the middle, and the desk’s own traders executing stock trades under that doctrine. Hiring is at each desk’s discretion — when a desk finds a repeatable edge, it births a new trader for it, kill criteria attached. Desks compete on the same scoreboard.",
@@ -655,7 +660,8 @@ A("ALT-1","Periscope","Alternative datasets — sources and maintains them, scou
 {name:"Quality Control",sub:"POINT-IN-TIME INTEGRITY",desc:"Freshness, gaps, source reliability, revision tracking. The org must know what it knew at the time — or every backtest lies.",pills:["NO LOOK-AHEAD"],agents:[
 A("DQ-1","Sieve","Scores source reliability, catches gaps and conflicts, preserves point-in-time truth.",["DATA","QUALITY"],{kind:"data"})]},
 {name:"Org Memory",sub:"EVERY DIVISION READS & WRITES HERE",desc:"Thesis log, trade log, signal library, causal chains, case files, lessons, agent registry, proposals, audit trail. Central with namespaces — silos defeat the purpose.",pills:["CENTRAL","NAMESPACED"],agents:[
-A("MEM-1","Archive","Owns shared memory — indexed and searchable; the reason lessons compound instead of evaporating.",["DATA","MEMORY"],{kind:"data"})]},
+A("MEM-1","Archive","Owns shared memory — indexed and searchable; the reason lessons compound instead of evaporating.",["DATA","MEMORY"],{kind:"data"}),
+A("SIG-1","Signal Bus","ResearchSignal guardian — rejects non-schema handoffs so strategies only consume standardized signals, never raw narrative blobs.",["DATA","SCHEMA"],{kind:"data"})]},
 {name:"Toolshop",sub:"INTERNAL BUILDS · THIS APP",desc:"Builds internal tools, dashboards and integrations — including the surface you're looking at right now.",pills:["WORKSHOP"],agents:[
 A("TOOL-1","Wrench","Builds internal tools other agents request, through the same proposal loop as everything else.",["DATA","TOOLING"],{kind:"data"}),
 A("UI-1","Window","Owns the human-facing surface — dashboards, drill-downs, proposal queue, alerts.",["DATA","INTERFACE"],{kind:"data"})]}]},
@@ -769,12 +775,13 @@ gov:["Clearing proposal queue","Reviewing contractor request","Preparing weekly 
 quant:["Sweeping series for weak relationships","Re-weighting the ensemble stack","Checking regime classification against live tape","Re-running out-of-sample validation","Modeling slippage at realistic size"],
 fund:["Re-reading the doctrine against today's tape","Grading a candidate against desk rules","Paper-testing a setup from the playbook","Writing the post-mortem on the last exit","Petitioning the Forge for a new agent"],
 mind:["Reframing a stuck problem through a second domain","Interrogating a confident claim from another desk","Generating candidates before any filtering","Sketching the mechanism behind a correlation","Attaching a kill condition to a new idea"],
-contr:["Standing by — no active engagement","Awaiting sponsor scope","Final knowledge-transfer packet","Idle — available for engagement"]};
+contr:["Standing by — no active engagement","Awaiting sponsor scope","Final knowledge-transfer packet","Idle — available for engagement"],
+control:["Diffing internal book vs paper broker","Classifying an open break","Drafting halt request for COMP-1","Clearing a resolved recon item","Enforcing daily activity budgets"]};
 var arr=t[a.kind]||t.trader;return arr[x%arr.length]}
 function tiles(a){var x=h(a.id);
-var m={trader:["📄","THESIS"],intel:["📄","REPORTS"],disc:["📡","FORECASTS"],lab:["🧪","EXPERIMENTS"],risk:["⚖️","REVIEWS"],meta:["🧾","AUDITS"],data:["🧮","PIPELINES"],gov:["🗳️","PROPOSALS"],contr:["📦","DELIVERY"],mind:["💡","IDEAS"],quant:["🔬","SIGNALS"],fund:["🏛️","PLAYBOOK"]};
+var m={trader:["📄","THESIS"],intel:["📄","REPORTS"],disc:["📡","FORECASTS"],lab:["🧪","EXPERIMENTS"],risk:["⚖️","REVIEWS"],meta:["🧾","AUDITS"],data:["🧮","PIPELINES"],gov:["🗳️","PROPOSALS"],contr:["📦","DELIVERY"],mind:["💡","IDEAS"],quant:["🔬","SIGNALS"],fund:["🏛️","PLAYBOOK"],control:["🧩","RECON"]};
 var third=m[a.kind]||m.trader;
-return[["▦","OVERVIEW",null],["◎","OBJECTIVES",null],["⚙️","FUNCTIONS",null],["🛠️","TOOLS",null],
+return[["▦","OVERVIEW",null],["🧬","BLUEPRINT",null],["◎","OBJECTIVES",null],["⚙️","FUNCTIONS",null],["🛠️","TOOLS",null],
 ["📖","KNOWLEDGE",{n:3+x%6}],["📊","ANALYTICS",null],[third[0],third[1],null],["⚡","ACTIVITY",{live:1}],
 ["🎓","LEARNING",null],["👥","TEAM",{n:2+(x>>2)%5}],["🔔","ALERTS",{n:(x>>4)%4,red:1}],["🎛️","SETTINGS",null],["💬","CHAT",null]]}
 function curDeptName(a){for(var i=0;i<cur.depts.length;i++){if(cur.depts[i].agents.indexOf(a)>-1)return cur.depts[i].name}return""}
@@ -841,9 +848,16 @@ gov:{cad:"Async queue · weekly council session",auto:"Approval authority · hum
 tools:[["🗳","Proposal Queue","OPEN"],["📖","Vote Ledger","WRITE"],["🔢","Ceiling Monitor","ENFORCED"],["🛑","Halt Switch","ARMED"]],
 fns:["Every structural change routes here","Enforce the agent ceiling","Written rationale on every vote","Human seat holds veto","Weekly full-org review"],
 srcs:[["Open proposal queue","proposals"],["Charter and hard limits","rules"],["Vote history","votes"],["Audit findings","findings"]],
-mets:[["Queue Depth","open"],["Approval Rate","%"],["Ceiling Used","of 150"],["Time to Decision","days"]],
+mets:[["Queue Depth","open"],["Approval Rate","%"],["Ceiling Used","of 300"],["Time to Decision","days"]],
 objs:["Keep growth deliberate — no agent exists without a stated reason.","Make every decision reversible and on the record.","Protect the hard limits from the org's own enthusiasm."],
 meas:"Measured on decision quality and on the ceiling never being quietly breached."},
+control:{cad:"Scheduled recon · continuous activity watch",auto:"Halt recommendation · no order authority",
+tools:[["🧮","Book Diff Engine","CONNECTED"],["📓","Incident Ledger","WRITE"],["⛔","Halt Request","ARMED"],["📊","Activity Budget","ENFORCED"]],
+fns:["Diff internal book vs paper broker","Classify and escalate material breaks","Cap discretionary proposal floods","Flag duplicate thesis families","Clear only after dual sign-off"],
+srcs:[["Internal position book","positions"],["Paper broker ledger","fills"],["Proposal activity log","proposals"],["Break history","cases"]],
+mets:[["Breaks Open","count"],["Time to Halt","min"],["Activity Caps Hit","/ day"],["False Breaks","%"]],
+objs:["Catch book lies before new risk compounds.","Keep experimentation wide without letting activity become the product.","Never clear your own breaks alone."],
+meas:"Judged on breaks caught early and activity budgets respected."},
 contr:{cad:"On demand · engagement-scoped",auto:"No standing authority · sponsor-gated",
 tools:[["📄","Scope Sheet","REQUIRED"],["📦","Delivery Packet","PENDING"],["🎓","Knowledge Transfer","MANDATORY"],["🔐","Sandbox Access","LIMITED"]],
 fns:["No work without a signed scope","Knowledge stays after engagement ends","Time-boxed access, auto-revoked","Sponsor sign-off on delivery","No standing data access"],
@@ -874,7 +888,60 @@ objs:["Improve how the org thinks, not what the org happens to believe today.","
 meas:"Measured on ideas that survived The Lab — never on ideas produced."}
 };
 function KP(a){return PROF[a.kind]||PROF.trader}
-function ledgerName(a){var t=tiles(a);for(var i=0;i<t.length;i++){if(["THESIS","REPORTS","FORECASTS","EXPERIMENTS","REVIEWS","AUDITS","PIPELINES","PROPOSALS","DELIVERY","IDEAS"].indexOf(t[i][1])>-1)return t[i][1]}return"THESIS"}
+function blueprintLayers(a){
+  var p=KP(a);
+  var id=a.id+" — «"+a.nick+"» — "+curDeptName(a)+" · "+(cur?cur.name:"");
+  var goal=(p.objs&&p.objs[0])?p.objs[0]:("Execute the mandate of "+a.nick+" at expert standard.");
+  var resp=["Owns: "+firstSentence(a.role), "Reports through division head to Mission Control", "Writes lineage to org memory (MEM-1)"];
+  if(a.kind==="trader"||a.kind==="fund"||(a.kind==="quant"&&String(a.id).indexOf("RT-")===0)){
+    resp.push("Proposes only — never self-approves or self-executes");
+  }
+  if(a.id==="EXEC-1")resp.push("Sole paper order placer after authority chain");
+  if(a.id==="RECON-1"||a.id==="ACT-1")resp.push("Control seat — halt/recommend, never trade");
+  var caps={
+    trader:["Setup recognition","Falsifiable thesis drafting","Session risk hygiene","Post-trade critique"],
+    intel:["Multi-source triangulation","Exposure mapping","Case-file discipline","Source scoring"],
+    disc:["Causal chaining","Anomaly detection","Confidence calibration","Cross-domain links"],
+    lab:["Hypothesis formalization","Point-in-time tests","Multiple-comparison correction","Adversarial critique"],
+    risk:["Exposure modeling","Correlation detection","Mandate drift spotting","Halt judgment"],
+    gov:["Proposal adjudication","Ceiling enforcement","Mode-B triage","Audit chairing"],
+    control:["Book reconciliation","Break classification","Activity budgeting","Halt packaging"],
+    meta:["Skill vs luck separation","Cohort attribution","Lesson routing","Lifecycle calls"],
+    data:["Feed monitoring","Schema validation","Point-in-time integrity","Conflict recon"],
+    sec:["Secret inventory","Dependency pinning","Leak detection","Emergency halt/restore"],
+    quant:["Weak-signal mining","Ensemble combination","Regime detection","Overfit/cost veto"],
+    fund:["Doctrine analysis","Playbook grading","Patient sizing","Forge petitions"],
+    mind:["Cross-domain analogy","First principles","Claim interrogation","Falsification"],
+    contr:["Scoped delivery","Knowledge transfer","Access hygiene"]
+  };
+  var mem={
+    trader:["Trade journal","Rejects","Regime at entry","Applied lessons"],
+    intel:["Case files","Source trust","Analogues","Corrections"],
+    disc:["Forecast board","Scores","Calibration curve","Anomaly queue"],
+    lab:["Hypothesis states","Graveyard","Promotion packets","Red-team notes"],
+    risk:["Exposure book","Breaches","Audits","Halts"],
+    gov:["Proposal queue","Votes","Ceiling exceptions","Audit minutes"],
+    control:["Recon runs","Open breaks","Activity caps","Clearances"],
+    meta:["Outcomes","Lessons","Audits","Lifecycle decisions"],
+    data:["Feed health","Conflicts","Memory index","Quarantines"],
+    sec:["Key inventory","Incidents","Drills","Reach maps"],
+    quant:["Signal library","OOS results","Regime log","Culls"],
+    fund:["Playbook ledger","Doctrine reviews","Journals","Decay notes"],
+    mind:["Idea ledger","Retractions","Stuck queue","Lab handoffs"],
+    contr:["Scopes","Deliveries","Engagement scores"]
+  };
+  return [
+    ["Identity", id],
+    ["Goal", goal],
+    ["Responsibilities", resp],
+    ["Functions", p.fns||[]],
+    ["Tools", (p.tools||[]).map(function(t){return t[1]+" ["+t[2]+"]"})],
+    ["Capabilities", caps[a.kind]||caps.trader],
+    ["Memory", mem[a.kind]||mem.trader],
+    ["Knowledge Base", (p.srcs||[]).map(function(s){return s[0]})]
+  ];
+}
+function ledgerName(a){var t=tiles(a);for(var i=0;i<t.length;i++){if(["THESIS","REPORTS","FORECASTS","EXPERIMENTS","REVIEWS","AUDITS","PIPELINES","PROPOSALS","DELIVERY","IDEAS","SIGNALS","PLAYBOOK","RECON"].indexOf(t[i][1])>-1)return t[i][1]}return"THESIS"}
 var FNS={};
 function fnOn(a,i){var k=a.id+"|"+i;if(FNS[k]===undefined)FNS[k]=((h(a.id)>>i)&1)===1||i<2;return FNS[k]}
 function firstSentence(r){var i=r.indexOf(". ");return i>-1?r.slice(0,i+1):r}
@@ -889,6 +956,16 @@ R(a,"Mandate",esc(firstSentence(a.role)))+
 R(a,"Sits in",esc(curDeptName(a))+" · "+cur.name)+
 R(a,"Cadence",p.cad)+R(a,"Autonomy",p.auto)+
 (a.custom?R(a,"Origin","Created by you — stored in org memory."):"");
+
+if(t==="BLUEPRINT"){
+  var layers=blueprintLayers(a);
+  return '<div class="pnote">Eight-layer operating blueprint — Identity through Knowledge Base. Expert standard for this seat.</div>'+
+  layers.map(function(L){
+    var body=Array.isArray(L[1])?L[1].map(function(x){return "• "+esc(x)}).join("<br>"):esc(L[1]);
+    return '<div class="box" style="margin-bottom:10px"><div class="k">'+esc(L[0])+'</div><div class="v" style="font-size:13px;line-height:1.55">'+body+'</div></div>';
+  }).join("")+
+  '<div class="pfoot">PAPER ONLY · NO SELF-APPROVE · NO SELF-EXECUTE · LIVE LOCKED</div>';
+}
 
 if(t==="OBJECTIVES")return '<div class="pnote">'+esc(a.role)+'</div>'+
 p.objs.map(function(o,i){return LI("0"+(i+1),o,"",null)}).join("")+

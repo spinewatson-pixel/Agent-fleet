@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-29T00:54:41.041778+00:00",
+  "generated_at": "2026-07-30T06:38:01.145480+00:00",
   "organization": "watchfloor quant lab",
-  "registry_version": "0.3.0",
+  "registry_version": "0.5.0",
   "agent_counts": {
-    "total_agents": 280,
+    "total_agents": 285,
     "proposers": 128,
     "executors": 1,
     "divisions": 12
@@ -200,9 +200,9 @@
       "team_name": "Trading Operations",
       "kind": "recommended_improvement",
       "title": "Per-symbol daily order cap live; slippage ledger still thin",
-      "detail": "102 trading-division agents share a per-symbol daily cap of 20.",
+      "detail": "103 trading-division agents share a per-symbol daily cap of 20.",
       "evidence": [
-        "trade_division_count=102",
+        "trade_division_count=103",
         "orders_today_by_symbol"
       ],
       "watchfloor_ids": [
@@ -347,7 +347,7 @@
       "team_name": "Governance and Operations",
       "kind": "recommended_improvement",
       "title": "Agent ceiling decision in force; enforce in UI create flow",
-      "detail": "Roster 280 \u2264 ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.",
+      "detail": "Roster 285 \u2264 ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.",
       "evidence": [
         "docs/council/decisions/GOV-CEIL-2026-07-28.md"
       ],
