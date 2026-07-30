@@ -1,0 +1,3853 @@
+{
+  "MKT-INFO-001": {
+    "agent_name": "Market Information Supervisor",
+    "agent_id": "MKT-INFO-001",
+    "department": "market_information",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "market_information",
+    "strategy": "Normalize and verify multi-source market/news/filing data",
+    "economic_rationale": "Decision quality depends on verified, tagged, timely inputs",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "MKT-INFO-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [],
+    "outputs_sent_to": [
+      "FUND-RES-001",
+      "QUANT-RES-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "data_ingestion",
+      "information_validation"
+    ],
+    "authority_actions": [
+      "reject_unverified_source"
+    ],
+    "extra": {}
+  },
+  "FUND-RES-001": {
+    "agent_name": "Research and Strategy Supervisor",
+    "agent_id": "FUND-RES-001",
+    "department": "research_strategy",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "fundamental_research",
+    "strategy": "Convert fundamental/sector/macro/event research into standardized signals",
+    "economic_rationale": "Research edge must be machine-consumable by strategy agents",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "FUND-RES-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "STRAT-EARN-001",
+      "STRAT-MACRO-001",
+      "STRAT-SECTOR-001",
+      "STRAT-VALUE-001",
+      "VAL-IND-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "research",
+      "signal_generation"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "QUANT-RES-001": {
+    "agent_name": "Quantitative Research Supervisor",
+    "agent_id": "QUANT-RES-001",
+    "department": "quantitative_research",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "quantitative_research",
+    "strategy": "Hypothesis generation, features, statistical validation, anti-overfit gates",
+    "economic_rationale": "Only statistically validated edges survive promotion",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "QUANT-RES-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "STRAT-FACTOR-001",
+      "STRAT-MOM-001",
+      "STRAT-MR-001",
+      "VAL-IND-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "research",
+      "controlled_improvement"
+    ],
+    "authority_actions": [
+      "reject_overfit_model"
+    ],
+    "extra": {}
+  },
+  "VAL-IND-001": {
+    "agent_name": "Independent Validation Agent",
+    "agent_id": "VAL-IND-001",
+    "department": "quantitative_research",
+    "supervisory_agent_id": "QUANT-RES-001",
+    "role": "validation",
+    "strategy": "Independent checks that strategy proposals are well-formed and regime-valid",
+    "economic_rationale": "Separation of proposal and validation reduces self-deception",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "VAL-IND-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "STRAT-*",
+      "FUND-RES-001",
+      "QUANT-RES-001"
+    ],
+    "outputs_sent_to": [
+      "PORT-RISK-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "independent_validation"
+    ],
+    "authority_actions": [
+      "reject"
+    ],
+    "extra": {}
+  },
+  "PORT-RISK-001": {
+    "agent_name": "Portfolio and Risk Supervisor",
+    "agent_id": "PORT-RISK-001",
+    "department": "portfolio_risk",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "portfolio_risk",
+    "strategy": "Portfolio construction, exposure, correlation, stress, drawdown controls",
+    "economic_rationale": "Organization survival depends on portfolio-level risk, not trade-level optimism",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "PORT-RISK-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "VAL-IND-001",
+      "TRADE-OPS-001"
+    ],
+    "outputs_sent_to": [
+      "CAP-STEW-001",
+      "GOV-OPS-001",
+      "EXEC-OMS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": true,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": true,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "portfolio_evaluation",
+      "risk_approval"
+    ],
+    "authority_actions": [
+      "approve",
+      "reject",
+      "reduce",
+      "pause",
+      "close"
+    ],
+    "extra": {}
+  },
+  "CAP-STEW-001": {
+    "agent_name": "Capital Stewardship Supervisor",
+    "agent_id": "CAP-STEW-001",
+    "department": "capital_stewardship",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "capital_stewardship",
+    "strategy": "Veto low-quality activity; protect long-term capital",
+    "economic_rationale": "Activity is not edge; unnecessary risk destroys compounding",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "CAP-STEW-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "PORT-RISK-001",
+      "FUND-RES-001"
+    ],
+    "outputs_sent_to": [
+      "GOV-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "risk_approval"
+    ],
+    "authority_actions": [
+      "reject",
+      "reduce",
+      "pause"
+    ],
+    "extra": {}
+  },
+  "GOV-OPS-001": {
+    "agent_name": "Governance and Operations Supervisor",
+    "agent_id": "GOV-OPS-001",
+    "department": "governance_operations",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "governance",
+    "strategy": "Compliance, permissions, reconciliation, incident escalation",
+    "economic_rationale": "Operational failure is existential risk",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "GOV-OPS-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "CAP-STEW-001",
+      "PORT-RISK-001"
+    ],
+    "outputs_sent_to": [
+      "EXEC-OMS-001",
+      "ARCH-CHIEF-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "risk_approval"
+    ],
+    "authority_actions": [
+      "reject",
+      "pause",
+      "shutdown"
+    ],
+    "extra": {}
+  },
+  "SYS-INTEL-001": {
+    "agent_name": "Systems Intelligence Supervisor",
+    "agent_id": "SYS-INTEL-001",
+    "department": "systems_intelligence",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "systems_intelligence",
+    "strategy": "Map decision system: lineage, permissions, shared context, audit",
+    "economic_rationale": "Unmapped decision systems cannot be controlled or improved",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "SYS-INTEL-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "*"
+    ],
+    "outputs_sent_to": [
+      "ARCH-CHIEF-001",
+      "GOV-OPS-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [
+      "audit"
+    ],
+    "extra": {}
+  },
+  "TRADE-OPS-001": {
+    "agent_name": "Trading Operations Supervisor",
+    "agent_id": "TRADE-OPS-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "trading_operations",
+    "strategy": "Live/paper workflow, regime label, OMS coordination, slippage analysis",
+    "economic_rationale": "Multi-strategy execution without coordination destroys edge via costs",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "TRADE-OPS-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "PORT-RISK-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "EXEC-OMS-001",
+      "MON-LIVE-001",
+      "STRAT-*"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": true,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "execution",
+      "live_monitoring"
+    ],
+    "authority_actions": [
+      "pause",
+      "close"
+    ],
+    "extra": {}
+  },
+  "AI-INFRA-001": {
+    "agent_name": "AI Infrastructure Supervisor",
+    "agent_id": "AI-INFRA-001",
+    "department": "ai_infrastructure",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "ai_infrastructure",
+    "strategy": "Model routing, compute, latency, failover, local vs cloud separation",
+    "economic_rationale": "Inference reliability and latency are trading infrastructure",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "AI-INFRA-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [],
+    "outputs_sent_to": [
+      "ARCH-CHIEF-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [
+      "failover"
+    ],
+    "extra": {}
+  },
+  "ARCH-CHIEF-001": {
+    "agent_name": "Chief Architecture Agent",
+    "agent_id": "ARCH-CHIEF-001",
+    "department": "systems_intelligence",
+    "supervisory_agent_id": "ARCH-CHIEF-001",
+    "role": "chief_architecture",
+    "strategy": "Resolve design conflicts; finalize authority; gate live deploy",
+    "economic_rationale": "Conflicting controls without arbitration create gaps",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "ARCH-CHIEF-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "GOV-OPS-001",
+      "PORT-RISK-001",
+      "CAP-STEW-001"
+    ],
+    "outputs_sent_to": [
+      "EXEC-OMS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "risk_approval",
+      "execution"
+    ],
+    "authority_actions": [
+      "pause",
+      "shutdown"
+    ],
+    "extra": {}
+  },
+  "EXEC-OMS-001": {
+    "agent_name": "Order Management Execution Agent",
+    "agent_id": "EXEC-OMS-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "TRADE-OPS-001",
+    "role": "execution",
+    "strategy": "Place only authorized paper/live orders; measure slippage",
+    "economic_rationale": "Unauthorized execution is the highest operational risk",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "EXEC-OMS-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "ARCH-CHIEF-001",
+      "GOV-OPS-001"
+    ],
+    "outputs_sent_to": [
+      "MON-LIVE-001",
+      "ATTR-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": true,
+      "may_cancel_orders": true,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 1000000.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "execution"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "MON-LIVE-001": {
+    "agent_name": "Live Monitoring Agent",
+    "agent_id": "MON-LIVE-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "TRADE-OPS-001",
+    "role": "monitoring",
+    "strategy": "Post-entry monitoring for stops, invalidation, regime breaks",
+    "economic_rationale": "Unmonitored positions convert edge into unmanaged risk",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "MON-LIVE-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "EXEC-OMS-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "TRADE-OPS-001",
+      "PORT-RISK-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "live_monitoring"
+    ],
+    "authority_actions": [
+      "close"
+    ],
+    "extra": {}
+  },
+  "ATTR-001": {
+    "agent_name": "Post-Trade Attribution Agent",
+    "agent_id": "ATTR-001",
+    "department": "quantitative_research",
+    "supervisory_agent_id": "QUANT-RES-001",
+    "role": "attribution",
+    "strategy": "Measure PnL, costs, decision quality; feed controlled improvement",
+    "economic_rationale": "Without attribution, learning is narrative not evidence",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "ATTR-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "EXEC-OMS-001",
+      "MON-LIVE-001"
+    ],
+    "outputs_sent_to": [
+      "LEARN-001",
+      "QUANT-RES-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "post_trade_attribution"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "LEARN-001": {
+    "agent_name": "Controlled Learning Agent",
+    "agent_id": "LEARN-001",
+    "department": "quantitative_research",
+    "supervisory_agent_id": "QUANT-RES-001",
+    "role": "learning_control",
+    "strategy": "Capture lessons; propose versioned changes; never auto-mutate production",
+    "economic_rationale": "Uncontrolled self-modification is a silent failure mode",
+    "assets_permitted": [
+      "ORG_WIDE"
+    ],
+    "markets_permitted": [
+      "ORG_WIDE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "continuous",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_state",
+      "audit_stream"
+    ],
+    "data_sources": {
+      "org_state": "SYS-INTEL-001",
+      "audit_stream": "SYS-INTEL-001.events"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "LEARN-001-DUTY-01",
+        "description": "Always-on control duty",
+        "expression": "duty_active == True",
+        "required_inputs": [
+          "duty_active"
+        ],
+        "lookback": 0
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "n/a"
+      ],
+      "exit_rules": [
+        "n/a"
+      ],
+      "stop_loss_rule": "n/a",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "shutdown_order"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Control agent does not size trades"
+    },
+    "information_received_from": [
+      "ATTR-001"
+    ],
+    "outputs_sent_to": [
+      "QUANT-RES-001",
+      "PORT-RISK-001",
+      "GOV-OPS-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "org_controls"
+    ],
+    "memory_retained": [
+      "decisions",
+      "vetoes",
+      "incidents"
+    ],
+    "performance_measurements": [
+      "false_reject_rate",
+      "missed_risk_events",
+      "latency_ms"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "ARCH-CHIEF-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "controlled_improvement"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-MOM-001": {
+    "agent_name": "Momentum Trend Agent",
+    "agent_id": "STRAT-MOM-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "TRADE-OPS-001",
+    "role": "strategy",
+    "strategy": "Cross-sectional and time-series momentum on liquid US equities",
+    "economic_rationale": "Underreaction and trend persistence produce positive expected return when costs are controlled and regimes are trending",
+    "assets_permitted": [
+      "US_EQUITY_LIQUID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 5,
+    "holding_period_days_max": 60,
+    "trading_frequency": "daily",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "low_volatility",
+      "risk_on"
+    ],
+    "invalid_regimes": [
+      "high_volatility",
+      "risk_off"
+    ],
+    "required_data_inputs": [
+      "daily_ohlcv",
+      "adv_20d",
+      "sma_50",
+      "sma_200",
+      "returns_12_1",
+      "regime_label"
+    ],
+    "data_sources": {
+      "daily_ohlcv": "MKT-INFO-001.bars",
+      "adv_20d": "MKT-INFO-001.liquidity",
+      "sma_50": "QUANT-RES-001.features",
+      "sma_200": "QUANT-RES-001.features",
+      "returns_12_1": "QUANT-RES-001.features",
+      "regime_label": "TRADE-OPS-001.regime"
+    },
+    "indicators_features_models": [
+      "sma_50",
+      "sma_200",
+      "returns_12_1",
+      "ATR_14"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "MOM-SETUP-01",
+        "description": "Price above rising SMA50 and positive 12-1 momentum",
+        "expression": "close > sma_50 AND sma_50 > sma_50[20] AND returns_12_1 > 0 AND adv_20d > 5e6",
+        "required_inputs": [
+          "close",
+          "sma_50",
+          "returns_12_1",
+          "adv_20d"
+        ],
+        "lookback": 252
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "MOM-SETUP-01 true on signal bar close",
+        "regime in valid_regimes"
+      ],
+      "exit_rules": [
+        "close < sma_50",
+        "holding_days >= 60"
+      ],
+      "stop_loss_rule": "entry - 2.5 * ATR_14",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "regime == HIGH_VOLATILITY",
+        "adv_20d < 2e6"
+      ],
+      "time_stop_days": 60
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 3.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 5,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "MKT-INFO-001",
+      "FUND-RES-001",
+      "QUANT-RES-001",
+      "AI-INFRA-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "stop_distance",
+      "sma_50_breach",
+      "regime_change",
+      "liquidity_collapse"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "TRADE-OPS-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-MR-001": {
+    "agent_name": "Mean Reversion Agent",
+    "agent_id": "STRAT-MR-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "TRADE-OPS-001",
+    "role": "strategy",
+    "strategy": "Short-horizon mean reversion in range-bound liquid names",
+    "economic_rationale": "Liquidity provision / overreaction in non-trending regimes",
+    "assets_permitted": [
+      "US_EQUITY_LIQUID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 1,
+    "holding_period_days_max": 10,
+    "trading_frequency": "daily",
+    "valid_regimes": [
+      "range_bound",
+      "low_volatility"
+    ],
+    "invalid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "high_volatility",
+      "risk_off"
+    ],
+    "required_data_inputs": [
+      "daily_ohlcv",
+      "rsi_14",
+      "bollinger_z",
+      "regime_label",
+      "adv_20d"
+    ],
+    "data_sources": {
+      "daily_ohlcv": "MKT-INFO-001.bars",
+      "rsi_14": "QUANT-RES-001.features",
+      "bollinger_z": "QUANT-RES-001.features",
+      "regime_label": "TRADE-OPS-001.regime",
+      "adv_20d": "MKT-INFO-001.liquidity"
+    },
+    "indicators_features_models": [
+      "rsi_14",
+      "bollinger_z",
+      "ATR_14"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "MR-SETUP-01",
+        "description": "Oversold bounce setup in range regime",
+        "expression": "rsi_14 < 30 AND bollinger_z < -2 AND regime == RANGE_BOUND AND adv_20d > 5e6",
+        "required_inputs": [
+          "rsi_14",
+          "bollinger_z",
+          "regime",
+          "adv_20d"
+        ],
+        "lookback": 60
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "MR-SETUP-01",
+        "no earnings within 3 trading days"
+      ],
+      "exit_rules": [
+        "rsi_14 > 50",
+        "bollinger_z > 0",
+        "holding_days >= 10"
+      ],
+      "stop_loss_rule": "entry - 1.5 * ATR_14",
+      "take_profit_rule": "mid_band",
+      "invalidation_rules": [
+        "regime leaves RANGE_BOUND",
+        "gap_down > 3%"
+      ],
+      "time_stop_days": 10
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 2.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 8,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "MKT-INFO-001",
+      "FUND-RES-001",
+      "QUANT-RES-001",
+      "AI-INFRA-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "rsi_path",
+      "gap_risk",
+      "regime_break",
+      "earnings_calendar"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "TRADE-OPS-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-EARN-001": {
+    "agent_name": "Earnings Event Agent",
+    "agent_id": "STRAT-EARN-001",
+    "department": "research_strategy",
+    "supervisory_agent_id": "FUND-RES-001",
+    "role": "strategy",
+    "strategy": "Event-driven post-earnings drift and surprise reaction",
+    "economic_rationale": "Earnings surprises underreact over 1\u201330 days on average",
+    "assets_permitted": [
+      "US_EQUITY_LIQUID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 1,
+    "holding_period_days_max": 30,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "earnings_season",
+      "risk_on",
+      "low_volatility"
+    ],
+    "invalid_regimes": [
+      "risk_off",
+      "high_volatility"
+    ],
+    "required_data_inputs": [
+      "earnings_calendar",
+      "eps_surprise_pct",
+      "guidance_delta",
+      "implied_move",
+      "adv_20d",
+      "news_sentiment"
+    ],
+    "data_sources": {
+      "earnings_calendar": "MKT-INFO-001.calendar",
+      "eps_surprise_pct": "MKT-INFO-001.filings",
+      "guidance_delta": "FUND-RES-001.signals",
+      "implied_move": "MKT-INFO-001.options_summary",
+      "adv_20d": "MKT-INFO-001.liquidity",
+      "news_sentiment": "MKT-INFO-001.news"
+    },
+    "indicators_features_models": [
+      "eps_surprise_z",
+      "post_earnings_drift_model_v1"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "EARN-SETUP-01",
+        "description": "Positive surprise above threshold with supportive guidance",
+        "expression": "eps_surprise_pct > 5 AND guidance_delta >= 0 AND adv_20d > 1e7",
+        "required_inputs": [
+          "eps_surprise_pct",
+          "guidance_delta",
+          "adv_20d"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "EARN-SETUP-01 within 1 session after print",
+        "spread_bps < 10"
+      ],
+      "exit_rules": [
+        "holding_days >= 20",
+        "thesis_invalidated_by_revision"
+      ],
+      "stop_loss_rule": "entry - max(1.0 * implied_move, 2.0 * ATR_14)",
+      "take_profit_rule": "1.5 * historical_PED_median",
+      "invalidation_rules": [
+        "material_negative_amendment",
+        "sector_shock"
+      ],
+      "time_stop_days": 30
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 2.5,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 5,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "MKT-INFO-001",
+      "FUND-RES-001",
+      "QUANT-RES-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "estimate_revisions",
+      "news_flow",
+      "volume_dryup"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "FUND-RES-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-MACRO-001": {
+    "agent_name": "Macro Regime Agent",
+    "agent_id": "STRAT-MACRO-001",
+    "department": "research_strategy",
+    "supervisory_agent_id": "FUND-RES-001",
+    "role": "strategy",
+    "strategy": "Macro-regime allocation across index ETFs and factor proxies",
+    "economic_rationale": "Risk premia vary with growth/inflation/policy regimes",
+    "assets_permitted": [
+      "US_ETF_INDEX",
+      "SECTOR_ETF"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ",
+      "ARCA"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 10,
+    "holding_period_days_max": 120,
+    "trading_frequency": "weekly",
+    "valid_regimes": [
+      "risk_on",
+      "risk_off",
+      "macro_event",
+      "trending_bull",
+      "trending_bear"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "macro_calendar",
+      "yield_curve",
+      "cpi_surprise",
+      "policy_prob",
+      "regime_label",
+      "etf_ohlcv"
+    ],
+    "data_sources": {
+      "macro_calendar": "MKT-INFO-001.calendar",
+      "yield_curve": "MKT-INFO-001.macro",
+      "cpi_surprise": "MKT-INFO-001.macro",
+      "policy_prob": "MKT-INFO-001.macro",
+      "regime_label": "TRADE-OPS-001.regime",
+      "etf_ohlcv": "MKT-INFO-001.bars"
+    },
+    "indicators_features_models": [
+      "regime_hmm_v1",
+      "growth_inflation_map"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "MACRO-SETUP-01",
+        "description": "Regime transition with confirming rate/inflation signals",
+        "expression": "regime_changed == True AND confirm_count >= 2",
+        "required_inputs": [
+          "regime_label",
+          "yield_curve",
+          "cpi_surprise"
+        ],
+        "lookback": 60
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "MACRO-SETUP-01",
+        "ETF ADV sufficient"
+      ],
+      "exit_rules": [
+        "regime_reverts",
+        "holding_days >= 120"
+      ],
+      "stop_loss_rule": "portfolio_sleeve_stop_3pct",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "data_revision_reverses_signal"
+      ],
+      "time_stop_days": 120
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 5.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 4,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "MKT-INFO-001",
+      "FUND-RES-001",
+      "CAP-STEW-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001",
+      "CAP-STEW-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "macro_release_risk",
+      "regime_stability"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "FUND-RES-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-FACTOR-001": {
+    "agent_name": "Quant Factor Agent",
+    "agent_id": "STRAT-FACTOR-001",
+    "department": "quantitative_research",
+    "supervisory_agent_id": "QUANT-RES-001",
+    "role": "strategy",
+    "strategy": "Multi-factor long-short (value, quality, momentum, low-vol) with neutralization",
+    "economic_rationale": "Compensated factor premia after cost and capacity constraints",
+    "assets_permitted": [
+      "US_EQUITY_LIQUID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 5,
+    "holding_period_days_max": 40,
+    "trading_frequency": "daily",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "low_volatility",
+      "risk_on"
+    ],
+    "invalid_regimes": [
+      "high_volatility"
+    ],
+    "required_data_inputs": [
+      "factor_scores",
+      "industry_map",
+      "beta",
+      "adv_20d",
+      "borrow_availability"
+    ],
+    "data_sources": {
+      "factor_scores": "QUANT-RES-001.features",
+      "industry_map": "MKT-INFO-001.reference",
+      "beta": "QUANT-RES-001.features",
+      "adv_20d": "MKT-INFO-001.liquidity",
+      "borrow_availability": "TRADE-OPS-001.locate"
+    },
+    "indicators_features_models": [
+      "value_z",
+      "quality_z",
+      "mom_z",
+      "lowvol_z",
+      "combined_alpha_v1"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "FACTOR-SETUP-01",
+        "description": "Top/bottom decile combined alpha after industry/beta neutralize",
+        "expression": "combined_alpha_v1 rank in {top_decile,bottom_decile} AND adv_20d > 5e6",
+        "required_inputs": [
+          "combined_alpha_v1",
+          "adv_20d"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "FACTOR-SETUP-01",
+        "gross_book within portfolio sleeve"
+      ],
+      "exit_rules": [
+        "rank exits extreme deciles",
+        "rebalance_day"
+      ],
+      "stop_loss_rule": "name_stop_8pct OR sleeve_stop",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "factor_crowding_alert",
+        "borrow_pulled"
+      ],
+      "time_stop_days": 40
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 1.5,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 40,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "QUANT-RES-001",
+      "MKT-INFO-001",
+      "PORT-RISK-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "factor_decay",
+      "crowding",
+      "borrow",
+      "neutralization_drift"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "QUANT-RES-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-VALUE-001": {
+    "agent_name": "Quality Value Steward Agent",
+    "agent_id": "STRAT-VALUE-001",
+    "department": "capital_stewardship",
+    "supervisory_agent_id": "CAP-STEW-001",
+    "role": "strategy",
+    "strategy": "Long-term quality/value ownership with low turnover",
+    "economic_rationale": "Durable cash-flow compounders purchased below intrinsic value",
+    "assets_permitted": [
+      "US_EQUITY_LARGE",
+      "US_EQUITY_MID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 90,
+    "holding_period_days_max": 1825,
+    "trading_frequency": "low_turnover",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "risk_on",
+      "risk_off",
+      "low_volatility"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "financials",
+      "roic",
+      "owner_earnings",
+      "valuation_band",
+      "moat_score",
+      "insider_activity"
+    ],
+    "data_sources": {
+      "financials": "MKT-INFO-001.filings",
+      "roic": "FUND-RES-001.signals",
+      "owner_earnings": "FUND-RES-001.signals",
+      "valuation_band": "CAP-STEW-001.valuation",
+      "moat_score": "CAP-STEW-001.quality",
+      "insider_activity": "MKT-INFO-001.filings"
+    },
+    "indicators_features_models": [
+      "roic",
+      "owner_earnings_yield",
+      "moat_score",
+      "margin_of_safety"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "VALUE-SETUP-01",
+        "description": "High quality with margin of safety",
+        "expression": "moat_score >= 4 AND margin_of_safety >= 0.25 AND roic > cost_of_capital",
+        "required_inputs": [
+          "moat_score",
+          "margin_of_safety",
+          "roic",
+          "cost_of_capital"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "VALUE-SETUP-01",
+        "CAP-STEW-001 quality gate passed"
+      ],
+      "exit_rules": [
+        "thesis_broken",
+        "valuation > 1.5 * intrinsic",
+        "better_opportunity_swap"
+      ],
+      "stop_loss_rule": "thesis_invalidation_only (no mechanical noise stop); hard risk sleeve 15pct name",
+      "take_profit_rule": "trim above intrinsic + 20%",
+      "invalidation_rules": [
+        "moat_score drop >= 2",
+        "fraud_or_governance_flag",
+        "permanent_earnings_impairment"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 5.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 15,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "CAP-STEW-001",
+      "FUND-RES-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001",
+      "CAP-STEW-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "fundamental_drift",
+      "valuation_band",
+      "governance_flags"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "CAP-STEW-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-VOL-001": {
+    "agent_name": "Volatility Awareness Agent",
+    "agent_id": "STRAT-VOL-001",
+    "department": "trading_operations",
+    "supervisory_agent_id": "TRADE-OPS-001",
+    "role": "strategy",
+    "strategy": "Volatility-regime overlay reducing risk in high-vol / expanding stress",
+    "economic_rationale": "Volatility clustering and crash risk require dynamic exposure control",
+    "assets_permitted": [
+      "US_ETF_INDEX",
+      "US_EQUITY_LIQUID"
+    ],
+    "markets_permitted": [
+      "NYSE",
+      "NASDAQ",
+      "CBOE_PROXY"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 1,
+    "holding_period_days_max": 20,
+    "trading_frequency": "daily",
+    "valid_regimes": [
+      "high_volatility",
+      "risk_off",
+      "macro_event"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "realized_vol_20",
+      "vix_proxy",
+      "corr_average",
+      "regime_label"
+    ],
+    "data_sources": {
+      "realized_vol_20": "QUANT-RES-001.features",
+      "vix_proxy": "MKT-INFO-001.macro",
+      "corr_average": "PORT-RISK-001.risk",
+      "regime_label": "TRADE-OPS-001.regime"
+    },
+    "indicators_features_models": [
+      "realized_vol_20",
+      "vol_of_vol",
+      "corr_spike"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "VOL-SETUP-01",
+        "description": "Vol expansion hedge / de-risk signal",
+        "expression": "realized_vol_20 > percentile_90 OR corr_average > 0.7",
+        "required_inputs": [
+          "realized_vol_20",
+          "corr_average"
+        ],
+        "lookback": 252
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "VOL-SETUP-01"
+      ],
+      "exit_rules": [
+        "realized_vol_20 < percentile_70",
+        "corr_average < 0.5"
+      ],
+      "stop_loss_rule": "overlay_sleeve_stop_2pct",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "false_break_vol_crush_same_day"
+      ],
+      "time_stop_days": 20
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 4.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 3,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "QUANT-RES-001",
+      "PORT-RISK-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "vol_path",
+      "correlation_path"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "TRADE-OPS-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  },
+  "STRAT-SECTOR-001": {
+    "agent_name": "Sector Rotation Agent",
+    "agent_id": "STRAT-SECTOR-001",
+    "department": "research_strategy",
+    "supervisory_agent_id": "FUND-RES-001",
+    "role": "strategy",
+    "strategy": "Relative-strength sector ETF rotation",
+    "economic_rationale": "Capital migrates across sectors with cycle and relative momentum",
+    "assets_permitted": [
+      "SECTOR_ETF"
+    ],
+    "markets_permitted": [
+      "ARCA",
+      "NYSE"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 10,
+    "holding_period_days_max": 90,
+    "trading_frequency": "weekly",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "risk_on",
+      "risk_off"
+    ],
+    "invalid_regimes": [
+      "high_volatility"
+    ],
+    "required_data_inputs": [
+      "sector_etf_ohlcv",
+      "rs_rank",
+      "macro_cycle_label",
+      "breadth"
+    ],
+    "data_sources": {
+      "sector_etf_ohlcv": "MKT-INFO-001.bars",
+      "rs_rank": "QUANT-RES-001.features",
+      "macro_cycle_label": "FUND-RES-001.signals",
+      "breadth": "MKT-INFO-001.market_internals"
+    },
+    "indicators_features_models": [
+      "rs_rank_63d",
+      "sector_breadth",
+      "cycle_map"
+    ],
+    "setup_detection_rules": [
+      {
+        "rule_id": "SECTOR-SETUP-01",
+        "description": "Top-quartile relative strength with cycle alignment",
+        "expression": "rs_rank_63d >= 0.75 AND cycle_aligned == True",
+        "required_inputs": [
+          "rs_rank_63d",
+          "macro_cycle_label"
+        ],
+        "lookback": 63
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "SECTOR-SETUP-01"
+      ],
+      "exit_rules": [
+        "rs_rank_63d < 0.5",
+        "holding_days >= 90"
+      ],
+      "stop_loss_rule": "entry - 2.0 * ATR_14",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "sector_policy_shock",
+        "ETF_tracking_error_spike"
+      ],
+      "time_stop_days": 90
+    },
+    "position_sizing": {
+      "method": "volatility_target",
+      "max_pct_nav": 4.0,
+      "min_pct_nav": 0.25,
+      "vol_target_ann": 0.12,
+      "kelly_fraction_cap": 0.25,
+      "max_concurrent_positions": 6,
+      "max_sector_pct": 15.0,
+      "notes": "Suggested size only; PORT-RISK-001 sets binding limits"
+    },
+    "information_received_from": [
+      "FUND-RES-001",
+      "QUANT-RES-001",
+      "MKT-INFO-001"
+    ],
+    "outputs_sent_to": [
+      "VAL-IND-001",
+      "PORT-RISK-001",
+      "TRADE-OPS-001",
+      "SYS-INTEL-001"
+    ],
+    "approval": {
+      "requires_independent_validation": true,
+      "requires_portfolio_evaluation": true,
+      "requires_risk_approval": true,
+      "requires_capital_stewardship_review": true,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": true,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "rs_rank",
+      "sector_news",
+      "etf_flows"
+    ],
+    "memory_retained": [
+      "proposals",
+      "fills_received",
+      "rejects",
+      "feature_snapshots",
+      "regime_at_entry"
+    ],
+    "performance_measurements": [
+      "hit_rate",
+      "avg_pnl_bps",
+      "sharpe_paper",
+      "max_drawdown_contrib",
+      "slippage_vs_expected",
+      "reject_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "FUND-RES-001",
+        "PORT-RISK-001",
+        "GOV-OPS-001"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "0.1.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [
+      "strategy_proposal"
+    ],
+    "authority_actions": [],
+    "extra": {}
+  }
+}

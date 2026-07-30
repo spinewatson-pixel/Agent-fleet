@@ -1,0 +1,937 @@
+{
+  "generated_at": "2026-07-30T06:38:01.145480+00:00",
+  "organization": "watchfloor quant lab",
+  "registry_version": "0.5.0",
+  "agent_counts": {
+    "total_agents": 285,
+    "proposers": 128,
+    "executors": 1,
+    "divisions": 12
+  },
+  "findings": [
+    {
+      "team_id": "IDC-PALANTIR",
+      "team_name": "Systems Intelligence",
+      "kind": "recommended_improvement",
+      "title": "Durable EventStore path exists; UI still lacks MEM-1 audit export",
+      "detail": "Paper org now writes lineage to data/audit/events.jsonl by default. Remaining gap: Watchfloor UI does not surface or export that graph.",
+      "evidence": [
+        "WatchfloorOrganization EventStore path",
+        "ui/watchfloor.html"
+      ],
+      "watchfloor_ids": [
+        "MEM-1",
+        "DQ-1",
+        "UI-1",
+        "TOOL-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add MEM-1 audit export endpoint/bridge so the UI can read data/audit/events.jsonl lineage for each proposal_id."
+    },
+    {
+      "team_id": "IDC-PALANTIR",
+      "team_name": "Systems Intelligence",
+      "kind": "structural_weakness",
+      "title": "Permissions exist in registry flags but are not enforced in the UI",
+      "detail": "UI create-agent flow can invent custom agents without going through GOV-CHAIR proposal queue or ceiling checks in code.",
+      "evidence": [
+        "ui/watchfloor.html CUSTOM.agents push path"
+      ],
+      "watchfloor_ids": [
+        "GOV-CHAIR",
+        "HUMAN-1",
+        "UI-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Gate UI agent creation behind council proposal objects validated against agent_ceiling and COMP-1 mandate checks."
+    },
+    {
+      "team_id": "IDC-BLOOMBERG",
+      "team_name": "Market Information",
+      "kind": "missing_capability",
+      "title": "No real market/news/filings adapters behind MKT-1/ALT-1",
+      "detail": "Paper path uses synthetic verified bars. Intel desks (GEO/MACRO/\u2026) have mandates but no normalized MarketEvent feed contract wired in.",
+      "evidence": [
+        "WatchfloorOrganization.ingest_market_event uses paper_feed"
+      ],
+      "watchfloor_ids": [
+        "MKT-1",
+        "ALT-1",
+        "DQ-1",
+        "GEO-1",
+        "MACRO-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Implement MarketEvent adapters (bars, calendar, filings, news) with source_verified + tagging, delivering slices to intel/pred consumers."
+    },
+    {
+      "team_id": "IDC-BLOOMBERG",
+      "team_name": "Market Information",
+      "kind": "recommended_improvement",
+      "title": "Dual-source confirmation for macro prints not encoded",
+      "detail": "MACRO-1 / POLICY-1 should require two-source confirm before FORE-1 publishes high-confidence calls.",
+      "evidence": [
+        "hard_rules lack dual_source_macro"
+      ],
+      "watchfloor_ids": [
+        "MACRO-1",
+        "FORE-1",
+        "DQ-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add dual_source_required flag for macro event types in DQ-1."
+    },
+    {
+      "team_id": "IDC-NVIDIA",
+      "team_name": "AI Infrastructure",
+      "kind": "missing_capability",
+      "title": "ML-ARCH autonomy budget not instrumented",
+      "detail": "Pattern Recognition ML claims self-building below compute ceiling, but there is no compute meter, model registry, or failover SLA.",
+      "evidence": [
+        "ML-ARCH seat exists",
+        "no compute budget in hard_rules"
+      ],
+      "watchfloor_ids": [
+        "ML-ARCH",
+        "ML-VIT",
+        "ML-SEQ",
+        "TOOL-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add hard_rules.compute_ceiling and a model-routing health endpoint; ML-ARCH proposals above ceiling require GOV-CHAIR."
+    },
+    {
+      "team_id": "IDC-NVIDIA",
+      "team_name": "AI Infrastructure",
+      "kind": "recommended_improvement",
+      "title": "Separate local paper inference from optional cloud workloads",
+      "detail": "Phase-1 paper org should stay local/deterministic; cloud only for experimental ML cells.",
+      "evidence": [
+        "LIVE_EXECUTION_ENABLED false",
+        "Environment buckets exist"
+      ],
+      "watchfloor_ids": [
+        "ML-ARCH",
+        "RT-FORGE-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Document and enforce Environment.EXPERIMENTAL for ML self-builds."
+    },
+    {
+      "team_id": "IDC-BLACKROCK",
+      "team_name": "Portfolio and Risk",
+      "kind": "recommended_improvement",
+      "title": "Fixed-dollar cohort sizing wired; fund/quant sleeves still %NAV",
+      "detail": "PaperBroker + RISK-1 honor suggested_size_usd for fixed_1_2_usd cohorts. Continue separating paper experiment capital from stewardship sleeve capital.",
+      "evidence": [
+        "default_sizing_usd=[1, 2]"
+      ],
+      "watchfloor_ids": [
+        "CAP-1",
+        "RISK-1",
+        "EXEC-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Expose paper_experiment_capital_usd vs stewardship_sleeve_capital_usd in portfolio state exports for BRK-SAFE."
+    },
+    {
+      "team_id": "IDC-BLACKROCK",
+      "team_name": "Portfolio and Risk",
+      "kind": "recommended_improvement",
+      "title": "Same-symbol cluster check exists; full correlation matrix still missing",
+      "detail": "RISK-1 rejects when same-symbol cluster exceeds max_correlated_cluster_pct. Cross-name rolling correlation matrix remains a P2 gap.",
+      "evidence": [
+        "WatchfloorOrganization.portfolio_risk cluster check"
+      ],
+      "watchfloor_ids": [
+        "RISK-1",
+        "CORR-Q",
+        "CAP-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add rolling cross-name correlation matrix feeding CORR-Q."
+    },
+    {
+      "team_id": "IDC-CITADEL",
+      "team_name": "Trading Operations",
+      "kind": "recommended_improvement",
+      "title": "REG-1 regime service admits proposals; richer regime engine still needed",
+      "detail": "RegimeService gates FIT-1 admission against contract valid/invalid regimes. Next: data-driven regime labels owned by HEAD-TRADE / REG-1.",
+      "evidence": [
+        "agent_fleet.core.regime.RegimeService"
+      ],
+      "watchfloor_ids": [
+        "HEAD-TRADE",
+        "REG-1",
+        "EXEC-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Replace static regime labels with tape/vol feature classifier."
+    },
+    {
+      "team_id": "IDC-CITADEL",
+      "team_name": "Trading Operations",
+      "kind": "recommended_improvement",
+      "title": "Per-symbol daily order cap live; slippage ledger still thin",
+      "detail": "103 trading-division agents share a per-symbol daily cap of 20.",
+      "evidence": [
+        "trade_division_count=103",
+        "orders_today_by_symbol"
+      ],
+      "watchfloor_ids": [
+        "EXEC-1",
+        "CAP-1",
+        "HEAD-TRADE"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Persist EXEC-1 slippage scorecards per fill for ATTR-1."
+    },
+    {
+      "team_id": "IDC-CITADEL",
+      "team_name": "Trading Operations",
+      "kind": "structural_weakness",
+      "title": "EXEC-1 is both quality analyst and sole order placer",
+      "detail": "Watchfloor nick 'Fill Check' mixes measurement with authority. Keep execution authority, but split attribution of fill quality to ATTR-1.",
+      "evidence": [
+        "EXEC-1 tags SUPPORT/EXECUTION"
+      ],
+      "watchfloor_ids": [
+        "EXEC-1",
+        "ATTR-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Clarify EXEC-1 contract: place authorized paper orders; ATTR-1 owns slippage scorecards."
+    },
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "recommended_improvement",
+      "title": "Proposer contract stubs complete; promote from stub to validated",
+      "detail": "All proposers have measurable setup/entry/exit stubs and FIT-1 blocks incomplete contracts. Next: empirically validate expressions.",
+      "evidence": [
+        "agent_fleet.agents.watchfloor_contracts"
+      ],
+      "watchfloor_ids": [
+        "FIT-1",
+        "STAT-1",
+        "HYPO-1",
+        "BACK-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Run BACK-1/STAT-1 validation packs per contract; mark contract_completeness=validated_v1 when OOS gates pass."
+    },
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "missing_capability",
+      "title": "No walk-forward / OOS harness wired to HYPO-1 and BACK-1",
+      "detail": "Lab seats exist; controlled improvement sequence is documented but not automated.",
+      "evidence": [
+        "ImprovementProposal required_tests exist",
+        "no backtest runner module"
+      ],
+      "watchfloor_ids": [
+        "HYPO-1",
+        "BACK-1",
+        "STAT-1",
+        "FIT-1",
+        "COST-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Build hypothesis registry + point-in-time backtest queue with FIT-1/COST-1 veto."
+    },
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "recommended_improvement",
+      "title": "Quant evidence_package_id gate is live; packages still synthetic in paper",
+      "detail": "FIT-1 requires evidence_package_id on RT/quant proposals before RISK-1.",
+      "evidence": [
+        "validate_proposal evidence_package_present"
+      ],
+      "watchfloor_ids": [
+        "FIT-1",
+        "COST-1",
+        "ENS-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Replace paper stub packages with FIT-1/COST-1 signed evidence objects."
+    },
+    {
+      "team_id": "IDC-GOLDMAN",
+      "team_name": "Research and Strategy",
+      "kind": "missing_capability",
+      "title": "ResearchSignal not produced by intel/pred desks in Watchfloor runtime",
+      "detail": "CORP-1/BULL-1/BEAR-1/FORE-1 exist, but paper path synthesizes a single CORP-1 signal. Standardized research\u2192signal handoff is incomplete.",
+      "evidence": [
+        "FundamentalResearchAgent is legacy",
+        "WatchfloorOrganization hardcodes CORP-1"
+      ],
+      "watchfloor_ids": [
+        "CORP-1",
+        "BULL-1",
+        "BEAR-1",
+        "FORE-1",
+        "HEAD-INTEL"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Route intel/pred outputs through ResearchSignal schema; strategies may only consume ResearchSignal IDs, never raw narrative blobs."
+    },
+    {
+      "team_id": "IDC-GOLDMAN",
+      "team_name": "Research and Strategy",
+      "kind": "recommended_improvement",
+      "title": "Bull/Bear split authors need conflict metadata on case files",
+      "detail": "BULL-1 and BEAR-1 must never share authorship on the same case version.",
+      "evidence": [
+        "Bull/Bear Desk design in Watchfloor"
+      ],
+      "watchfloor_ids": [
+        "BULL-1",
+        "BEAR-1",
+        "MEM-1"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Enforce separate author_id on case file versions in org memory."
+    },
+    {
+      "team_id": "IDC-JPM",
+      "team_name": "Governance and Operations",
+      "kind": "recommended_improvement",
+      "title": "Agent ceiling decision in force; enforce in UI create flow",
+      "detail": "Roster 285 \u2264 ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.",
+      "evidence": [
+        "docs/council/decisions/GOV-CEIL-2026-07-28.md"
+      ],
+      "watchfloor_ids": [
+        "GOV-CHAIR",
+        "HUMAN-1",
+        "LIFE-1",
+        "UI-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Wire UI agent creation to agent_ceiling + GOV-CHAIR proposal queue."
+    },
+    {
+      "team_id": "IDC-JPM",
+      "team_name": "Governance and Operations",
+      "kind": "recommended_improvement",
+      "title": "RECON-1 seat added; automate book vs broker mismatch halt",
+      "detail": "Seat exists under COMP-1; runtime recon loop still to implement.",
+      "evidence": [
+        "RECON-1 in registry"
+      ],
+      "watchfloor_ids": [
+        "RECON-1",
+        "COMP-1",
+        "EXEC-1",
+        "SEC-LEDGER"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Implement RECON-1 daily check; mismatch \u2192 COMP-1 halt."
+    },
+    {
+      "team_id": "IDC-JPM",
+      "team_name": "Governance and Operations",
+      "kind": "recommended_improvement",
+      "title": "Incident runbooks for SEC-HALT drills not versioned in repo",
+      "detail": "Kill switch exists in code; drill scorecards and restore checklist need artifacts.",
+      "evidence": [
+        "SEC-HALT",
+        "SEC-DRILL",
+        "SEC-RESTORE seats"
+      ],
+      "watchfloor_ids": [
+        "SEC-HALT",
+        "SEC-DRILL",
+        "SEC-RESTORE",
+        "SEC-LEDGER"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add docs/runbooks/halt_drill.md and automate SEC-DRILL quarterly checklist."
+    },
+    {
+      "team_id": "IDC-BERKSHIRE",
+      "team_name": "Capital Stewardship",
+      "kind": "structural_weakness",
+      "title": "Activity incentives still favor many small discretionary experiments",
+      "detail": "100-trader floor + novel fleet can create trading-for-learning without quality filter. Stewardship veto exists for low edge but not for unnecessary concurrent identical setups.",
+      "evidence": [
+        "Group A/B/C/E design",
+        "BRK-SAFE veto on low edge only"
+      ],
+      "watchfloor_ids": [
+        "BRK-SAFE",
+        "BRK-INV",
+        "CAP-1",
+        "HEAD-TRADE"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Add activity budget: max new discretionary proposals/day/cohort; BRK-INV reviews duplicates of the same thesis family."
+    },
+    {
+      "team_id": "IDC-BERKSHIRE",
+      "team_name": "Capital Stewardship",
+      "kind": "recommended_improvement",
+      "title": "Berkshire desk moat/MOS gate is live; scorecards still manual",
+      "detail": "BRK-TRD* proposals require moat_score and margin_of_safety metadata before RISK-1.",
+      "evidence": [
+        "WatchfloorOrganization.stewardship BRK-TRD gate"
+      ],
+      "watchfloor_ids": [
+        "BRK-MOAT",
+        "BRK-SAFE",
+        "BRK-TRD1",
+        "BRK-TRD2"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Have BRK-MOAT/BRK-SAFE publish signed score objects instead of free-form metadata."
+    },
+    {
+      "team_id": "IDC-BERKSHIRE",
+      "team_name": "Capital Stewardship",
+      "kind": "dissent",
+      "title": "Dissent: retiring mean-reversion scouts entirely is too aggressive for a lab",
+      "detail": "Keep SCOUT/MR-style cohorts in paper with stewardship veto and fixed $1\u20132 sizing; do not delete the experiment.",
+      "evidence": [
+        "prior council dissent log"
+      ],
+      "watchfloor_ids": [
+        "SCOUT-L2",
+        "SCOUT-S2",
+        "BRK-SAFE"
+      ],
+      "priority": "P2",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Retain MR/scout cohorts; tag as experimental with elevated reject sensitivity."
+    },
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "architecture_decision",
+      "title": "Critique resolution: single ResearchSignal schema remains mandatory",
+      "detail": "Intel and quant may both publish, but payload must be ResearchSignal.",
+      "evidence": [
+        "prior unified_design.md"
+      ],
+      "watchfloor_ids": [
+        "FORE-1",
+        "MINE-1",
+        "CORP-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Reject non-ResearchSignal handoffs in message bus permissions."
+    },
+    {
+      "team_id": "IDC-BERKSHIRE",
+      "team_name": "Capital Stewardship",
+      "kind": "dissent",
+      "title": "Critique: do not confuse lab breadth with production capital allocation",
+      "detail": "Paper cohorts may be wide; binding capital stays tiny and comparable.",
+      "evidence": [
+        "default_sizing_usd",
+        "paper_only"
+      ],
+      "watchfloor_ids": [
+        "CAP-1",
+        "BRK-SAFE"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Separate paper experiment capital from stewardship sleeve capital in portfolio state."
+    }
+  ],
+  "cross_critiques": [
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "architecture_decision",
+      "title": "Critique resolution: single ResearchSignal schema remains mandatory",
+      "detail": "Intel and quant may both publish, but payload must be ResearchSignal.",
+      "evidence": [
+        "prior unified_design.md"
+      ],
+      "watchfloor_ids": [
+        "FORE-1",
+        "MINE-1",
+        "CORP-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Reject non-ResearchSignal handoffs in message bus permissions."
+    },
+    {
+      "team_id": "IDC-BERKSHIRE",
+      "team_name": "Capital Stewardship",
+      "kind": "dissent",
+      "title": "Critique: do not confuse lab breadth with production capital allocation",
+      "detail": "Paper cohorts may be wide; binding capital stays tiny and comparable.",
+      "evidence": [
+        "default_sizing_usd",
+        "paper_only"
+      ],
+      "watchfloor_ids": [
+        "CAP-1",
+        "BRK-SAFE"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Separate paper experiment capital from stewardship sleeve capital in portfolio state."
+    }
+  ],
+  "vetoes": [],
+  "decisions": [
+    {
+      "team_id": "IDC-CHIEF",
+      "team_name": "Chief Architecture",
+      "kind": "architecture_decision",
+      "title": "Unified enhance sequence adopted",
+      "detail": "P0: separation + ceiling governance + measurable contracts. P1: durable lineage, fixed-dollar sizing, regime gate, ResearchSignal wiring. P2: data adapters, backtest factory, ML compute budget. P3: limited live only with explicit HUMAN-1 authorization.",
+      "evidence": [
+        "IDC-PALANTIR",
+        "IDC-PALANTIR",
+        "IDC-BLOOMBERG",
+        "IDC-BLOOMBERG",
+        "IDC-NVIDIA",
+        "IDC-NVIDIA",
+        "IDC-BLACKROCK",
+        "IDC-BLACKROCK"
+      ],
+      "watchfloor_ids": [
+        "GOV-CHAIR",
+        "ARCH-1",
+        "HUMAN-1"
+      ],
+      "priority": "P0",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Execute tasks_by_priority in order; do not skip P0."
+    },
+    {
+      "team_id": "IDC-CHIEF",
+      "team_name": "Chief Architecture",
+      "kind": "architecture_decision",
+      "title": "Watchfloor IDs remain canonical; council is designer/supervisor layer",
+      "detail": "Institutional teams design and enhance; Watchfloor strategy agents propose; RISK-1/COMP-1/GOV-CHAIR/SEC-HALT/HUMAN-1 decide; EXEC-1 executes paper.",
+      "evidence": [
+        "user role separation mandate"
+      ],
+      "watchfloor_ids": [
+        "EXEC-1",
+        "RISK-1",
+        "GOV-CHAIR"
+      ],
+      "priority": "P0",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Keep IDC-* agents out of TradeProposal emission."
+    },
+    {
+      "team_id": "IDC-RENTECH",
+      "team_name": "Quantitative Research",
+      "kind": "architecture_decision",
+      "title": "Critique resolution: single ResearchSignal schema remains mandatory",
+      "detail": "Intel and quant may both publish, but payload must be ResearchSignal.",
+      "evidence": [
+        "prior unified_design.md"
+      ],
+      "watchfloor_ids": [
+        "FORE-1",
+        "MINE-1",
+        "CORP-1"
+      ],
+      "priority": "P1",
+      "vetoable": false,
+      "vetoed": false,
+      "veto_reason": "",
+      "implementation_task": "Reject non-ResearchSignal handoffs in message bus permissions."
+    }
+  ],
+  "tasks_by_priority": {
+    "P0": [
+      {
+        "title": "Unified enhance sequence adopted",
+        "task": "Execute tasks_by_priority in order; do not skip P0.",
+        "owner_team": "Chief Architecture",
+        "watchfloor_ids": [
+          "GOV-CHAIR",
+          "ARCH-1",
+          "HUMAN-1"
+        ],
+        "kind": "architecture_decision"
+      },
+      {
+        "title": "Watchfloor IDs remain canonical; council is designer/supervisor layer",
+        "task": "Keep IDC-* agents out of TradeProposal emission.",
+        "owner_team": "Chief Architecture",
+        "watchfloor_ids": [
+          "EXEC-1",
+          "RISK-1",
+          "GOV-CHAIR"
+        ],
+        "kind": "architecture_decision"
+      }
+    ],
+    "P1": [
+      {
+        "title": "Permissions exist in registry flags but are not enforced in the UI",
+        "task": "Gate UI agent creation behind council proposal objects validated against agent_ceiling and COMP-1 mandate checks.",
+        "owner_team": "Systems Intelligence",
+        "watchfloor_ids": [
+          "GOV-CHAIR",
+          "HUMAN-1",
+          "UI-1"
+        ],
+        "kind": "structural_weakness"
+      },
+      {
+        "title": "Separate local paper inference from optional cloud workloads",
+        "task": "Document and enforce Environment.EXPERIMENTAL for ML self-builds.",
+        "owner_team": "AI Infrastructure",
+        "watchfloor_ids": [
+          "ML-ARCH",
+          "RT-FORGE-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "ResearchSignal not produced by intel/pred desks in Watchfloor runtime",
+        "task": "Route intel/pred outputs through ResearchSignal schema; strategies may only consume ResearchSignal IDs, never raw narrative blobs.",
+        "owner_team": "Research and Strategy",
+        "watchfloor_ids": [
+          "CORP-1",
+          "BULL-1",
+          "BEAR-1",
+          "FORE-1",
+          "HEAD-INTEL"
+        ],
+        "kind": "missing_capability"
+      },
+      {
+        "title": "Agent ceiling decision in force; enforce in UI create flow",
+        "task": "Wire UI agent creation to agent_ceiling + GOV-CHAIR proposal queue.",
+        "owner_team": "Governance and Operations",
+        "watchfloor_ids": [
+          "GOV-CHAIR",
+          "HUMAN-1",
+          "LIFE-1",
+          "UI-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Activity incentives still favor many small discretionary experiments",
+        "task": "Add activity budget: max new discretionary proposals/day/cohort; BRK-INV reviews duplicates of the same thesis family.",
+        "owner_team": "Capital Stewardship",
+        "watchfloor_ids": [
+          "BRK-SAFE",
+          "BRK-INV",
+          "CAP-1",
+          "HEAD-TRADE"
+        ],
+        "kind": "structural_weakness"
+      },
+      {
+        "title": "Critique resolution: single ResearchSignal schema remains mandatory",
+        "task": "Reject non-ResearchSignal handoffs in message bus permissions.",
+        "owner_team": "Quantitative Research",
+        "watchfloor_ids": [
+          "FORE-1",
+          "MINE-1",
+          "CORP-1"
+        ],
+        "kind": "architecture_decision"
+      },
+      {
+        "title": "Critique: do not confuse lab breadth with production capital allocation",
+        "task": "Separate paper experiment capital from stewardship sleeve capital in portfolio state.",
+        "owner_team": "Capital Stewardship",
+        "watchfloor_ids": [
+          "CAP-1",
+          "BRK-SAFE"
+        ],
+        "kind": "dissent"
+      }
+    ],
+    "P2": [
+      {
+        "title": "Durable EventStore path exists; UI still lacks MEM-1 audit export",
+        "task": "Add MEM-1 audit export endpoint/bridge so the UI can read data/audit/events.jsonl lineage for each proposal_id.",
+        "owner_team": "Systems Intelligence",
+        "watchfloor_ids": [
+          "MEM-1",
+          "DQ-1",
+          "UI-1",
+          "TOOL-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "No real market/news/filings adapters behind MKT-1/ALT-1",
+        "task": "Implement MarketEvent adapters (bars, calendar, filings, news) with source_verified + tagging, delivering slices to intel/pred consumers.",
+        "owner_team": "Market Information",
+        "watchfloor_ids": [
+          "MKT-1",
+          "ALT-1",
+          "DQ-1",
+          "GEO-1",
+          "MACRO-1"
+        ],
+        "kind": "missing_capability"
+      },
+      {
+        "title": "Dual-source confirmation for macro prints not encoded",
+        "task": "Add dual_source_required flag for macro event types in DQ-1.",
+        "owner_team": "Market Information",
+        "watchfloor_ids": [
+          "MACRO-1",
+          "FORE-1",
+          "DQ-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "ML-ARCH autonomy budget not instrumented",
+        "task": "Add hard_rules.compute_ceiling and a model-routing health endpoint; ML-ARCH proposals above ceiling require GOV-CHAIR.",
+        "owner_team": "AI Infrastructure",
+        "watchfloor_ids": [
+          "ML-ARCH",
+          "ML-VIT",
+          "ML-SEQ",
+          "TOOL-1"
+        ],
+        "kind": "missing_capability"
+      },
+      {
+        "title": "Fixed-dollar cohort sizing wired; fund/quant sleeves still %NAV",
+        "task": "Expose paper_experiment_capital_usd vs stewardship_sleeve_capital_usd in portfolio state exports for BRK-SAFE.",
+        "owner_team": "Portfolio and Risk",
+        "watchfloor_ids": [
+          "CAP-1",
+          "RISK-1",
+          "EXEC-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Same-symbol cluster check exists; full correlation matrix still missing",
+        "task": "Add rolling cross-name correlation matrix feeding CORR-Q.",
+        "owner_team": "Portfolio and Risk",
+        "watchfloor_ids": [
+          "RISK-1",
+          "CORR-Q",
+          "CAP-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "REG-1 regime service admits proposals; richer regime engine still needed",
+        "task": "Replace static regime labels with tape/vol feature classifier.",
+        "owner_team": "Trading Operations",
+        "watchfloor_ids": [
+          "HEAD-TRADE",
+          "REG-1",
+          "EXEC-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Per-symbol daily order cap live; slippage ledger still thin",
+        "task": "Persist EXEC-1 slippage scorecards per fill for ATTR-1.",
+        "owner_team": "Trading Operations",
+        "watchfloor_ids": [
+          "EXEC-1",
+          "CAP-1",
+          "HEAD-TRADE"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "EXEC-1 is both quality analyst and sole order placer",
+        "task": "Clarify EXEC-1 contract: place authorized paper orders; ATTR-1 owns slippage scorecards.",
+        "owner_team": "Trading Operations",
+        "watchfloor_ids": [
+          "EXEC-1",
+          "ATTR-1"
+        ],
+        "kind": "structural_weakness"
+      },
+      {
+        "title": "Proposer contract stubs complete; promote from stub to validated",
+        "task": "Run BACK-1/STAT-1 validation packs per contract; mark contract_completeness=validated_v1 when OOS gates pass.",
+        "owner_team": "Quantitative Research",
+        "watchfloor_ids": [
+          "FIT-1",
+          "STAT-1",
+          "HYPO-1",
+          "BACK-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "No walk-forward / OOS harness wired to HYPO-1 and BACK-1",
+        "task": "Build hypothesis registry + point-in-time backtest queue with FIT-1/COST-1 veto.",
+        "owner_team": "Quantitative Research",
+        "watchfloor_ids": [
+          "HYPO-1",
+          "BACK-1",
+          "STAT-1",
+          "FIT-1",
+          "COST-1"
+        ],
+        "kind": "missing_capability"
+      },
+      {
+        "title": "Quant evidence_package_id gate is live; packages still synthetic in paper",
+        "task": "Replace paper stub packages with FIT-1/COST-1 signed evidence objects.",
+        "owner_team": "Quantitative Research",
+        "watchfloor_ids": [
+          "FIT-1",
+          "COST-1",
+          "ENS-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Bull/Bear split authors need conflict metadata on case files",
+        "task": "Enforce separate author_id on case file versions in org memory.",
+        "owner_team": "Research and Strategy",
+        "watchfloor_ids": [
+          "BULL-1",
+          "BEAR-1",
+          "MEM-1"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "RECON-1 seat added; automate book vs broker mismatch halt",
+        "task": "Implement RECON-1 daily check; mismatch \u2192 COMP-1 halt.",
+        "owner_team": "Governance and Operations",
+        "watchfloor_ids": [
+          "RECON-1",
+          "COMP-1",
+          "EXEC-1",
+          "SEC-LEDGER"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Incident runbooks for SEC-HALT drills not versioned in repo",
+        "task": "Add docs/runbooks/halt_drill.md and automate SEC-DRILL quarterly checklist.",
+        "owner_team": "Governance and Operations",
+        "watchfloor_ids": [
+          "SEC-HALT",
+          "SEC-DRILL",
+          "SEC-RESTORE",
+          "SEC-LEDGER"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Berkshire desk moat/MOS gate is live; scorecards still manual",
+        "task": "Have BRK-MOAT/BRK-SAFE publish signed score objects instead of free-form metadata.",
+        "owner_team": "Capital Stewardship",
+        "watchfloor_ids": [
+          "BRK-MOAT",
+          "BRK-SAFE",
+          "BRK-TRD1",
+          "BRK-TRD2"
+        ],
+        "kind": "recommended_improvement"
+      },
+      {
+        "title": "Dissent: retiring mean-reversion scouts entirely is too aggressive for a lab",
+        "task": "Retain MR/scout cohorts; tag as experimental with elevated reject sensitivity.",
+        "owner_team": "Capital Stewardship",
+        "watchfloor_ids": [
+          "SCOUT-L2",
+          "SCOUT-S2",
+          "BRK-SAFE"
+        ],
+        "kind": "dissent"
+      }
+    ],
+    "P3": []
+  },
+  "reasoning": "Council ran independent audits against the Watchfloor registry and paper-org wiring, cross-critiqued trading vs risk vs stewardship tensions, applied standing live-execution vetoes, and ordered implementation by P0\u2192P3.",
+  "dissenting_views": [
+    "Dissent: retiring mean-reversion scouts entirely is too aggressive for a lab \u2014 Keep SCOUT/MR-style cohorts in paper with stewardship veto and fixed $1\u20132 sizing; do not delete the experiment.",
+    "Critique: do not confuse lab breadth with production capital allocation \u2014 Paper cohorts may be wide; binding capital stays tiny and comparable."
+  ]
+}

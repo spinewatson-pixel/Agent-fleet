@@ -1,0 +1,78 @@
+# Institutional Agent Fleet — Organization Configuration
+# LIVE EXECUTION IS DISABLED until Phase 5+ explicit authorization.
+# Canonical agent roster: config/watchfloor_registry.json
+
+environment: paper
+live_execution_enabled: false
+paper_capital_usd: 1_000_000
+agent_ceiling: 300
+source_of_truth: config/watchfloor_registry.json
+ui: ui/watchfloor.html
+
+organization:
+  name: Watchfloor Quant Lab
+  version: "0.5.0"
+  chief_architecture_agent: GOV-CHAIR
+
+departments:
+  systems_intelligence:
+    inspired_by: Palantir
+    watchfloor_seats: [MEM-1, DQ-1, UI-1, TOOL-1]
+  market_information:
+    inspired_by: Bloomberg
+    watchfloor_seats: [MKT-1, ALT-1, GEO-1, MACRO-1]
+  ai_infrastructure:
+    inspired_by: NVIDIA
+    watchfloor_seats: [ML-ARCH, ML-VIT, ML-SEQ, TOOL-1]
+  portfolio_risk:
+    inspired_by: BlackRock
+    watchfloor_seats: [RISK-1, CAP-1, CORR-Q]
+  trading_operations:
+    inspired_by: Citadel
+    watchfloor_seats: [HEAD-TRADE, EXEC-1, CIT-RISK, CIT-ALLOC]
+  quantitative_research:
+    inspired_by: Renaissance Technologies
+    watchfloor_seats: [MINE-1, ENS-1, FIT-1, COST-1, BACK-1, STAT-1]
+  research_strategy:
+    inspired_by: Goldman Sachs
+    watchfloor_seats: [CORP-1, BULL-1, BEAR-1, FORE-1, HEAD-INTEL]
+  governance_operations:
+    inspired_by: JPMorgan Chase
+    watchfloor_seats: [GOV-CHAIR, COMP-1, SEC-HALT, SEC-LEDGER, HUMAN-1]
+  capital_stewardship:
+    inspired_by: Berkshire Hathaway
+    watchfloor_seats: [BRK-MOAT, BRK-SAFE, BRK-MRKT, BRK-INV, BRK-TRD1, BRK-TRD2]
+
+risk_limits:
+  max_gross_exposure_pct: 100
+  max_net_exposure_pct: 60
+  max_single_name_pct: 5
+  max_sector_pct: 25
+  max_strategy_pct: 30
+  max_correlated_cluster_pct: 40
+  daily_loss_halt_pct: 2
+  drawdown_halt_pct: 8
+  max_orders_per_day: 50
+  min_liquidity_adv_pct: 2
+  default_paper_size_usd: [1, 2]
+  swing_hard_cap_days: 7
+
+approval_chain:
+  - FIT-1
+  - RISK-1
+  - COMP-1
+  - CAP-1
+  - GOV-CHAIR
+  - HUMAN-1
+
+veto_agents: [RISK-1, COMP-1, GOV-CHAIR, SEC-HALT, HUMAN-1, FIT-1, CIT-RISK]
+
+legacy_strategy_agents_retired_as_primary:
+  - STRAT-MOM-001
+  - STRAT-MR-001
+  - STRAT-EARN-001
+  - STRAT-MACRO-001
+  - STRAT-FACTOR-001
+  - STRAT-VALUE-001
+  - STRAT-VOL-001
+  - STRAT-SECTOR-001
