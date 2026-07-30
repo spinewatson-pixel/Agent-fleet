@@ -930,6 +930,166 @@ function blueprintLayers(a){
     mind:["Idea ledger","Retractions","Stuck queue","Lab handoffs"],
     contr:["Scopes","Deliveries","Engagement scores"]
   };
+  var ops={
+    trader:{
+      skills:["Mandate setup recognition","Falsifiable thesis writing","Session risk hygiene","Cohort sizing discipline"],
+      workflows:["Ingest tape+signal → check regime/contract → log thesis → emit TradeProposal → await chain → monitor/ATTR"],
+      decisions:["Act only on setup_rules_fired + thesis","Refuse invalid regime / low confidence","Halt on SEC-HALT"],
+      comms:["← ResearchSignal (SIG-1)","→ TradeProposal to FIT-1/RISK-1/MEM-1","← ApprovalDecision"],
+      inputs:["Verified bars","ResearchSignal IDs","REG-1 regime","Contract setup rules"],
+      outputs:["TradeProposal","Thesis log","Post-trade review"],
+      learning:["Learning Loop lessons only — no auto production mutation"],
+      eval:["Thesis score before P&L","Hit rate","Reject rate"],
+      perms:["Propose only","No self-approve/execute","paper_only · live locked"]
+    },
+    intel:{
+      skills:["Triangulation","Exposure mapping","Case-file authorship","Source ranking"],
+      workflows:["Sweep → dual-source → map names → update case file → brief Predictions"],
+      decisions:["Publish after dual-source or mark provisional","Correct publicly on failure"],
+      comms:["← MKT-1/ALT-1/DQ-1","→ case files for FORE/traders","→ HEAD-INTEL gaps"],
+      inputs:["Wires","Filings","Alt data","Prior cases"],
+      outputs:["Reports","Case updates","Exposure maps"],
+      learning:["Drop low-reliability sources"],
+      eval:["Lead time","Source trust","Correction rate"],
+      perms:["No trade authority","Write intel namespaces","paper_only"]
+    },
+    disc:{
+      skills:["Forecast construction","Causal chaining","Calibration","Anomaly logging"],
+      workflows:["Consume intel → call+confidence+kill → publish → score at resolution"],
+      decisions:["No call without confidence+invalidation","No post-hoc score edits"],
+      comms:["← Intel","→ Learning Loop/CALIB-1","↔ SIG-1 schema"],
+      inputs:["Case files","Outcomes","Decay curves"],
+      outputs:["Forecasts","Causal chains","Anomaly tickets"],
+      learning:["Recalibrate from Brier drift"],
+      eval:["Brier","Calibration","Hit rate"],
+      perms:["No trading","Write forecast board"]
+    },
+    lab:{
+      skills:["Hypothesis formalization","PIT backtests","Stats correction","Red team"],
+      workflows:["Register → backtest → stats/red-team → kill or promote → publish negatives"],
+      decisions:["No look-ahead","Builder never self-certifies","Kill fast"],
+      comms:["← Minds/Forge","→ FIT-1/COST-1/HEAD-LAB","→ SYNTH-1 graveyard"],
+      inputs:["Registry","PIT history","Papers"],
+      outputs:["Verdicts","Promotion packets","Kill reports"],
+      learning:["Update methodology from false positives"],
+      eval:["Tests/week","Survival","Time-to-kill"],
+      perms:["Run backtests","No trading"]
+    },
+    risk:{
+      skills:["Exposure modeling","Correlation","Mandate drift","Halt judgment"],
+      workflows:["Receive proposal → limits → approve/reduce/veto → audit → escalate"],
+      decisions:["Veto on breach","Halt first, argue after"],
+      comms:["← FIT-1","→ BRK-SAFE/GOV-CHAIR","→ COMP-1/SEC-HALT"],
+      inputs:["Proposals","Book","Correlation","Mandates"],
+      outputs:["RiskVerdict","Halts","Audits"],
+      learning:["Tune audit sampling"],
+      eval:["Early breaches caught","Fleet ρ","False halt rate"],
+      perms:["Veto/halt","No proposing trades"]
+    },
+    gov:{
+      skills:["Adjudication","Ceiling enforcement","Mode-B triage","Audit chair"],
+      workflows:["Intake proposal → charter/ceiling check → vote+rationale → escalate Mode-B → weekly review"],
+      decisions:["No agent without reason","Ceiling not quietly breached","Human veto above thresholds"],
+      comms:["← division heads/ARCH-1","→ MEM-1/UI-1","↔ SEC-HALT"],
+      inputs:["Proposal queue","Hard rules","Audits"],
+      outputs:["Decisions","Exceptions","Agendas"],
+      learning:["Mode-B changes only via recorded vote"],
+      eval:["Queue depth","Time-to-decision","Ceiling use"],
+      perms:["Structural approval","No trading"]
+    },
+    control:{
+      skills:["Recon","Break classification","Activity budgets","Halt packaging"],
+      workflows:["Diff book↔broker → classify → COMP-1 halt if material → enforce activity caps → dual clear"],
+      decisions:["Material mismatch halts new risk","Cannot clear own breaks alone"],
+      comms:["← EXEC-1/book","→ SEC-LEDGER","→ COMP-1"],
+      inputs:["Positions","Fills","Activity log"],
+      outputs:["Recon reports","Halt requests","Cap hits"],
+      learning:["Cut false-break rate"],
+      eval:["Breaks open","Time-to-halt","False breaks"],
+      perms:["Read book+broker","Request halt","No orders"]
+    },
+    meta:{
+      skills:["Skill vs luck","Attribution","Lesson routing","Lifecycle"],
+      workflows:["Ingest outcomes → attribute → route lessons → recommend lifecycle → never auto-mutate"],
+      decisions:["Binding scores from Learning Loop","production_mutation_allowed=false by default"],
+      comms:["← ATTR/CALIB/EXEC","→ agent inboxes","→ LIFE-1/GOV-CHAIR"],
+      inputs:["Outcomes","Cohorts","Lessons"],
+      outputs:["Scorecards","Lessons","Audits"],
+      learning:["Controlled improvement sequence only"],
+      eval:["Lessons applied","Agents improved"],
+      perms:["Write scorecards","Cannot mutate production"]
+    },
+    data:{
+      skills:["Freshness","Schema/PIT","Conflict recon","Signal schema"],
+      workflows:["Ingest → validate → quarantine → index MEM-1 → serve honest PIT"],
+      decisions:["Never silent stale","SIG-1 rejects non-schema handoffs"],
+      comms:["→ all divisions","→ COMP-1 on DQ fail"],
+      inputs:["Feeds","Source registry"],
+      outputs:["MarketEvents","Index entries","Quarantines"],
+      learning:["Retire bad sources"],
+      eval:["Uptime","Staleness","Downstream errors→0"],
+      perms:["Quarantine feeds","Write MEM-1"]
+    },
+    sec:{
+      skills:["Secrets","Pins","Leak/phish","Halt/restore"],
+      workflows:["Watch → alarm → freeze → drill → restore with Locksmith"],
+      decisions:["Credential asks hostile until proven","Halt outranks Mission Control"],
+      comms:["→ operator/GOV/HUMAN","→ SEC-LEDGER"],
+      inputs:["Keys","Deps","Outbound logs"],
+      outputs:["Alarms","Halts","Cases","Restores"],
+      learning:["Shrink blast radius each drill"],
+      eval:["Keys in scope","Drill grade","Incidents"],
+      perms:["Halt authority","Never trades"]
+    },
+    quant:{
+      skills:["Signal mining","Ensembles","Regime","Overfit/cost veto","Evidence seal"],
+      workflows:["Mine/combine/regime → OOS+costs → FIT/COST/EVID → RT propose → cull decay"],
+      decisions:["Edge over story","No self-certify","Evidence required for RT"],
+      comms:["Desk bus","→ SIG-1","→ Validation Police"],
+      inputs:["PIT history","Signals","Costs"],
+      outputs:["Signals","Evidence packages","RT proposals"],
+      learning:["Retire at half-life"],
+      eval:["OOS Sharpe","Decay half-life"],
+      perms:["Desk autonomy budget","Propose with evidence only"]
+    },
+    fund:{
+      skills:["Doctrine analysis","Playbook grading","Desk mechanics","Forge petitions"],
+      workflows:["Doctrine vs tape → grade → paper/propose → log → Forge if repeatable"],
+      decisions:["Off-playbook win = miss","BRK-TRD need moat+MOS"],
+      comms:["Desk chain","→ FIT-1/RISK-1","↔ Forge"],
+      inputs:["Doctrine","Tape","Playbook"],
+      outputs:["Grades","Proposals","Petitions"],
+      learning:["Retire dead plays"],
+      eval:["Doctrine fidelity","Edge decay"],
+      perms:["Traders propose only","No self-execute"]
+    },
+    mind:{
+      skills:["Named method","Analogy","Interrogation","Falsification"],
+      workflows:["Intake → method → kill condition → Lab only — never raw to floor"],
+      decisions:["No jargon","Nothing unfalsifiable forward","Never trade"],
+      comms:["← stuck queue","→ HYPO-1/Lab","Movers → Mission Control"],
+      inputs:["Problems","Claims","Analogy bank"],
+      outputs:["Reframes","Ideas","Kill conditions"],
+      learning:["Track methods that survive Lab"],
+      eval:["Ideas→Lab %","Reuse rate"],
+      perms:["No trading","Write idea ledger"]
+    },
+    contr:{
+      skills:["Scoped specialty","Knowledge transfer","Access hygiene"],
+      workflows:["Signed scope → sandbox work → delivery+transfer → auto-revoke"],
+      decisions:["No scope = no work","Trading never automatic"],
+      comms:["Sponsor/GOV only"],
+      inputs:["Scope","Sandbox data"],
+      outputs:["Delivery packet","Transfer"],
+      learning:["Leave org capable without you"],
+      eval:["Knowledge retained %"],
+      perms:["LIMITED sandbox","No standing access"]
+    }
+  };
+  var o=ops[a.kind]||ops.trader;
+  if(a.id==="EXEC-1"){
+    o={skills:["Authorized paper execution","Slippage measurement"],workflows:["Receive ApprovalDecision → size → paper fill → ExecutionReport"],decisions:["Only if execution_authorized"],comms:["← GOV-CHAIR chain","→ COMP-1/ATTR-1/MEM-1"],inputs:["ApprovalDecision","Proposal"],outputs:["ExecutionReport","Slippage ledger"],learning:["Improve fill quality notes for ATTR-1"],eval:["Slippage bps","Reject unauthorized"],perms:["Place paper orders only","Cannot invent approval","live locked"]};
+  }
   return [
     ["Identity", id],
     ["Goal", goal],
@@ -938,7 +1098,16 @@ function blueprintLayers(a){
     ["Tools", (p.tools||[]).map(function(t){return t[1]+" ["+t[2]+"]"})],
     ["Capabilities", caps[a.kind]||caps.trader],
     ["Memory", mem[a.kind]||mem.trader],
-    ["Knowledge Base", (p.srcs||[]).map(function(s){return s[0]})]
+    ["Knowledge Base", (p.srcs||[]).map(function(s){return s[0]})],
+    ["Skills", o.skills],
+    ["Workflows", o.workflows],
+    ["Decision Rules", o.decisions],
+    ["Communication", o.comms],
+    ["Inputs", o.inputs],
+    ["Outputs", o.outputs],
+    ["Learning", o.learning],
+    ["Evaluation", o.eval],
+    ["Permissions", o.perms]
   ];
 }
 function ledgerName(a){var t=tiles(a);for(var i=0;i<t.length;i++){if(["THESIS","REPORTS","FORECASTS","EXPERIMENTS","REVIEWS","AUDITS","PIPELINES","PROPOSALS","DELIVERY","IDEAS","SIGNALS","PLAYBOOK","RECON"].indexOf(t[i][1])>-1)return t[i][1]}return"THESIS"}
@@ -959,7 +1128,7 @@ R(a,"Cadence",p.cad)+R(a,"Autonomy",p.auto)+
 
 if(t==="BLUEPRINT"){
   var layers=blueprintLayers(a);
-  return '<div class="pnote">Eight-layer operating blueprint — Identity through Knowledge Base. Expert standard for this seat.</div>'+
+  return '<div class="pnote">Complete operating blueprint — 8 structural + 9 operating layers. Expert standard for this seat.</div>'+
   layers.map(function(L){
     var body=Array.isArray(L[1])?L[1].map(function(x){return "• "+esc(x)}).join("<br>"):esc(L[1]);
     return '<div class="box" style="margin-bottom:10px"><div class="k">'+esc(L[0])+'</div><div class="v" style="font-size:13px;line-height:1.55">'+body+'</div></div>';
