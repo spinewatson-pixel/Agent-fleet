@@ -17,12 +17,31 @@ Study + agent stack for an accelerated BSN program. **Python standard library on
 | `world.py` | Scouts search the live web for real problems, then work them. |
 | `study.html` | UI: terms → courses → agent count → agent squares. |
 
+## Setup check
+
+```bash
+python3 ecosystem/setup_check.py
+```
+
+Exits `0` when this folder stands on its own and `1` when it does not. It separates two
+different failures: **core** (a bug in this folder) from **wiring gaps** (the pieces
+deliberately not shipped here). It runs schema checks against a throwaway database, so
+`ecosystem.db` is never touched.
+
+Verified on this machine (Python 3.12.3): 9/9 modules import, 23 tables apply across 8
+modules, the contract refuses furniture and self-verification, `UNCHECKED` is the default
+verdict, and both mechanical scorers discriminate (chapter 1.0 vs 0.088 for a refusal).
+
 ## Pre-existing dependencies (not in this folder)
 
-- **`serve.py`** — backend that hosts `/api/study/*` (and related nursing) routes and serves `study.html`.
-- **`nursing_api`** — course catalogue (`COURSES`), question generation, weak areas, expert Q&A.
+| Dependency | What breaks without it |
+| --- | --- |
+| `serve.py` | Nothing serves the 26 endpoints `study.html` calls, so the UI cannot load. |
+| `nursing_api` | `COURSES`, item generation, weak areas and expert Q&A are missing, so roster / terms / cycle and every course-facing call fail. |
+| `nursing_items`, `nursing_answers` tables | Owned by `nursing_api`. Tutor chat, item revision and Examiner rank read them. |
+| `claude` CLI on `PATH` | Every `llm.ask()` returns `claude CLI not found on PATH`, so no agent produces anything. |
 
-Runtime also expects the `claude` CLI on `PATH`.
+`setup_check.py` prints the full endpoint list `serve.py` must provide.
 
 ## Two rules everything obeys
 
