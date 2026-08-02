@@ -56,6 +56,13 @@ CREATE TABLE IF NOT EXISTS loop_variant(
 
 EXPLORE = 0.25          # share of runs that deliberately try something else
 
+# The Mentor is the one agent in this module that calls the model, so the same
+# guard every other agent carries applies to it too.
+GUARD = ("State uncertainty rather than resolving it with confident prose. Never "
+         "invent a source, a statistic or a measurement. This is exam preparation "
+         "for a nursing student, not clinical guidance for a real patient. You "
+         "cannot read, write or execute anything on the operator's machine.")
+
 
 def _c():
     c = sqlite3.connect(DB, timeout=20); c.row_factory = sqlite3.Row; return c
@@ -337,7 +344,8 @@ def mentor(kind):
         "You are the Mentor. You do not do the work yourself — you study how other "
         "agents perform it and write better instructions for them. You are evaluated "
         "the same way they are: your proposal will be run and scored against theirs, "
-        "so a clever-sounding variant that does not measurably help is a failure.\n\n"
+        "so a clever-sounding variant that does not measurably help is a failure.\n"
+        + GUARD + "\n\n"
         f"THE WORK: {subject}\n{stages}\n\n"
         "The scoring is mechanical, not aesthetic. Chapters score on: body length in "
         "band, whether the Editor raised specific quoted concerns rather than refusing "

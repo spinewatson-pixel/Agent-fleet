@@ -17,6 +17,22 @@ Study + agent stack for an accelerated BSN program. **Python standard library on
 | `world.py` | Scouts search the live web for real problems, then work them. |
 | `study.html` | UI: terms → courses → agent count → agent squares. |
 
+## Verification
+
+This stack is a registered ecosystem in the repository's build verification framework
+(see [docs/VERIFICATION.md](../docs/VERIFICATION.md)):
+
+```bash
+pnpm verify --project nursing-ecosystem
+python3 ecosystem/verify_gates.py e2e     # or: build | dependencies | contracts | governance | performance
+```
+
+Each gate prints one JSON object for the framework and human detail on stderr. The
+end-to-end gate runs the real chains against the test doubles in `simulation/`, so
+stage order, accumulating carry, prompt placement, database writes and mechanical
+scoring are all verified without the `claude` CLI or `nursing_api`. It proves the
+wiring; it proves nothing about the quality of what a real model would write.
+
 ## Setup check
 
 ```bash

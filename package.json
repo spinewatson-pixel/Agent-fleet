@@ -17,7 +17,10 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.web.json --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
-    "check": "pnpm run typecheck && pnpm run lint && pnpm run test"
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run test",
+    "depcheck": "tsx scripts/depcheck.ts",
+    "verify": "tsx scripts/verify.ts",
+    "verify:baseline": "tsx scripts/verify.ts --update-baseline"
   },
   "engines": {
     "node": ">=20"
