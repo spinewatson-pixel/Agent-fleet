@@ -1,0 +1,207 @@
+# Demo AI organization with seeded architecture defects for MVP acceptance.
+# Seeded defects:
+# - missing human approval gate on high-criticality workflow
+# - broken/missing contract on tool interface
+# - incomplete mission/risk/success metrics (intent unknowns)
+# - orphaned worker node and circular dependency risk
+# - absent owners on a capability
+
+name: Contoso Claims Copilot
+version: "0.3.1"
+environment: staging
+criticality: high
+scope: "Claims intake summarization and adjuster assist"
+# mission intentionally omitted — intent completeness must ask
+owners:
+  - owner_platform
+  - owner_claims
+
+capabilities:
+  - id: cap_intake
+    name: Claims Intake Summarization
+    purpose: "Summarize inbound claim packets for adjusters"
+    inputs: ["claim_packet"]
+    outputs: ["summary_draft"]
+    dependencies: ["cap_retrieval"]
+    slos: ["p95_latency_under_8s"]
+    failureModes: ["tool_timeout", "stale_policy_docs"]
+    evaluationCriteria: []
+    owners: []
+  - id: cap_retrieval
+    name: Policy Document Retrieval
+    purpose: "Retrieve relevant policy clauses"
+    inputs: ["query"]
+    outputs: ["passages"]
+    dependencies: []
+    slos: ["freshness_under_7d"]
+    failureModes: ["index_stale"]
+    evaluationCriteria: ["precision_at_5"]
+    owners: ["owner_platform"]
+  - id: cap_notify
+    name: Adjuster Notification
+    purpose: "Notify adjuster when summary ready"
+    inputs: ["summary_draft"]
+    outputs: ["notification"]
+    dependencies: ["cap_intake"]
+    owners: ["owner_claims"]
+
+workers:
+  - id: worker_intake_agent
+    name: Intake Agent
+    kind: agent
+    responsibilities: ["parse packet", "call retrieval", "draft summary"]
+    authority: "write_draft_only"
+    runtimeOrModel: "local-stub-model"
+    permissions: ["read_claims", "call_tools"]
+    costProfile:
+      unit: "usd_per_1k_calls"
+      estimate: 1.2
+    owners: ["owner_platform"]
+  - id: worker_retrieval_tool
+    name: Retrieval Tool
+    kind: tool
+    responsibilities: ["vector search over policy docs"]
+    authority: "read_only"
+    permissions: ["read_knowledge"]
+    owners: ["owner_platform"]
+  - id: worker_notify_service
+    name: Notify Service
+    kind: service
+    responsibilities: ["send adjuster email"]
+    authority: "send_notification"
+    permissions: ["notify_adjuster"]
+    owners: ["owner_claims"]
+  - id: worker_orphan_reporter
+    name: Orphan Reporter
+    kind: agent
+    responsibilities: ["legacy unused reporter"]
+    authority: "none"
+    permissions: []
+    owners: ["owner_platform"]
+
+interfaces:
+  - id: iface_intake_api
+    name: Intake API
+    kind: api
+    contractSchema: "ClaimPacketV1"
+    rateLimits: "30rpm"
+    authReference: "internal_mtls"
+    producerId: worker_intake_agent
+    consumerIds: [worker_notify_service]
+  - id: iface_retrieval
+    name: Retrieval Interface
+    kind: api
+    # contractSchema intentionally missing — seeded broken contract
+    rateLimits: "120rpm"
+    authReference: "service_token"
+    producerId: worker_retrieval_tool
+    consumerIds: [worker_intake_agent]
+  - id: iface_notify
+    name: Notify Queue
+    kind: queue
+    contractSchema: "NotificationV1"
+    producerId: worker_notify_service
+    consumerIds: []
+
+knowledgeMemories:
+  - id: km_policy_index
+    name: Policy Document Index
+    source: "manual_upload_bundle"
+    freshness: "21d"
+    retention: "1y"
+    access: "platform_team"
+    provenance: "claims_ops_share"
+    retrievalBehavior: "top_k_vector"
+    owners: ["owner_platform"]
+
+governancePolicies:
+  - id: pol_data_min
+    name: Minimum Data Policy
+    riskClass: high
+    dataRules: ["no_pii_in_prompts_beyond_claim_id"]
+    budgets: ["daily_tool_budget_500"]
+    escalation: "page_oncall_claims"
+    auditRequirements: ["log_tool_calls"]
+    # requiresHumanApprovalGate intentionally false — seeded absent approval gate
+    requiresHumanApprovalGate: false
+    approvals: []
+    owners: ["owner_platform"]
+
+topology:
+  name: Primary Workflow
+  nodes:
+    - id: n_intake
+      refId: worker_intake_agent
+      kind: worker
+      label: Intake Agent
+    - id: n_retrieval
+      refId: worker_retrieval_tool
+      kind: worker
+      label: Retrieval Tool
+    - id: n_notify
+      refId: worker_notify_service
+      kind: worker
+      label: Notify Service
+    - id: n_orphan
+      refId: worker_orphan_reporter
+      kind: worker
+      label: Orphan Reporter
+    - id: n_cap_intake
+      refId: cap_intake
+      kind: capability
+      label: Intake Capability
+  edges:
+    - id: e_intake_retrieval
+      from: n_intake
+      to: n_retrieval
+      kind: delegation
+      label: retrieve policy
+    - id: e_retrieval_intake
+      from: n_retrieval
+      to: n_intake
+      kind: communication
+      label: passages
+    - id: e_intake_notify
+      from: n_intake
+      to: n_notify
+      kind: communication
+      label: summary ready
+    # circular dependency between intake and notify capabilities via edges
+    - id: e_notify_intake_cycle
+      from: n_notify
+      to: n_intake
+      kind: dependency
+      label: legacy ack loop
+
+metrics:
+  - id: metric_latency
+    name: Summary Latency p95
+    definition: "End-to-end summary generation"
+    baseline: 12
+    target: 8
+    sampling: "rolling_1h"
+    dimension: latency
+  - id: metric_reliability
+    name: Successful Summary Rate
+    definition: "Share of intakes producing usable draft"
+    baseline: 0.91
+    target: 0.98
+    sampling: "daily"
+    dimension: reliability
+  - id: metric_cost
+    name: Tool Spend
+    definition: "USD per 1k intake calls"
+    baseline: 1.2
+    target: 1.0
+    sampling: "daily"
+    dimension: cost
+
+traces:
+  - id: trace_sample_1
+    summary: "Intake agent timed out waiting for retrieval tool"
+    collectedAt: "2026-07-28T14:22:00.000Z"
+    confidence: medium
+  - id: trace_sample_2
+    summary: "Summary emitted without human review on high-severity claim"
+    collectedAt: "2026-07-30T09:10:00.000Z"
+    confidence: high
