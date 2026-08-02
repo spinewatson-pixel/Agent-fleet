@@ -7,3 +7,11 @@ data
 .env.*
 coverage
 .vite
+
+# Nursing OS / Ecosystem runtime
+ecosystem/ecosystem.db
+ecosystem/library/
+ecosystem/assets/
+ecosystem/textbook_*.html
+ecosystem/__pycache__/
+ecosystem/*.pyc
