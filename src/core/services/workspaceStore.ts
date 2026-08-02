@@ -25,6 +25,7 @@ export interface WorkspaceSnapshot {
   validationResults?: unknown;
   reviewResults?: unknown;
   recommendation?: unknown;
+  baselineComparison?: unknown;
   changeHistory: ChangeSet[];
   exports: ExportArtifact[];
   updatedAt: string;
@@ -96,5 +97,8 @@ export class JsonFileWorkspaceStore implements WorkspaceStore {
 }
 
 export function defaultDataDir(): string {
+  if (process.env.AGENT_FLEET_DATA_DIR) {
+    return path.resolve(process.env.AGENT_FLEET_DATA_DIR);
+  }
   return path.resolve(process.cwd(), "data", "workspaces");
 }

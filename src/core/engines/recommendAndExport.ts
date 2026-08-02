@@ -10,6 +10,7 @@ import type { GapAnalysisResult } from "./gapAnalysis.js";
 import type { CandidateArchitecture } from "./candidateSynthesis.js";
 import type { ValidationResult } from "./validation.js";
 import type { ReviewResult } from "./review.js";
+import type { BaselineProposalComparison } from "./baselineComparison.js";
 
 export interface RecommendationResult {
   chosenCandidateId: string | null;
@@ -107,6 +108,7 @@ export function exportRecommendationArtifacts(input: {
   validations: ValidationResult[];
   reviews: ReviewResult[];
   recommendation: RecommendationResult;
+  baselineComparison?: BaselineProposalComparison;
 }): ExportArtifactContent {
   const {
     org,
@@ -116,6 +118,7 @@ export function exportRecommendationArtifacts(input: {
     validations,
     reviews,
     recommendation,
+    baselineComparison,
   } = input;
 
   const chosen = candidates.find((c) => c.id === recommendation.chosenCandidateId);
@@ -162,6 +165,7 @@ export function exportRecommendationArtifacts(input: {
     ),
     currentStatePreserveList: gaps.preserveList,
     gapFindings: gaps.findings,
+    baselineComparison: baselineComparison ?? null,
     candidates: candidates.map((c) => ({
       ...c,
       review: reviews.find((r) => r.candidateId === c.id),
@@ -242,6 +246,7 @@ export function exportRecommendationArtifacts(input: {
     reviews,
     recommendation,
     chosen,
+    baselineComparison,
     json,
   });
 
@@ -257,6 +262,7 @@ function renderMarkdown(args: {
   reviews: ReviewResult[];
   recommendation: RecommendationResult;
   chosen?: CandidateArchitecture;
+  baselineComparison?: BaselineProposalComparison;
   json: Record<string, unknown>;
 }): string {
   const {
@@ -268,6 +274,7 @@ function renderMarkdown(args: {
     reviews,
     recommendation,
     chosen,
+    baselineComparison,
   } = args;
 
   const lines: string[] = [];
@@ -306,6 +313,18 @@ function renderMarkdown(args: {
     );
   }
   lines.push("");
+  if (baselineComparison) {
+    lines.push("## Baseline vs proposals");
+    lines.push(
+      `- Baseline: critical=${baselineComparison.baseline.criticalGapCount}, missingContracts=${baselineComparison.baseline.missingContracts}, approvalGate=${baselineComparison.baseline.hasApprovalGate}`,
+    );
+    for (const p of baselineComparison.proposals) {
+      lines.push(
+        `- Proposal \`${p.candidateId}\` review=${p.reviewStatus}: ${p.vsBaseline}`,
+      );
+    }
+    lines.push("");
+  }
   lines.push("## Candidate comparison");
   for (const c of candidates) {
     const rev = reviews.find((r) => r.candidateId === c.id);

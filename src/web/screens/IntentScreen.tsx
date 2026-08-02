@@ -2,6 +2,7 @@ import { useState } from "react";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceBadge, EvidenceLegend } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function IntentScreen() {
   const { snap, setSnap, workspaceId } = useWorkspace();
@@ -44,6 +45,7 @@ export function IntentScreen() {
         Complete mission, constraints, and preserve list. Missing fields become explicit
         questions — the builder will not invent answers.
       </p>
+      <JourneyNav current="/intent" />
       <EvidenceLegend />
 
       <div className="panel">

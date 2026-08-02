@@ -175,12 +175,29 @@ button,
   padding: 0.55rem 0.9rem;
   font-weight: 600;
   cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
 }
 
-button.secondary {
+a.button:hover {
+  text-decoration: none;
+  filter: brightness(1.05);
+}
+
+button.secondary,
+a.button.secondary {
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--line);
+}
+
+.journey-nav .journey-steps {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.journey-nav .journey-steps .current {
+  color: var(--accent);
 }
 
 button.danger {

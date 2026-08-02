@@ -1,101 +1,108 @@
 # Agent Fleet — AI Enterprise Architecture Engineer (Builder) MVP
 
-Read-only, advisory-first architecture control plane for AI organizations. Import a workflow description, reconstruct intent with explicit uncertainty, identify gaps, compare candidate improvements, run declared-fidelity checks, and export a traceable recommendation. **It does not deploy, mutate connected systems, or act as an autonomous worker.**
+One integrated, **read-only / advisory-only** architecture control plane. Import an AI organization, inspect the canonical model, reconstruct intent with explicit uncertainty, run deterministic gap/candidate/validation/review engines, compare baseline vs proposals, and export a cited recommendation. **No deployment or mutation of connected systems.**
 
-## Quick start
+## Clean clone → runnable product
 
 ```bash
+git clone <repo-url> Agent-fleet
+cd Agent-fleet
 pnpm install
-pnpm dev          # API :8787 + UI :5173
-# or separately:
-pnpm dev:api
-pnpm dev:web
+pnpm seed                 # import fixtures/demo-org.yaml into data/workspaces
+pnpm dev                  # API :8787 + UI :5173
 ```
 
-Checks:
+Open **http://localhost:5173** → Import (or open seeded workspace) → complete the journey via sidebar / step nav:
 
-```bash
-pnpm test
-pnpm typecheck
-pnpm lint
-pnpm check        # typecheck + lint + test
-```
+1. **Import** fixture  
+2. **Organization Map** — canonical model + evidence  
+3. **Intent & Evidence** — owner form; unresolved questions (no invented answers)  
+4. **Gap Analysis** — run engines (also produces candidates, validation, review)  
+5. **Candidates & Validation** — baseline vs proposals + declared-fidelity checks  
+6. **Review & Decision** — non-averaging blockers; approve & export  
+7. **Change History** — immutable local decision/export record  
 
-Production-ish local serve (build UI, then API serves `dist/web`):
+Production-style single process (serves built UI from API if `dist/web` exists):
 
 ```bash
 pnpm build
-pnpm start
+pnpm start                # http://localhost:8787
 ```
 
-Open `http://localhost:5173` in dev (proxies `/api` → `:8787`). Load **demo organization** from the Import screen.
+## Verified commands
+
+```bash
+pnpm install
+pnpm seed
+pnpm test                 # unit + HTTP e2e journey
+pnpm test:e2e             # HTTP journey only
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm check                # typecheck + lint + test
+```
+
+Against a running API:
+
+```bash
+pnpm dev:api              # terminal A
+pnpm smoke                # terminal B — full HTTP journey smoke
+```
 
 ## Architecture
 
 ```text
-┌─────────────┐   YAML/JSON    ┌──────────────────────────┐
-│  Browser UI │ ─────────────► │ Express API (advisory)   │
-│  7 screens  │ ◄───────────── │  /api/workspaces/*       │
-└─────────────┘   snapshots    └────────────┬─────────────┘
-                                            │
-                               ┌────────────▼─────────────┐
-                               │ BuilderPipeline          │
-                               │  adapter → intent → gap  │
-                               │  → candidates → validate │
-                               │  → review → export       │
-                               └────────────┬─────────────┘
-                                            │
-                    ┌───────────────────────┼───────────────────────┐
-                    ▼                       ▼                       ▼
-           ReadOnlyDiscoveryAdapter   Deterministic engines   JSON workspace store
-           (discover/normalize/       (gap, candidates,       (data/workspaces)
-            validate; apply REJECT)    validation, review)
+Browser UI (7 screens + journey nav)
+        │  /api/*
+        ▼
+Express createApp() ──► BuilderPipeline (single product path)
+        │                      │
+        │         discover → normalize → intent → gaps
+        │         → candidates → validation → baseline compare
+        │         → review → recommendation → export
+        ▼
+JSON workspace store (data/workspaces)   ReadOnlyDiscoveryAdapter
+                                         apply() permanently rejected
 ```
 
-**Claim chain (exported):**  
+**Claim chain:**  
 `Mission → Intent → Evidence → Knowledge → Simulation/Validation → Architecture Review → Recommendation → Approval/Outcome`
 
 ## Security boundaries
 
-| Boundary | MVP behavior |
+| Boundary | Behavior |
 | --- | --- |
-| Discovery | Read-only local JSON/YAML only |
-| `apply` / mutation | Interface defined; always rejected (`MutationRejectedError` / `POST /api/apply` → 405) |
+| Discovery | Local JSON/YAML only |
+| Mutation / `apply` | Always rejected (`POST /api/apply` → 405) |
 | Secrets | Not accepted or stored |
-| LLM | `LlmProvider` interface present; `DisabledLlmProvider` default; engines do not call it |
-| Approval | Local draft/approved/rejected/exported record only — **no deployment path** |
-| Tenancy | Single local workspace (`data/`) |
+| LLM | Interface present; disabled by default; engines do not call it |
+| Approval | Local export record only — **no deployment path** |
 
-## Current limits
+## Current limits (honest)
 
 - Declared-fidelity static/scenario validation — **not** full behavioral simulation
-- Template-backed candidates (two templates), not open-ended synthesis
-- Optimization objective fixed to reliability / capability coverage; cost & latency are trade-offs
-- No live LangGraph / custom-Python / cloud discovery
-- Knowledge base is a small cited fixture (6 rules), not the full research corpus
+- Template-backed candidates (two), not open-ended synthesis
+- Objective fixed to reliability / capability coverage; cost & latency are trade-offs
+- No live LangGraph / cloud discovery; no browser automation suite (HTTP e2e covers the product path)
+- JSON file store is single-process
 
 ## Adapter roadmap
 
-1. **Now:** `ReadOnlyDiscoveryAdapter` (generic local JSON/YAML)
-2. **Next:** LangGraph inventory adapter implementing the same `discover/normalize/validate` interface
-3. **Later:** Custom Python / service adapters
-4. **Not in MVP:** any `apply` implementation — mutation remains guarded until a future governed release
+1. **Now:** `ReadOnlyDiscoveryAdapter` (local JSON/YAML)  
+2. **Next:** LangGraph inventory adapter (same interface)  
+3. **Later:** Custom Python / service adapters  
+4. **Not in MVP:** any `apply` implementation  
 
 ## Project layout
 
 ```text
-fixtures/demo-org.yaml     Seeded demo with intentional defects
-src/core/schemas           Zod canonical model
-src/core/adapters          Read-only adapter + mutation guard
-src/core/engines           Gap, candidates, validation, review, export
-src/core/services          Intent completeness + workspace store
-src/api                    Express API
-src/web                    React UI (7 screens)
-tests/                     Vitest unit + acceptance slice
-IMPLEMENTATION_PLAN.md     Stack + milestone map
-BUILD_STATUS.md            Delivery status
+fixtures/demo-org.yaml
+scripts/seed.ts            Seed demo into local store
+scripts/smoke.ts           Repeatable smoke against running API
+src/core/                  Schemas, adapter, engines, pipeline
+src/api/                   createApp + server
+src/web/                   Integrated 7-screen UI
+tests/e2e.http.journey.test.ts
+IMPLEMENTATION_PLAN.md
+BUILD_STATUS.md
 ```
-
-## License
-
-Private / as designated by repository owners.

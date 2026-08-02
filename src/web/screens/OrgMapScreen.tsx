@@ -1,5 +1,6 @@
 import { useWorkspace } from "../App";
 import { EvidenceBadge, EvidenceLegend } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function OrgMapScreen() {
   const { snap } = useWorkspace();
@@ -15,6 +16,7 @@ export function OrgMapScreen() {
         Canonical inventory for <strong>{org.name}</strong> (v{org.version}, {org.environment}).
         Missing fields and mapping gaps are listed without inventing values.
       </p>
+      <JourneyNav current="/map" />
       <EvidenceLegend />
 
       <div className="panel">

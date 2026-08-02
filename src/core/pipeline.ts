@@ -17,6 +17,10 @@ import {
   exportRecommendationArtifacts,
   type RecommendationResult,
 } from "./engines/recommendAndExport.js";
+import {
+  compareBaselineToProposals,
+  type BaselineProposalComparison,
+} from "./engines/baselineComparison.js";
 import type { GapAnalysisResult } from "./engines/gapAnalysis.js";
 import type { CandidateArchitecture } from "./engines/candidateSynthesis.js";
 import type { ValidationResult } from "./engines/validation.js";
@@ -123,12 +127,20 @@ export class BuilderPipeline {
       reviewResults,
       snap.intent,
     );
+    const baselineComparison = compareBaselineToProposals(
+      snap.canonical,
+      gaps,
+      candidates,
+      validationResults,
+      reviewResults,
+    );
 
     snap.gapAnalysis = gaps;
     snap.candidates = { candidates, notes };
     snap.validationResults = validationResults;
     snap.reviewResults = reviewResults;
     snap.recommendation = recommendation;
+    snap.baselineComparison = baselineComparison;
     await this.store.save(snap);
     return snap;
   }
@@ -176,6 +188,9 @@ export class BuilderPipeline {
       validations,
       reviews,
       recommendation,
+      baselineComparison: snap.baselineComparison as
+        | BaselineProposalComparison
+        | undefined,
     });
 
     recommendation.changeSet.exportArtifactIds = [artifact.id];

@@ -5,16 +5,19 @@
   "description": "Read-only, advisory-first AI organization architecture control plane (MVP)",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k \"npm:dev:api\" \"npm:dev:web\"",
+    "dev": "concurrently -k \"pnpm run dev:api\" \"pnpm run dev:web\"",
     "dev:api": "tsx watch src/api/server.ts",
     "dev:web": "vite",
     "build": "tsc -p tsconfig.build.json && vite build",
     "start": "NODE_ENV=production tsx src/api/server.ts",
+    "seed": "tsx scripts/seed.ts",
+    "smoke": "tsx scripts/smoke.ts",
     "test": "vitest run",
+    "test:e2e": "vitest run tests/e2e.http.journey.test.ts",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.web.json --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run test"
   },
   "engines": {
     "node": ">=20"

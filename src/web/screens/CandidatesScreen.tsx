@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function CandidatesScreen() {
   const { snap } = useWorkspace();
@@ -10,15 +11,76 @@ export function CandidatesScreen() {
   }
 
   const { candidates, notes } = snap.candidates;
+  const comparison = snap.baselineComparison;
 
   return (
     <div>
       <h1>Candidates & Validation</h1>
       <p className="lede">
-        At least two template-backed architectures with trade-offs. Validation is
+        Compare the current baseline to at least two template-backed proposals. Validation is
         declared-fidelity static/scenario checking — not full behavioral prediction.
       </p>
+      <JourneyNav current="/candidates" />
       <p className="mono">{notes}</p>
+
+      {comparison && (
+        <div className="panel">
+          <h2>Baseline vs proposals</h2>
+          <p>{comparison.notes}</p>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>View</th>
+                <th>Critical gaps</th>
+                <th>Missing contracts</th>
+                <th>Approval gate</th>
+                <th>Orphans / cycle</th>
+                <th>Review</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <EvidenceBadge status="observation" /> current baseline
+                </td>
+                <td className="mono">{comparison.baseline.criticalGapCount}</td>
+                <td className="mono">{comparison.baseline.missingContracts}</td>
+                <td className="mono">
+                  {comparison.baseline.hasApprovalGate ? "yes" : "no"}
+                </td>
+                <td className="mono">
+                  orphans={comparison.baseline.orphanWorkerNodes} cycle=
+                  {comparison.baseline.circularDependency ? "yes" : "no"}
+                </td>
+                <td className="mono">n/a (as-is)</td>
+              </tr>
+              {comparison.proposals.map((p) => (
+                <tr key={p.candidateId}>
+                  <td>
+                    <EvidenceBadge status="recommendation" /> {p.name}
+                  </td>
+                  <td className="mono" colSpan={3}>
+                    remediates: {p.remediates.join("; ") || "—"}
+                  </td>
+                  <td className="mono">
+                    rel={p.tradeOffs.reliability} cost={p.tradeOffs.cost} lat=
+                    {p.tradeOffs.latency}
+                  </td>
+                  <td>
+                    <span className={`badge ${p.reviewStatus}`}>{p.reviewStatus}</span>{" "}
+                    <span className="mono">{p.weightedScore.toFixed(2)}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <ul className="mono">
+            {comparison.proposals.map((p) => (
+              <li key={`${p.candidateId}-vs`}>{p.vsBaseline}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="compare">
         {candidates.map((c) => {

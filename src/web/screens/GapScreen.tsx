@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function GapScreen() {
   const { snap, setSnap, workspaceId } = useWorkspace();
+  const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,6 +20,7 @@ export function GapScreen() {
     try {
       const next = await api.analyze(workspaceId);
       setSnap(next);
+      nav("/candidates");
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -32,11 +36,17 @@ export function GapScreen() {
       <p className="lede">
         Deterministic comparison of the canonical model against stated intent/constraints
         for reliability / capability coverage. Cost and latency are recorded as trade-offs only.
+        Running analysis also generates candidates, validation, baseline comparison, and review.
       </p>
+      <JourneyNav
+        current="/gaps"
+        nextDisabled={!gaps}
+        nextHint="Run analysis engines to unlock candidates"
+      />
 
       <div className="row">
         <button disabled={busy} onClick={() => void run()}>
-          {gaps ? "Re-run gap + candidate + validation + review" : "Run analysis engines"}
+          {gaps ? "Re-run full analysis pipeline" : "Run analysis engines"}
         </button>
         <span className="mono">objective=reliability_capability_coverage</span>
       </div>

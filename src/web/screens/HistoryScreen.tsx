@@ -1,5 +1,6 @@
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function HistoryScreen() {
   const { snap } = useWorkspace();
@@ -12,6 +13,7 @@ export function HistoryScreen() {
         Immutable local record of decisions and exported plans. Outcomes do not mutate
         connected systems.
       </p>
+      <JourneyNav current="/history" />
 
       <h2>Change sets</h2>
       {snap.changeHistory.length === 0 && (

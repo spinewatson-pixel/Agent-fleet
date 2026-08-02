@@ -113,6 +113,30 @@ export type WorkspaceSnapshot = {
     changeSet: Record<string, unknown>;
     traceChain: string[];
   };
+  baselineComparison?: {
+    baseline: {
+      label: string;
+      criticalGapCount: number;
+      highGapCount: number;
+      missingContracts: number;
+      hasApprovalGate: boolean;
+      orphanWorkerNodes: number;
+      circularDependency: boolean;
+      summary: string;
+    };
+    proposals: Array<{
+      candidateId: string;
+      name: string;
+      remediates: string[];
+      residualRisks: string[];
+      validationOverallPass: boolean;
+      reviewStatus: "PASS" | "BLOCKED";
+      weightedScore: number;
+      tradeOffs: Record<string, number>;
+      vsBaseline: string;
+    }>;
+    notes: string;
+  };
   changeHistory: Array<Record<string, unknown>>;
   exports: Array<{
     id: string;

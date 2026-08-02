@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceLegend } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function ImportScreen() {
-  const { setWorkspaceId, setSnap } = useWorkspace();
+  const { setWorkspaceId, setSnap, snap } = useWorkspace();
   const nav = useNavigate();
   const [content, setContent] = useState("");
   const [format, setFormat] = useState<"yaml" | "json">("yaml");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [seeded, setSeeded] = useState<Array<{ organizationId: string; name: string }>>(
+    [],
+  );
+
+  useEffect(() => {
+    void api
+      .list()
+      .then((rows) => setSeeded(rows))
+      .catch(() => setSeeded([]));
+  }, [snap?.organizationId]);
 
   async function loadDemo() {
     setBusy(true);
@@ -50,6 +61,7 @@ export function ImportScreen() {
         normalizes into a canonical registry. Nothing is deployed; discovery is read-only.
       </p>
       <EvidenceLegend />
+      <JourneyNav current="/" nextDisabled={!snap} nextHint="Import an organization first" />
 
       <div className="panel">
         <div className="row">
@@ -58,6 +70,28 @@ export function ImportScreen() {
           </button>
           <span className="mono">fixtures/demo-org.yaml · seeded defects included</span>
         </div>
+        <p className="mono" style={{ marginTop: "0.75rem" }}>
+          Or seed from CLI: <code>pnpm seed</code> then open a workspace below.
+        </p>
+        {seeded.length > 0 && (
+          <ul>
+            {seeded.map((w) => (
+              <li key={w.organizationId}>
+                <button
+                  className="secondary"
+                  disabled={busy}
+                  onClick={() => {
+                    setWorkspaceId(w.organizationId);
+                    nav("/map");
+                  }}
+                >
+                  Open {w.name}
+                </button>{" "}
+                <span className="mono">{w.organizationId}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="panel">

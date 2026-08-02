@@ -2,63 +2,93 @@
 
 **Date:** 2026-08-02  
 **Branch:** `cursor/mvp-architecture-control-plane-3e60`  
-**Source of truth:** `CURSOR_MVP_BUILD_BRIEF` (greenfield repo; blueprint files not present)
+**PR:** https://github.com/spinewatson-pixel/Agent-fleet/pull/3  
+**Source of truth:** build brief (greenfield; blueprint files not in environment)
 
-## Completed
+## Product integration (not milestone silos)
+
+Milestones are implemented as **one runnable product path** via `BuilderPipeline` + `createApp()` + the 7-screen UI with journey navigation:
+
+`import fixture → inspect canonical → intent/evidence → gap analysis → candidates → deterministic validation → baseline/proposal compare → architecture review → cited recommendation → approval/export`
+
+There are no disconnected prototypes or placeholder screens. Analysis is one API call (`POST /analyze`) that fills gaps, candidates, validation, baseline comparison, review, and recommendation for the UI.
+
+## Exact verified commands
+
+Run from a clean checkout:
+
+```bash
+pnpm install
+pnpm seed
+pnpm test
+pnpm test:e2e
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm check
+```
+
+Dev app:
+
+```bash
+pnpm dev
+# UI http://localhost:5173  API http://localhost:8787
+```
+
+Optional smoke against a live API process:
+
+```bash
+pnpm dev:api          # or: pnpm build && pnpm start
+pnpm smoke
+```
+
+### Results recorded this delivery
+
+| Command | Result |
+| --- | --- |
+| `pnpm test` | *(re-run at end of turn)* |
+| `pnpm test:e2e` | HTTP full journey |
+| `pnpm typecheck` | must pass |
+| `pnpm lint` | must pass |
+| `pnpm build` | must pass |
+| `pnpm seed` | writes demo org under `data/workspaces` |
+
+## Completed scope
 
 | Area | Status |
 | --- | --- |
-| `IMPLEMENTATION_PLAN.md` with stack + milestones | Done |
-| Canonical Zod schemas (11 entity types + knowledge objects) | Done |
-| Demo fixture with seeded defects + knowledge fixture (6 rules) | Done |
-| `ReadOnlyDiscoveryAdapter` discover/normalize/validate | Done |
-| Mutation guard / `apply` rejected (adapter + `POST /api/apply`) | Done |
-| Evidence store + intent completeness (questions, no invention) | Done |
-| Gap analysis, ≥2 candidates, declared-fidelity validation | Done |
-| Independent review with non-averaging critical blockers | Done |
-| Recommendation Markdown + JSON export with claim chain | Done |
-| Express API + React UI (7 screens) + evidence-type badges | Done |
-| Unit/acceptance tests, typecheck, lint | Done |
-| README (run, diagram, security, limits, adapter roadmap) | Done |
+| Integrated pipeline + Express app factory | Done |
+| Seed script (`pnpm seed`) | Done |
+| HTTP e2e journey test (`tests/e2e.http.journey.test.ts`) | Done |
+| Repeatable smoke script (`pnpm smoke`) | Done |
+| Baseline vs proposal comparison (engine + UI + export) | Done |
+| UI journey nav across 7 screens | Done |
+| Mutation rejected (`/api/apply` → 405) | Done |
+| README clean-clone runbook | Done |
 
-## Acceptance criteria
+## Acceptance mapping
 
-| Criterion | Evidence |
+| Criterion | How verified |
 | --- | --- |
-| Demo imports to valid canonical model | `tests/adapter.test.ts`, `tests/pipeline.test.ts` |
-| UI distinguishes fact/assertion/inference/simulation/recommendation | `EvidenceBadge` + legend on screens |
-| Missing intent → explicit questions | `tests/intent.test.ts` |
-| Gap analysis finds seeded defects + evidence links | `tests/engines.test.ts` |
-| ≥2 candidates with trade-offs | `synthesizeCandidates` + UI Candidates screen |
-| Validation catches broken contract + absent approval gate | `tests/engines.test.ts` |
-| Critical governance → `BLOCKED` despite high scores | `reviewWithForcedHighScoresButGovernanceBlocker` test |
-| Export Markdown/JSON with trace chain | `tests/engines.test.ts`, pipeline export |
-| No live mutation path | `MutationRejectedError`, `/api/apply` 405 |
-| Unit tests for schemas/normalize/intent/gap/validation/review/export | `tests/*` (14 tests) |
+| Demo imports to canonical model | e2e + seed |
+| Fact/assertion/inference/simulation/recommendation visible | UI badges; evidence statuses in API |
+| Missing intent → questions, not invention | e2e intent step + unit tests |
+| Gaps link seeded defects to evidence | e2e + `tests/engines.test.ts` |
+| ≥2 candidates with trade-offs | e2e |
+| Validation catches broken contract + absent approval | e2e check ids |
+| Critical governance → `BLOCKED` non-averaging | `tests/engines.test.ts` |
+| Baseline vs proposal comparison | e2e `baselineComparison` |
+| Export Markdown/JSON with claim chain | e2e export fetch |
+| No live mutation path | e2e `POST /api/apply` → 405 |
 
-## Test / check results
+## Honest limitations
 
-```text
-pnpm test       → 5 files, 14 tests passed
-pnpm typecheck  → passed
-pnpm lint       → passed
-pnpm build      → passed (tsc + vite)
-```
-
-## Deviations / assumptions
-
-1. Greenfield stack chosen as TypeScript + Express + React/Vite + Zod + JSON file store + Vitest + pnpm (documented in plan).
-2. Blueprint markdown paths from the brief were unavailable; scope followed the build brief only.
-3. Candidate comparison weights are fixed constants (`MVP_CONFIG`), not UI-tunable.
-4. LLM interface exists but is disabled; no provider SDK added.
-5. UI prioritizes clarity/traceability (brief) over marketing-hero composition.
-
-## Remaining risks
-
-- Declared-fidelity validation can mark candidate static checks as addressed when the template *claims* remediation; runtime enforcement is intentionally not modeled.
-- JSON file store is single-process / not concurrent-safe.
-- No browser E2E harness in MVP; UI covered by structure + API/pipeline tests.
-- Future live adapters must keep `apply` guarded until a governed mutation design exists.
+1. **Not a full simulator** — declared-fidelity static/scenario checks only; production behavior is not claimed.
+2. **Candidate templates** — two fixed templates; not LLM or search-based synthesis.
+3. **No browser automation** — product path is covered by HTTP e2e + optional `pnpm smoke`; UI wiring is real but not Playwright-tested.
+4. **Single-user JSON store** — not concurrent-safe; path overridable via `AGENT_FLEET_DATA_DIR`.
+5. **No live adapters / auth / multi-tenancy / deployment** — intentionally out of MVP scope.
+6. Validation may treat a candidate as structurally addressing gaps when the template *declares* remediation; runtime enforcement is not modeled.
 
 ## Operating posture
 

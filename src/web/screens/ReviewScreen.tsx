@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { JourneyNav } from "../components/JourneyNav";
 
 export function ReviewScreen() {
   const { snap, setSnap, workspaceId } = useWorkspace();
+  const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,6 +23,7 @@ export function ReviewScreen() {
     try {
       const next = await api.decide(workspaceId, decision);
       setSnap(next);
+      if (decision === "approved") nav("/history");
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -39,6 +42,22 @@ export function ReviewScreen() {
         non-averaging: any blocker yields BLOCKED regardless of score. Approval is
         advisory only — no deployment path exists.
       </p>
+      <JourneyNav current="/review" />
+
+      {snap.baselineComparison && (
+        <div className="panel">
+          <h2>Baseline vs chosen proposal</h2>
+          <p className="mono">{snap.baselineComparison.baseline.summary}</p>
+          <ul>
+            {snap.baselineComparison.proposals.map((p) => (
+              <li key={p.candidateId}>
+                <span className={`badge ${p.reviewStatus}`}>{p.reviewStatus}</span>{" "}
+                {p.name}: {p.vsBaseline}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="panel">
         <p className="mono">trace: {rec.traceChain.join(" → ")}</p>
