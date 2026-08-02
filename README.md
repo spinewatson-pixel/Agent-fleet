@@ -2,6 +2,10 @@
 
 One integrated, **read-only / advisory-only** architecture control plane. Import an AI organization, inspect the canonical model, reconstruct intent with explicit uncertainty, run deterministic gap/candidate/validation/review engines, compare baseline vs proposals, and export a cited recommendation. **No deployment or mutation of connected systems.**
 
+## Fortress Siege (game/)
+
+A standalone, single-file browser game unrelated to the product above — open `game/index.html` directly, or serve it (`npx serve game`). You command Fortress Kaldris against endless waves of raiders: WASD to move, mouse to aim, click to fire, `R` to reload, `Q` for an artillery strike. No build step required.
+
 ## Clean clone → runnable product
 
 ```bash
