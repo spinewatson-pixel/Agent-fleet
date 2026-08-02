@@ -26,6 +26,7 @@ export interface WorkspaceSnapshot {
   reviewResults?: unknown;
   recommendation?: unknown;
   baselineComparison?: unknown;
+  eligibility?: unknown;
   changeHistory: ChangeSet[];
   exports: ExportArtifact[];
   updatedAt: string;

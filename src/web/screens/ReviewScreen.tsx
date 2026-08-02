@@ -65,10 +65,26 @@ export function ReviewScreen() {
           <EvidenceBadge status="recommendation" /> {rec.rationale}
         </p>
         <p className="mono">
-          chosen={rec.chosenCandidateId ?? "none"} · rejected=
+          selection={rec.selectionStatus ?? "n/a"} · chosen=
+          {rec.chosenCandidateId ?? "none"} · rejected=
           {rec.rejectedCandidateIds.join(", ") || "none"} · approval=
           {rec.approvalState}
         </p>
+        {rec.selectionStatus === "BLOCKED_NO_ELIGIBLE_CANDIDATE" && (
+          <div>
+            <p className="error">
+              No eligible candidate — approve/export is blocked. Remediate validation
+              failures and critical findings first.
+            </p>
+            <ul>
+              {(rec.eligibility?.blockReasons ?? []).slice(0, 12).map((r) => (
+                <li key={r} className="mono">
+                  {r}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {snap.reviewResults.map((r) => (
@@ -119,7 +135,14 @@ export function ReviewScreen() {
       </ul>
 
       <div className="row">
-        <button disabled={busy} onClick={() => void decide("approved")}>
+        <button
+          disabled={
+            busy ||
+            rec.selectionStatus === "BLOCKED_NO_ELIGIBLE_CANDIDATE" ||
+            !rec.chosenCandidateId
+          }
+          onClick={() => void decide("approved")}
+        >
           Approve & export plan
         </button>
         <button
@@ -129,7 +152,9 @@ export function ReviewScreen() {
         >
           Reject
         </button>
-        <span className="mono">human review required · no approval = no deployment</span>
+        <span className="mono">
+          human review required · eligibility gate enforced · no approval = no deployment
+        </span>
       </div>
       {error && <p className="error">{error}</p>}
 

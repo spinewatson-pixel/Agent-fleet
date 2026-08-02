@@ -116,7 +116,10 @@ describe("HTTP end-to-end advisory journey", () => {
     expect(intented.data.intent.unresolvedQuestions).toEqual([]);
     expect(
       intented.data.canonical.evidence.some(
-        (e) => e.sourceType === "owner_statement" && e.status === "assertion",
+        (e) =>
+          e.sourceType === "owner_statement" &&
+          e.status === "assertion" &&
+          (e as { confidence?: string }).confidence === "medium",
       ),
     ).toBe(true);
 
@@ -155,6 +158,7 @@ describe("HTTP end-to-end advisory journey", () => {
       recommendation: {
         chosenCandidateId: string | null;
         rejectedCandidateIds: string[];
+        selectionStatus: string;
         rationale: string;
         uncertainty: string[];
         traceChain: string[];
@@ -190,7 +194,7 @@ describe("HTTP end-to-end advisory journey", () => {
       analyzed.data.baselineComparison.proposals.every((p) => p.vsBaseline.length > 0),
     ).toBe(true);
 
-    // Architecture review present
+    // Architecture review present; demo must not select ineligible candidates
     expect(analyzed.data.reviewResults.length).toBeGreaterThanOrEqual(2);
     expect(analyzed.data.recommendation.traceChain).toEqual([
       "Mission",
@@ -203,13 +207,47 @@ describe("HTTP end-to-end advisory journey", () => {
       "Approval/Outcome",
     ]);
     expect(analyzed.data.recommendation.rationale.length).toBeGreaterThan(0);
+    expect(analyzed.data.recommendation.selectionStatus).toBe(
+      "BLOCKED_NO_ELIGIBLE_CANDIDATE",
+    );
+    expect(analyzed.data.recommendation.chosenCandidateId).toBeNull();
 
-    // 9) Approval / export artifact
+    // Demo approve/export blocked by eligibility gate
+    const blocked = await api<{ error: string }>("POST", `/api/workspaces/${id}/decision`, {
+      decision: "approved",
+    });
+    expect(blocked.status).toBe(400);
+    expect(blocked.data.error).toMatch(/eligibility gate/i);
+
+    // Eligible fixture can approve/export
+    const eligible = await api<{ organizationId: string }>(
+      "POST",
+      "/api/workspaces/import/fixture/eligible-org.yaml",
+    );
+    expect(eligible.status).toBe(201);
+    const eid = eligible.data.organizationId;
+    await api("PUT", `/api/workspaces/${eid}/intent`, {
+      mission: "Reliable claims summarization under human governance",
+      successMeasures: ["usable draft rate >= 0.98"],
+      constraints: ["human approval before notify"],
+      riskTolerance: "low",
+      preserveList: ["retrieval read-only authority"],
+      confirmed: true,
+    });
+    const eligibleAnalyzed = await api<{
+      recommendation: {
+        chosenCandidateId: string | null;
+        selectionStatus: string;
+      };
+    }>("POST", `/api/workspaces/${eid}/analyze`);
+    expect(eligibleAnalyzed.data.recommendation.selectionStatus).toBe("SELECTED");
+    expect(eligibleAnalyzed.data.recommendation.chosenCandidateId).toBeTruthy();
+
     const decided = await api<{
       exports: Array<{ id: string; markdown: string; json: Record<string, unknown> }>;
       changeHistory: Array<{ approvalState: string; outcome?: string }>;
       recommendation: { approvalState: string };
-    }>("POST", `/api/workspaces/${id}/decision`, { decision: "approved" });
+    }>("POST", `/api/workspaces/${eid}/decision`, { decision: "approved" });
     expect(decided.status).toBe(200);
     expect(decided.data.exports.length).toBe(1);
     expect(decided.data.exports[0].markdown).toContain("Trace chain");
@@ -221,16 +259,15 @@ describe("HTTP end-to-end advisory journey", () => {
     expect(decided.data.changeHistory[0].approvalState).toBe("exported");
     expect(decided.data.changeHistory[0].outcome).toMatch(/No deployment/);
 
-    // Fetch export by id
     const exportId = decided.data.exports[0].id;
     const artifact = await api<{ markdown: string }>(
       "GET",
-      `/api/workspaces/${id}/exports/${exportId}`,
+      `/api/workspaces/${eid}/exports/${exportId}`,
     );
     expect(artifact.status).toBe(200);
     expect(artifact.data.markdown).toContain("Staged migration plan");
 
-    // 10) Mutation path rejected
+    // Mutation path rejected
     const apply = await api<{ code: string }>("POST", "/api/apply", { change: true });
     expect(apply.status).toBe(405);
     expect(apply.data.code).toBe("MUTATION_REJECTED");

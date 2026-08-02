@@ -5,17 +5,22 @@
 **PR:** https://github.com/spinewatson-pixel/Agent-fleet/pull/3  
 **Source of truth:** build brief (greenfield; blueprint files not in environment)
 
-## Product integration (not milestone silos)
+## Release-blocking repair (eligibility gate)
 
-Milestones are implemented as **one runnable product path** via `BuilderPipeline` + `createApp()` + the 7-screen UI with journey navigation:
+A **single eligibility gate** (`src/core/engines/eligibility.ts`) is now used by recommendation, review surfacing, approval, and export.
 
-`import fixture → inspect canonical → intent/evidence → gap analysis → candidates → deterministic validation → baseline/proposal compare → architecture review → cited recommendation → approval/export`
+A candidate is eligible only when:
+1. Validation has **zero failed checks** (`overallPass`)
+2. **No unresolved critical** gap findings remain for that candidate
+3. Independent review is not `BLOCKED`
 
-There are no disconnected prototypes or placeholder screens. Analysis is one API call (`POST /analyze`) that fills gaps, candidates, validation, baseline comparison, review, and recommendation for the UI.
+If none are eligible → `selectionStatus=BLOCKED_NO_ELIGIBLE_CANDIDATE`, `chosenCandidateId=null`, explicit reasons; **no fallback** to an invalid candidate. Approve/export of a recommendation throws / HTTP 400.
+
+Also fixed:
+- Validation separates **current-state observations** from **candidate assumptions**
+- Owner assertions are **medium** confidence (not high) without corroborating observation
 
 ## Exact verified commands
-
-Run from a clean checkout:
 
 ```bash
 pnpm install
@@ -38,58 +43,45 @@ pnpm dev
 Optional smoke against a live API process:
 
 ```bash
-pnpm dev:api          # or: pnpm build && pnpm start
-pnpm smoke
+pnpm start                # or pnpm dev:api
+pnpm smoke                # demo blocked + eligible fixture export
 ```
 
 ### Results recorded this delivery
 
 | Command | Result |
 | --- | --- |
-| `pnpm test` | *(re-run at end of turn)* |
-| `pnpm test:e2e` | HTTP full journey |
-| `pnpm typecheck` | must pass |
-| `pnpm lint` | must pass |
-| `pnpm build` | must pass |
-| `pnpm seed` | writes demo org under `data/workspaces` |
+| `pnpm test` | **22 passed** (7 files; includes eligibility regressions + HTTP e2e) |
+| `pnpm test:e2e` | **1 passed** — demo blocked; eligible fixture exported |
+| `pnpm typecheck` | passed |
+| `pnpm lint` | passed |
+| `pnpm build` | passed (tsc + vite) |
+| `pnpm seed` | seeds demo org (intentionally ineligible until remediated) |
+| `pnpm start` + `pnpm smoke` | **SMOKE_OK** (demo blocked; eligible org exported) |
 
-## Completed scope
+## Regression coverage (release-blocking)
 
-| Area | Status |
-| --- | --- |
-| Integrated pipeline + Express app factory | Done |
-| Seed script (`pnpm seed`) | Done |
-| HTTP e2e journey test (`tests/e2e.http.journey.test.ts`) | Done |
-| Repeatable smoke script (`pnpm smoke`) | Done |
-| Baseline vs proposal comparison (engine + UI + export) | Done |
-| UI journey nav across 7 screens | Done |
-| Mutation rejected (`/api/apply` → 405) | Done |
-| README clean-clone runbook | Done |
+| # | Case | Test |
+| --- | --- | --- |
+| 1 | Demo failing candidates cannot be approved/exported | `tests/eligibility.regression.test.ts` |
+| 2 | Eligible validated candidate can be approved/exported | same + `fixtures/eligible-org.yaml` |
+| 3 | No-candidate condition blocks cleanly with reasons | same |
+| — | Owner assertion ≠ high confidence without corroboration | same |
+| — | Current-state vs candidate assumptions separated | same + validation engine |
 
-## Acceptance mapping
+## Product path
 
-| Criterion | How verified |
-| --- | --- |
-| Demo imports to canonical model | e2e + seed |
-| Fact/assertion/inference/simulation/recommendation visible | UI badges; evidence statuses in API |
-| Missing intent → questions, not invention | e2e intent step + unit tests |
-| Gaps link seeded defects to evidence | e2e + `tests/engines.test.ts` |
-| ≥2 candidates with trade-offs | e2e |
-| Validation catches broken contract + absent approval | e2e check ids |
-| Critical governance → `BLOCKED` non-averaging | `tests/engines.test.ts` |
-| Baseline vs proposal comparison | e2e `baselineComparison` |
-| Export Markdown/JSON with claim chain | e2e export fetch |
-| No live mutation path | e2e `POST /api/apply` → 405 |
+`import → inspect canonical → intent/evidence → gaps → candidates → validation → baseline/proposal → review → **eligibility gate** → recommendation → approval/export (only if eligible)`
 
 ## Honest limitations
 
-1. **Not a full simulator** — declared-fidelity static/scenario checks only; production behavior is not claimed.
-2. **Candidate templates** — two fixed templates; not LLM or search-based synthesis.
-3. **No browser automation** — product path is covered by HTTP e2e + optional `pnpm smoke`; UI wiring is real but not Playwright-tested.
-4. **Single-user JSON store** — not concurrent-safe; path overridable via `AGENT_FLEET_DATA_DIR`.
-5. **No live adapters / auth / multi-tenancy / deployment** — intentionally out of MVP scope.
-6. Validation may treat a candidate as structurally addressing gaps when the template *declares* remediation; runtime enforcement is not modeled.
+1. **Not a full simulator** — declared-fidelity static/scenario checks only.
+2. **Candidate projected pass** may credit explicit template remediations as assumptions; those are labeled and are not current-state evidence.
+3. **Demo org is intentionally ineligible** after analysis (seeded defects remain unresolved under projected validation). Use `fixtures/eligible-org.yaml` for a selectable path.
+4. **No browser automation** — HTTP e2e + `pnpm smoke` cover the product path.
+5. **Single-user JSON store** — not concurrent-safe; `AGENT_FLEET_DATA_DIR` override supported.
+6. No live adapters / auth / multi-tenancy / deployment.
 
 ## Operating posture
 
-**Advisory-only. Read-only discovery. Deterministic engines. Traceable exports. No deployment.**
+**Advisory-only. Read-only discovery. Deterministic engines. Eligibility-gated recommendation/export. No deployment.**

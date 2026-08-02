@@ -143,9 +143,21 @@ export function CandidatesScreen() {
                       <td className="mono">{ch.kind}</td>
                       <td>
                         <span className={`badge ${ch.pass ? "ok" : "critical"}`}>
-                          {ch.pass ? "pass" : "fail"}
+                          projected={ch.pass ? "pass" : "fail"}
+                        </span>{" "}
+                        <EvidenceBadge status="observation" />{" "}
+                        <span className="mono">
+                          current=
+                          {"currentStatePass" in ch
+                            ? String((ch as { currentStatePass?: boolean }).currentStatePass)
+                            : "n/a"}
                         </span>
                         <div className="mono">{ch.observations[0]}</div>
+                        {(ch.assumptions?.length ?? 0) > 0 && (
+                          <div className="mono">
+                            assumption: {ch.assumptions[0]}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}

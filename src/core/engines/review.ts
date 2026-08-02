@@ -157,6 +157,30 @@ export function reviewCandidate(
     .filter((d) => d.blocker)
     .map((d) => d.blockerReason ?? `${d.dimension} blocker`);
 
+  // Eligibility-aligned: failed validation checks are non-averaging review blockers.
+  if (!validation.overallPass) {
+    const failed = validation.checks.filter((c) => !c.pass).map((c) => c.id);
+    blockers.push(
+      `Validation failed checks (ineligible): ${failed.join(", ") || "overallPass=false"}`,
+    );
+  }
+  const unresolvedCritical = gaps.findings.filter((f) => f.severity === "critical");
+  for (const f of unresolvedCritical) {
+    const remediated =
+      (f.category === "contract" &&
+        f.entityIds.some((id) => candidate.affectedEntityIds.includes(id))) ||
+      ((f.category === "governance" || f.id === "gap_approval_gate") &&
+        (`${candidate.summary} ${candidate.benefits.join(" ")}`
+          .toLowerCase()
+          .includes("approval gate") ||
+          `${candidate.summary} ${candidate.benefits.join(" ")}`
+            .toLowerCase()
+            .includes("human approval")));
+    if (!remediated) {
+      blockers.push(`Unresolved critical finding: ${f.id} — ${f.title}`);
+    }
+  }
+
   const averageScore =
     dimensions.reduce((s, d) => s + d.score, 0) / dimensions.length;
 

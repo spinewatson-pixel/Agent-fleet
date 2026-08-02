@@ -21,6 +21,10 @@ import {
   compareBaselineToProposals,
   type BaselineProposalComparison,
 } from "./engines/baselineComparison.js";
+import {
+  assertEligibleForApprovalExport,
+  runEligibilityGate,
+} from "./engines/eligibility.js";
 import type { GapAnalysisResult } from "./engines/gapAnalysis.js";
 import type { CandidateArchitecture } from "./engines/candidateSynthesis.js";
 import type { ValidationResult } from "./engines/validation.js";
@@ -40,9 +44,13 @@ export class BuilderPipeline {
   }
 
   async importDemo(): Promise<WorkspaceSnapshot> {
-    const demoPath = path.resolve(process.cwd(), "fixtures", "demo-org.yaml");
-    const text = fs.readFileSync(demoPath, "utf8");
-    return this.importRaw(text, { label: "demo-org.yaml", format: "yaml" });
+    return this.importFixture("demo-org.yaml");
+  }
+
+  async importFixture(fileName: string): Promise<WorkspaceSnapshot> {
+    const fixturePath = path.resolve(process.cwd(), "fixtures", fileName);
+    const text = fs.readFileSync(fixturePath, "utf8");
+    return this.importRaw(text, { label: fileName, format: "yaml" });
   }
 
   async importRaw(
@@ -91,10 +99,11 @@ export class BuilderPipeline {
         evidenceIds: [],
         sourceType: "owner_statement",
         status: "assertion",
-        summary: "Owner updated intent/constraints form",
+        summary: "Owner updated intent/constraints form (assertion; not corroborated observation)",
         collectedAt: ts,
         freshness: "at_statement",
-        confidence: "high",
+        // Owner assertions are not high-confidence without corroborating observation.
+        confidence: "medium",
         lineage: [],
         details: { fields: Object.keys(input) },
       });
@@ -124,7 +133,9 @@ export class BuilderPipeline {
     const recommendation = buildRecommendation(
       snap.canonical,
       candidates,
+      validationResults,
       reviewResults,
+      gaps,
       snap.intent,
     );
     const baselineComparison = compareBaselineToProposals(
@@ -141,6 +152,7 @@ export class BuilderPipeline {
     snap.reviewResults = reviewResults;
     snap.recommendation = recommendation;
     snap.baselineComparison = baselineComparison;
+    snap.eligibility = recommendation.eligibility;
     await this.store.save(snap);
     return snap;
   }
@@ -163,20 +175,64 @@ export class BuilderPipeline {
     const validations = snap.validationResults as ValidationResult[];
     const reviews = snap.reviewResults as ReviewResult[];
 
-    const approvalState =
-      decision === "approved" ? ("exported" as const) : ("rejected" as const);
+    // Re-run gate at approval time — never trust a stale chosen id.
+    const gate = runEligibilityGate({
+      candidates: candidatesBundle.candidates,
+      validations,
+      reviews,
+      gaps,
+    });
+    const recommendationFresh: RecommendationResult = {
+      ...base,
+      eligibility: gate,
+      selectionStatus: gate.selectionStatus,
+      chosenCandidateId: gate.chosenCandidateId,
+      rejectedCandidateIds: candidatesBundle.candidates
+        .filter((c) => c.id !== gate.chosenCandidateId)
+        .map((c) => c.id),
+    };
+
+    if (decision === "approved") {
+      const gateCheck = assertEligibleForApprovalExport({
+        chosenCandidateId: recommendationFresh.chosenCandidateId,
+        gate,
+      });
+      if (!gateCheck.ok) {
+        throw new Error(
+          `Approval/export blocked by eligibility gate: ${gateCheck.reasons.join("; ")}`,
+        );
+      }
+    }
+
+    if (decision === "rejected") {
+      const recommendation: RecommendationResult = {
+        ...recommendationFresh,
+        approvalState: "rejected",
+        changeSet: {
+          ...recommendationFresh.changeSet,
+          approvalState: "rejected",
+          outcome: "Human rejected recommendation. No deployment performed.",
+          updatedAt: nowIso(),
+          candidateId: recommendationFresh.chosenCandidateId ?? undefined,
+        },
+      };
+      await this.store.appendChange(organizationId, recommendation.changeSet);
+      const refreshed = await this.require(organizationId);
+      refreshed.recommendation = recommendation;
+      refreshed.eligibility = gate;
+      await this.store.save(refreshed);
+      return refreshed;
+    }
 
     const recommendation: RecommendationResult = {
-      ...base,
-      approvalState,
+      ...recommendationFresh,
+      approvalState: "exported",
       changeSet: {
-        ...base.changeSet,
-        approvalState,
-        outcome:
-          decision === "approved"
-            ? "Human approved advisory export. No deployment performed."
-            : "Human rejected recommendation. No deployment performed.",
+        ...recommendationFresh.changeSet,
+        approvalState: "exported",
+        outcome: "Human approved advisory export. No deployment performed.",
         updatedAt: nowIso(),
+        candidateId: recommendationFresh.chosenCandidateId ?? undefined,
       },
     };
 
@@ -206,6 +262,7 @@ export class BuilderPipeline {
 
     const refreshed = await this.require(organizationId);
     refreshed.recommendation = recommendation;
+    refreshed.eligibility = gate;
     await this.store.save(refreshed);
     return refreshed;
   }

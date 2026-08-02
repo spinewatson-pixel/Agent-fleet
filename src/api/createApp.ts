@@ -62,6 +62,20 @@ export function createApp(options?: { dataDir?: string }): AppBundle {
     }
   });
 
+  app.post("/api/workspaces/import/fixture/:name", async (req, res) => {
+    try {
+      const name = req.params.name;
+      if (!/^[\w.-]+\.ya?ml$/i.test(name)) {
+        res.status(400).json({ error: "invalid fixture name" });
+        return;
+      }
+      const snap = await pipeline.importFixture(name);
+      res.status(201).json(snap);
+    } catch (err) {
+      res.status(400).json({ error: errorMessage(err) });
+    }
+  });
+
   app.post("/api/workspaces/import", async (req, res) => {
     try {
       const body = req.body as

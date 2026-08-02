@@ -11,10 +11,18 @@ import type { CandidateArchitecture } from "./candidateSynthesis.js";
 import type { ValidationResult } from "./validation.js";
 import type { ReviewResult } from "./review.js";
 import type { BaselineProposalComparison } from "./baselineComparison.js";
+import {
+  assertEligibleForApprovalExport,
+  runEligibilityGate,
+  type EligibilityGateResult,
+  type SelectionStatus,
+} from "./eligibility.js";
 
 export interface RecommendationResult {
   chosenCandidateId: string | null;
   rejectedCandidateIds: string[];
+  selectionStatus: SelectionStatus;
+  eligibility: EligibilityGateResult;
   rationale: string;
   uncertainty: string[];
   approvalState: ChangeSet["approvalState"];
@@ -31,18 +39,23 @@ export interface ExportArtifactContent {
 export function buildRecommendation(
   org: CanonicalOrganization,
   candidates: CandidateArchitecture[],
+  validations: ValidationResult[],
   reviews: ReviewResult[],
+  gaps: GapAnalysisResult,
   intent?: IntentProfile,
 ): RecommendationResult {
-  const passing = reviews
-    .filter((r) => r.status === "PASS")
-    .sort((a, b) => b.weightedScore - a.weightedScore);
+  const eligibility = runEligibilityGate({
+    candidates,
+    validations,
+    reviews,
+    gaps,
+  });
 
-  const chosen = passing[0];
-  const chosenCandidate = chosen
-    ? candidates.find((c) => c.id === chosen.candidateId) ?? null
+  const chosenCandidate = eligibility.chosenCandidateId
+    ? candidates.find((c) => c.id === eligibility.chosenCandidateId) ?? null
     : null;
 
+  // Never fall back to an ineligible / review-only PASS candidate.
   const rejected = candidates
     .filter((c) => c.id !== chosenCandidate?.id)
     .map((c) => c.id);
@@ -51,9 +64,11 @@ export function buildRecommendation(
     ...(intent?.unresolvedQuestions ?? []),
     "Validation is declared-fidelity only; not proof of production behavior.",
     "Cost and latency are trade-offs, not automatic optimization targets.",
+    "Owner assertions are not high-confidence without corroborating observation.",
   ];
 
   const ts = nowIso();
+  const blocked = eligibility.selectionStatus === "BLOCKED_NO_ELIGIBLE_CANDIDATE";
   const changeSet: ChangeSet = {
     id: newId("change"),
     schemaVersion: SCHEMA_VERSION,
@@ -63,17 +78,19 @@ export function buildRecommendation(
     evidenceIds: org.evidence.map((e) => e.id).slice(0, 5),
     proposal: chosenCandidate
       ? `Adopt advisory recommendation: ${chosenCandidate.name}`
-      : "No candidate cleared independent review; export blocked recommendation state.",
+      : "BLOCKED: no eligible candidate — approval/export of a recommendation is not permitted.",
     affectedEntityIds: chosenCandidate?.affectedEntityIds ?? [],
     predictedImpact: chosenCandidate
       ? `Reliability trade-off ${chosenCandidate.tradeOffs.reliability}; cost ${chosenCandidate.tradeOffs.cost}; latency ${chosenCandidate.tradeOffs.latency}.`
-      : "No deployable recommendation.",
+      : "No selectable recommendation.",
     approvalState: "draft",
     rollout: chosenCandidate
       ? "Staged: (1) contracts+owners (2) approval gate (3) evaluations (4) topology changes if any"
       : undefined,
     rollback: chosenCandidate?.reversibility,
-    outcome: undefined,
+    outcome: blocked
+      ? `Blocked/no-selection. Reasons: ${eligibility.blockReasons.slice(0, 5).join(" | ")}`
+      : undefined,
     candidateId: chosenCandidate?.id,
     exportArtifactIds: [],
   };
@@ -81,9 +98,13 @@ export function buildRecommendation(
   return {
     chosenCandidateId: chosenCandidate?.id ?? null,
     rejectedCandidateIds: rejected,
-    rationale: chosen
-      ? `Selected ${chosen.candidateId} with weighted score ${chosen.weightedScore.toFixed(2)} and status PASS. Alternatives retained for comparison.`
-      : `All candidates BLOCKED or unavailable. Critical blockers are non-averaging; human must remediate governance/contract issues.`,
+    selectionStatus: eligibility.selectionStatus,
+    eligibility,
+    rationale: chosenCandidate
+      ? `Selected eligible candidate ${chosenCandidate.id} via eligibility gate (validation pass, no unresolved critical findings, review PASS). Weighted score ${(
+          reviews.find((r) => r.candidateId === chosenCandidate.id)?.weightedScore ?? 0
+        ).toFixed(2)}.`
+      : `BLOCKED_NO_ELIGIBLE_CANDIDATE. ${eligibility.blockReasons[0] ?? "No eligible candidate."}`,
     uncertainty,
     approvalState: "draft",
     changeSet,
@@ -121,7 +142,21 @@ export function exportRecommendationArtifacts(input: {
     baselineComparison,
   } = input;
 
+  const gateCheck = assertEligibleForApprovalExport({
+    chosenCandidateId: recommendation.chosenCandidateId,
+    gate: recommendation.eligibility,
+  });
+  if (!gateCheck.ok) {
+    throw new Error(
+      `Export blocked by eligibility gate: ${gateCheck.reasons.join("; ")}`,
+    );
+  }
+
   const chosen = candidates.find((c) => c.id === recommendation.chosenCandidateId);
+  if (!chosen) {
+    throw new Error("Export blocked: chosen eligible candidate missing from candidate set.");
+  }
+
   const id = newId("export");
 
   const json: Record<string, unknown> = {
@@ -130,6 +165,8 @@ export function exportRecommendationArtifacts(input: {
     generatedAt: nowIso(),
     operatingMode: "advisory_export_only",
     mutationAllowed: false,
+    selectionStatus: recommendation.selectionStatus,
+    eligibility: recommendation.eligibility,
     traceChain: recommendation.traceChain,
     problem: {
       organizationId: org.organization.id,
@@ -159,7 +196,7 @@ export function exportRecommendationArtifacts(input: {
     knowledgeCitations: KNOWLEDGE_OBJECTS.filter((k) =>
       [
         ...gaps.findings.flatMap((f) => f.knowledgeIds),
-        ...(chosen?.knowledgeIds ?? []),
+        ...chosen.knowledgeIds,
         ...reviews.flatMap((r) => r.knowledgeIds),
       ].includes(k.id),
     ),
@@ -170,62 +207,64 @@ export function exportRecommendationArtifacts(input: {
       ...c,
       review: reviews.find((r) => r.candidateId === c.id),
       validation: validations.find((v) => v.candidateId === c.id),
+      eligibility: recommendation.eligibility.assessments.find(
+        (a) => a.candidateId === c.id,
+      ),
     })),
     recommendation: {
       chosenCandidateId: recommendation.chosenCandidateId,
       rejectedCandidateIds: recommendation.rejectedCandidateIds,
+      selectionStatus: recommendation.selectionStatus,
       rationale: recommendation.rationale,
       uncertainty: recommendation.uncertainty,
       approvalState: recommendation.approvalState,
     },
     migrationPlan: {
-      stages: chosen
-        ? [
-            {
-              stage: 1,
-              name: "Contracts and ownership",
-              owner: org.organization.owners[0] ?? "owner_platform",
-              actions: [
-                "Author missing interface contract schemas",
-                "Assign owners to unowned capabilities",
-              ],
-              successMetrics: ["All interfaces have contractSchema", "No unowned capabilities"],
-            },
-            {
-              stage: 2,
-              name: "Approval gate",
-              owner: org.organization.owners[0] ?? "owner_platform",
-              actions: [
-                "Enable requiresHumanApprovalGate on governance policy",
-                "Wire notify path behind human approval",
-              ],
-              successMetrics: ["Approval scenario check passes"],
-              approvalGate: "Human architecture owner must approve before stage 3",
-            },
-            {
-              stage: 3,
-              name: "Evaluation and recovery",
-              owner: "owner_platform",
-              actions: [
-                "Add evaluation criteria to capabilities",
-                "Bound retries; break cyclic ack loops",
-              ],
-              successMetrics: ["Reliability target progress", "No unbounded retry loops"],
-            },
-            {
-              stage: 4,
-              name: chosen.template === "planner_worker_verifier" ? "Topology split" : "Stabilize",
-              owner: "owner_platform",
-              actions:
-                chosen.template === "planner_worker_verifier"
-                  ? ["Introduce planner/worker/verifier roles", "Retire orphan nodes"]
-                  : ["Monitor metrics", "Keep single workflow with new gates"],
-              successMetrics: ["Review status remains PASS", "Preserve list intact"],
-              rollback: chosen.reversibility,
-            },
-          ]
-        : [],
-      rollback: chosen?.reversibility ?? "N/A — no recommendation selected",
+      stages: [
+        {
+          stage: 1,
+          name: "Contracts and ownership",
+          owner: org.organization.owners[0] ?? "owner_platform",
+          actions: [
+            "Author missing interface contract schemas",
+            "Assign owners to unowned capabilities",
+          ],
+          successMetrics: ["All interfaces have contractSchema", "No unowned capabilities"],
+        },
+        {
+          stage: 2,
+          name: "Approval gate",
+          owner: org.organization.owners[0] ?? "owner_platform",
+          actions: [
+            "Enable requiresHumanApprovalGate on governance policy",
+            "Wire notify path behind human approval",
+          ],
+          successMetrics: ["Approval scenario check passes"],
+          approvalGate: "Human architecture owner must approve before stage 3",
+        },
+        {
+          stage: 3,
+          name: "Evaluation and recovery",
+          owner: "owner_platform",
+          actions: [
+            "Add evaluation criteria to capabilities",
+            "Bound retries; break cyclic ack loops",
+          ],
+          successMetrics: ["Reliability target progress", "No unbounded retry loops"],
+        },
+        {
+          stage: 4,
+          name: chosen.template === "planner_worker_verifier" ? "Topology split" : "Stabilize",
+          owner: "owner_platform",
+          actions:
+            chosen.template === "planner_worker_verifier"
+              ? ["Introduce planner/worker/verifier roles", "Retire orphan nodes"]
+              : ["Monitor metrics", "Keep single workflow with new gates"],
+          successMetrics: ["Review status remains PASS", "Preserve list intact"],
+          rollback: chosen.reversibility,
+        },
+      ],
+      rollback: chosen.reversibility,
       successMetrics: intent?.successMeasures ?? [],
     },
     securityBoundaries: {
@@ -261,7 +300,7 @@ function renderMarkdown(args: {
   validations: ValidationResult[];
   reviews: ReviewResult[];
   recommendation: RecommendationResult;
-  chosen?: CandidateArchitecture;
+  chosen: CandidateArchitecture;
   baselineComparison?: BaselineProposalComparison;
   json: Record<string, unknown>;
 }): string {
@@ -281,6 +320,7 @@ function renderMarkdown(args: {
   lines.push(`# Architecture Recommendation — ${org.organization.name}`);
   lines.push("");
   lines.push("**Operating mode:** advisory-only / export-only. No deployment or mutation.");
+  lines.push(`**Selection status:** ${recommendation.selectionStatus}`);
   lines.push("");
   lines.push("## Trace chain");
   lines.push(recommendation.traceChain.join(" → "));
@@ -325,6 +365,15 @@ function renderMarkdown(args: {
     }
     lines.push("");
   }
+  lines.push("## Eligibility gate");
+  for (const a of recommendation.eligibility.assessments) {
+    lines.push(
+      `- \`${a.candidateId}\` eligible=${a.eligible}${
+        a.reasons.length ? ` — ${a.reasons.join("; ")}` : ""
+      }`,
+    );
+  }
+  lines.push("");
   lines.push("## Candidate comparison");
   for (const c of candidates) {
     const rev = reviews.find((r) => r.candidateId === c.id);
@@ -349,22 +398,20 @@ function renderMarkdown(args: {
   lines.push("## Uncertainty & simulation limitations");
   for (const u of recommendation.uncertainty) lines.push(`- ${u}`);
   lines.push("- Declared fidelity: static structure + scenario readiness only.");
+  lines.push("- Current-state observations are distinct from candidate assumptions.");
   lines.push("");
   lines.push("## Staged migration plan");
-  if (!chosen) {
-    lines.push("_No migration plan — recommendation blocked._");
-  } else {
-    lines.push("1. **Contracts and ownership** — owner: platform — success: all contracts present.");
-    lines.push("2. **Approval gate** — human approval required before notify; gate before stage 3.");
-    lines.push("3. **Evaluation and recovery** — criteria + bounded retries.");
-    lines.push(
-      `4. **${chosen.template === "planner_worker_verifier" ? "Topology split" : "Stabilize"}** — rollback: ${chosen.reversibility}`,
-    );
-  }
+  lines.push("1. **Contracts and ownership** — owner: platform — success: all contracts present.");
+  lines.push("2. **Approval gate** — human approval required before notify; gate before stage 3.");
+  lines.push("3. **Evaluation and recovery** — criteria + bounded retries.");
+  lines.push(
+    `4. **${chosen.template === "planner_worker_verifier" ? "Topology split" : "Stabilize"}** — rollback: ${chosen.reversibility}`,
+  );
   lines.push("");
   lines.push("## Security boundaries");
   lines.push("- Read-only discovery only; `apply` rejected.");
   lines.push("- No secrets stored; no live mutation path.");
+  lines.push("- Eligibility gate blocks approve/export of invalid candidates.");
   lines.push("");
   return lines.join("\n");
 }

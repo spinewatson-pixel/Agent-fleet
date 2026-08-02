@@ -32,13 +32,18 @@ export function evaluateIntentCompleteness(
     ...(ownerInput?.fieldConfidence ?? {}),
   };
 
+  // Owner statements are assertions: medium confidence unless corroborated by observation.
+  const assertionConfidence: Confidence = "medium";
+
   if (!mission || mission.trim().length === 0) {
     unresolvedQuestions.push(
       "What is the organization's mission in one sentence? (Do not invent; owner must state it.)",
     );
     fieldConfidence.mission = "unknown";
+  } else if (ownerInput?.mission) {
+    fieldConfidence.mission = assertionConfidence;
   } else {
-    fieldConfidence.mission = fieldConfidence.mission ?? "high";
+    fieldConfidence.mission = fieldConfidence.mission ?? assertionConfidence;
   }
 
   if (successMeasures.length === 0) {
@@ -46,8 +51,10 @@ export function evaluateIntentCompleteness(
       "Which success measures define good outcomes (e.g., reliability target, capability coverage)?",
     );
     fieldConfidence.successMeasures = "unknown";
+  } else if (ownerInput?.successMeasures) {
+    fieldConfidence.successMeasures = assertionConfidence;
   } else {
-    fieldConfidence.successMeasures = fieldConfidence.successMeasures ?? "medium";
+    fieldConfidence.successMeasures = fieldConfidence.successMeasures ?? assertionConfidence;
   }
 
   if (riskTolerance === "unknown") {
@@ -55,8 +62,10 @@ export function evaluateIntentCompleteness(
       "What is the risk tolerance for autonomous actions (low / medium / high)?",
     );
     fieldConfidence.riskTolerance = "unknown";
+  } else if (ownerInput?.riskTolerance) {
+    fieldConfidence.riskTolerance = assertionConfidence;
   } else {
-    fieldConfidence.riskTolerance = fieldConfidence.riskTolerance ?? "high";
+    fieldConfidence.riskTolerance = fieldConfidence.riskTolerance ?? assertionConfidence;
   }
 
   if (constraints.length === 0) {
@@ -64,8 +73,10 @@ export function evaluateIntentCompleteness(
       "What hard constraints must architecture changes respect (data residency, human approval, budget)?",
     );
     fieldConfidence.constraints = "unknown";
+  } else if (ownerInput?.constraints) {
+    fieldConfidence.constraints = assertionConfidence;
   } else {
-    fieldConfidence.constraints = fieldConfidence.constraints ?? "medium";
+    fieldConfidence.constraints = fieldConfidence.constraints ?? assertionConfidence;
   }
 
   if (preserveList.length === 0) {
@@ -73,8 +84,10 @@ export function evaluateIntentCompleteness(
       "Which current strengths or components must be preserved?",
     );
     fieldConfidence.preserveList = "unknown";
+  } else if (ownerInput?.preserveList) {
+    fieldConfidence.preserveList = assertionConfidence;
   } else {
-    fieldConfidence.preserveList = fieldConfidence.preserveList ?? "medium";
+    fieldConfidence.preserveList = fieldConfidence.preserveList ?? assertionConfidence;
   }
 
   if (!org.organization.scope) {

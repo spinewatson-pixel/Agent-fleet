@@ -1,0 +1,150 @@
+# Clean organization used for eligibility regression: a candidate can pass validation.
+name: Contoso Eligible Assist
+version: "1.0.0"
+environment: staging
+criticality: high
+scope: "Claims intake summarization with governed notify"
+mission: "Reliable claims summarization under human governance"
+owners:
+  - owner_platform
+  - owner_claims
+
+capabilities:
+  - id: cap_intake
+    name: Claims Intake Summarization
+    purpose: "Summarize inbound claim packets for adjusters"
+    inputs: ["claim_packet"]
+    outputs: ["summary_draft"]
+    dependencies: ["cap_retrieval"]
+    slos: ["p95_latency_under_8s"]
+    failureModes: ["tool_timeout", "stale_policy_docs"]
+    evaluationCriteria: ["adjuster_accept_rate"]
+    owners: ["owner_platform"]
+  - id: cap_retrieval
+    name: Policy Document Retrieval
+    purpose: "Retrieve relevant policy clauses"
+    inputs: ["query"]
+    outputs: ["passages"]
+    dependencies: []
+    slos: ["freshness_under_7d"]
+    failureModes: ["index_stale"]
+    evaluationCriteria: ["precision_at_5"]
+    owners: ["owner_platform"]
+
+workers:
+  - id: worker_intake_agent
+    name: Intake Agent
+    kind: agent
+    responsibilities: ["parse packet", "call retrieval", "draft summary"]
+    authority: "write_draft_only"
+    runtimeOrModel: "local-stub-model"
+    permissions: ["read_claims", "call_tools"]
+    owners: ["owner_platform"]
+  - id: worker_retrieval_tool
+    name: Retrieval Tool
+    kind: tool
+    responsibilities: ["vector search over policy docs"]
+    authority: "read_only"
+    permissions: ["read_knowledge"]
+    owners: ["owner_platform"]
+  - id: worker_notify_service
+    name: Notify Service
+    kind: service
+    responsibilities: ["send adjuster email"]
+    authority: "send_notification"
+    permissions: ["notify_adjuster"]
+    owners: ["owner_claims"]
+
+interfaces:
+  - id: iface_intake_api
+    name: Intake API
+    kind: api
+    contractSchema: "ClaimPacketV1"
+    rateLimits: "30rpm"
+    authReference: "internal_mtls"
+    producerId: worker_intake_agent
+    consumerIds: [worker_notify_service]
+  - id: iface_retrieval
+    name: Retrieval Interface
+    kind: api
+    contractSchema: "RetrievalQueryV1"
+    rateLimits: "120rpm"
+    authReference: "service_token"
+    producerId: worker_retrieval_tool
+    consumerIds: [worker_intake_agent]
+  - id: iface_notify
+    name: Notify Queue
+    kind: queue
+    contractSchema: "NotificationV1"
+    producerId: worker_notify_service
+    consumerIds: []
+
+knowledgeMemories:
+  - id: km_policy_index
+    name: Policy Document Index
+    source: "manual_upload_bundle"
+    freshness: "3d"
+    retention: "1y"
+    access: "platform_team"
+    provenance: "claims_ops_share"
+    retrievalBehavior: "top_k_vector"
+    owners: ["owner_platform"]
+
+governancePolicies:
+  - id: pol_data_min
+    name: Minimum Data Policy
+    riskClass: high
+    dataRules: ["no_pii_in_prompts_beyond_claim_id"]
+    budgets: ["daily_tool_budget_500"]
+    escalation: "page_oncall_claims"
+    auditRequirements: ["log_tool_calls"]
+    requiresHumanApprovalGate: true
+    approvals: ["owner_claims"]
+    owners: ["owner_platform"]
+
+topology:
+  name: Primary Workflow
+  nodes:
+    - id: n_intake
+      refId: worker_intake_agent
+      kind: worker
+      label: Intake Agent
+    - id: n_retrieval
+      refId: worker_retrieval_tool
+      kind: worker
+      label: Retrieval Tool
+    - id: n_notify
+      refId: worker_notify_service
+      kind: worker
+      label: Notify Service
+  edges:
+    - id: e_intake_retrieval
+      from: n_intake
+      to: n_retrieval
+      kind: delegation
+      label: retrieve policy
+    - id: e_retrieval_intake
+      from: n_retrieval
+      to: n_intake
+      kind: communication
+      label: passages
+    - id: e_intake_notify
+      from: n_intake
+      to: n_notify
+      kind: communication
+      label: summary ready
+
+metrics:
+  - id: metric_reliability
+    name: Successful Summary Rate
+    definition: "Share of intakes producing usable draft"
+    baseline: 0.97
+    target: 0.98
+    sampling: "daily"
+    dimension: reliability
+
+traces:
+  - id: trace_ok_1
+    summary: "Intake completed with approval gate recorded"
+    collectedAt: "2026-07-30T09:10:00.000Z"
+    confidence: high

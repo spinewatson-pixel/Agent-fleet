@@ -82,7 +82,10 @@ export type WorkspaceSnapshot = {
       name: string;
       kind: string;
       pass: boolean;
+      currentStatePass?: boolean;
+      currentStateObservations?: string[];
       observations: string[];
+      assumptions: string[];
     }>;
     overallPass: boolean;
     limitations: string[];
@@ -107,6 +110,16 @@ export type WorkspaceSnapshot = {
   recommendation?: {
     chosenCandidateId: string | null;
     rejectedCandidateIds: string[];
+    selectionStatus?: string;
+    eligibility?: {
+      assessments: Array<{
+        candidateId: string;
+        eligible: boolean;
+        reasons: string[];
+      }>;
+      blockReasons: string[];
+      selectionStatus: string;
+    };
     rationale: string;
     uncertainty: string[];
     approvalState: string;

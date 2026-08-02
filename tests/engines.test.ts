@@ -107,13 +107,66 @@ describe("deterministic engines", () => {
     expect(review.blockers.length).toBeGreaterThan(0);
   });
 
-  it("export produces markdown + json with trace chain; no mutation path", async () => {
+  it("demo recommendation is blocked (no eligible fallback)", async () => {
     const { org, intent } = await loadDemoOrg();
     const gaps = analyzeGaps(org, intent);
     const { candidates } = synthesizeCandidates(org, gaps, intent);
     const validations = validateAllCandidates(org, candidates);
     const reviews = reviewAll(org, candidates, gaps, validations, intent);
-    const recommendation = buildRecommendation(org, candidates, reviews, intent);
+    const recommendation = buildRecommendation(
+      org,
+      candidates,
+      validations,
+      reviews,
+      gaps,
+      intent,
+    );
+    expect(recommendation.chosenCandidateId).toBeNull();
+    expect(recommendation.selectionStatus).toBe("BLOCKED_NO_ELIGIBLE_CANDIDATE");
+    expect(() =>
+      exportRecommendationArtifacts({
+        org,
+        intent,
+        gaps,
+        candidates,
+        validations,
+        reviews,
+        recommendation,
+      }),
+    ).toThrow(/eligibility gate/i);
+    expect(() => rejectMutation({})).toThrow(/read-only|Mutation/i);
+  });
+
+  it("export produces markdown + json with trace chain for eligible org", async () => {
+    const adapter = new ReadOnlyDiscoveryAdapter();
+    const eligibleYaml = fs.readFileSync(
+      path.resolve(process.cwd(), "fixtures/eligible-org.yaml"),
+      "utf8",
+    );
+    const org = await adapter.normalize(
+      await adapter.discover(eligibleYaml, { format: "yaml" }),
+    );
+    const intent = evaluateIntentCompleteness(org, {
+      mission: "Reliable claims summarization under human governance",
+      successMeasures: ["reliability >= 0.98"],
+      constraints: ["human approval before notify"],
+      riskTolerance: "low",
+      preserveList: ["retrieval read-only authority"],
+      confirmed: true,
+    }).profile;
+    const gaps = analyzeGaps(org, intent);
+    const { candidates } = synthesizeCandidates(org, gaps, intent);
+    const validations = validateAllCandidates(org, candidates);
+    const reviews = reviewAll(org, candidates, gaps, validations, intent);
+    const recommendation = buildRecommendation(
+      org,
+      candidates,
+      validations,
+      reviews,
+      gaps,
+      intent,
+    );
+    expect(recommendation.selectionStatus).toBe("SELECTED");
     const artifact = exportRecommendationArtifacts({
       org,
       intent,
@@ -124,13 +177,12 @@ describe("deterministic engines", () => {
       recommendation,
     });
     expect(artifact.markdown).toContain("Trace chain");
-    expect(artifact.markdown).toContain("Mission");
+    expect(artifact.markdown).toContain("Eligibility gate");
     expect(artifact.json.traceChain).toEqual(recommendation.traceChain);
     expect(artifact.json.securityBoundaries).toMatchObject({
       readOnly: true,
       applyImplemented: false,
       liveMutationPath: false,
     });
-    expect(() => rejectMutation({})).toThrow(/read-only|Mutation/i);
   });
 });
