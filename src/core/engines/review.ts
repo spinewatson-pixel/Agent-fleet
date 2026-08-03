@@ -3,6 +3,7 @@ import type { CandidateArchitecture } from "./candidateSynthesis.js";
 import type { GapAnalysisResult } from "./gapAnalysis.js";
 import type { ValidationResult } from "./validation.js";
 import { MVP_CONFIG } from "../schemas/common.js";
+import { listUnresolvedCriticalFindings } from "./remediation.js";
 
 export type ReviewDimension =
   | "intent_fit"
@@ -164,21 +165,8 @@ export function reviewCandidate(
       `Validation failed checks (ineligible): ${failed.join(", ") || "overallPass=false"}`,
     );
   }
-  const unresolvedCritical = gaps.findings.filter((f) => f.severity === "critical");
-  for (const f of unresolvedCritical) {
-    const remediated =
-      (f.category === "contract" &&
-        f.entityIds.some((id) => candidate.affectedEntityIds.includes(id))) ||
-      ((f.category === "governance" || f.id === "gap_approval_gate") &&
-        (`${candidate.summary} ${candidate.benefits.join(" ")}`
-          .toLowerCase()
-          .includes("approval gate") ||
-          `${candidate.summary} ${candidate.benefits.join(" ")}`
-            .toLowerCase()
-            .includes("human approval")));
-    if (!remediated) {
-      blockers.push(`Unresolved critical finding: ${f.id} — ${f.title}`);
-    }
+  for (const f of listUnresolvedCriticalFindings(candidate, gaps.findings)) {
+    blockers.push(`Unresolved critical finding: ${f.id} — ${f.title}`);
   }
 
   const averageScore =

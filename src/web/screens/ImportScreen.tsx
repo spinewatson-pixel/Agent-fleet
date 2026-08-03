@@ -23,13 +23,16 @@ export function ImportScreen() {
       .catch(() => setSeeded([]));
   }, [snap?.organizationId]);
 
-  async function loadDemo() {
+  async function loadFixture(name: "demo-org.yaml" | "eligible-org.yaml") {
     setBusy(true);
     setError(null);
     try {
-      const snap = await api.importDemo();
-      setSnap(snap);
-      setWorkspaceId(snap.organizationId);
+      const next =
+        name === "demo-org.yaml"
+          ? await api.importDemo()
+          : await api.importFixture(name);
+      setSnap(next);
+      setWorkspaceId(next.organizationId);
       nav("/map");
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -42,9 +45,9 @@ export function ImportScreen() {
     setBusy(true);
     setError(null);
     try {
-      const snap = await api.importContent(content, format);
-      setSnap(snap);
-      setWorkspaceId(snap.organizationId);
+      const next = await api.importContent(content, format);
+      setSnap(next);
+      setWorkspaceId(next.organizationId);
       nav("/map");
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -64,14 +67,26 @@ export function ImportScreen() {
       <JourneyNav current="/" nextDisabled={!snap} nextHint="Import an organization first" />
 
       <div className="panel">
+        <h2>Fixture paths</h2>
+        <p className="lede">
+          <strong>Demo</strong> includes seeded defects and is expected to end{" "}
+          <span className="mono">BLOCKED_NO_ELIGIBLE_CANDIDATE</span>.{" "}
+          <strong>Eligible</strong> is a clean org you can approve and export.
+        </p>
         <div className="row">
-          <button disabled={busy} onClick={() => void loadDemo()}>
+          <button disabled={busy} onClick={() => void loadFixture("demo-org.yaml")}>
             Load demo organization
           </button>
-          <span className="mono">fixtures/demo-org.yaml · seeded defects included</span>
+          <button
+            className="secondary"
+            disabled={busy}
+            onClick={() => void loadFixture("eligible-org.yaml")}
+          >
+            Load eligible organization
+          </button>
         </div>
         <p className="mono" style={{ marginTop: "0.75rem" }}>
-          Or seed from CLI: <code>pnpm seed</code> then open a workspace below.
+          fixtures/demo-org.yaml · fixtures/eligible-org.yaml · or CLI: pnpm seed
         </p>
         {seeded.length > 0 && (
           <ul>

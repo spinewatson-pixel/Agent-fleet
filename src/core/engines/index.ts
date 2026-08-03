@@ -5,3 +5,4 @@ export * from "./review.js";
 export * from "./recommendAndExport.js";
 export * from "./baselineComparison.js";
 export * from "./eligibility.js";
+export * from "./remediation.js";

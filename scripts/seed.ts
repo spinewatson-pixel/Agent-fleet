@@ -1,6 +1,6 @@
 /**
- * Seed local workspace with the demo organization fixture.
- * Safe to re-run: writes a fresh import into data/workspaces.
+ * Seed local workspace with demo (intentionally blocked) and eligible (exportable) fixtures.
+ * Safe to re-run: writes fresh imports into data/workspaces.
  */
 import path from "node:path";
 import { BuilderPipeline } from "../src/core/pipeline.js";
@@ -12,16 +12,20 @@ async function main() {
     path.resolve(process.cwd(), "data", "workspaces");
   const store = new JsonFileWorkspaceStore(dataDir);
   const pipeline = new BuilderPipeline(store);
-  const snap = await pipeline.importDemo();
-  console.log("Seeded demo organization");
-  console.log(`  organizationId: ${snap.organizationId}`);
-  console.log(`  name: ${snap.canonical.organization.name}`);
+
+  const demo = await pipeline.importFixture("demo-org.yaml");
+  const eligible = await pipeline.importFixture("eligible-org.yaml");
+
+  console.log("Seeded workspaces");
   console.log(`  dataDir: ${dataDir}`);
   console.log(
-    `  unresolvedIntentQuestions: ${snap.intent?.unresolvedQuestions.length ?? 0}`,
+    `  demo (blocked path): ${demo.canonical.organization.name} · ${demo.organizationId}`,
   );
   console.log(
-    `  importGaps: ${(snap.importValidation as { gaps: unknown[] } | undefined)?.gaps.length ?? 0}`,
+    `  eligible (exportable path): ${eligible.canonical.organization.name} · ${eligible.organizationId}`,
+  );
+  console.log(
+    `  tip: demo is expected to end BLOCKED_NO_ELIGIBLE_CANDIDATE; use eligible for approve/export.`,
   );
 }
 
