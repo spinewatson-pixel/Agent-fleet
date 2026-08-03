@@ -59,10 +59,10 @@ export function analyzeGaps(
     if (cap.ownerIds.length === 0) {
       findings.push({
         id: `gap_owner_${cap.id}`,
-        category: "observability",
+        category: "governance",
         severity: "medium",
         title: `Absent owner for capability ${cap.name}`,
-        rationale: "Unowned capabilities block operability and escalation.",
+        rationale: "Unowned capabilities block operability, escalation, and human governance.",
         evidenceIds: cap.evidenceIds,
         knowledgeIds: ["ko_readonly_before_mutation"],
         evidenceConfidence: "high",

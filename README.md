@@ -96,13 +96,25 @@ JSON workspace store (data/workspaces)   ReadOnlyDiscoveryAdapter
 ## Project layout
 
 ```text
-fixtures/demo-org.yaml
-scripts/seed.ts            Seed demo into local store
-scripts/smoke.ts           Repeatable smoke against running API
-src/core/                  Schemas, adapter, engines, pipeline
-src/api/                   createApp + server
-src/web/                   Integrated 7-screen UI
+fixtures/demo-org.yaml         Seeded defects → expected BLOCKED path
+fixtures/eligible-org.yaml     Clean org → selectable approve/export path
+scripts/seed.ts                Seeds both fixtures into local store
+scripts/smoke.ts               Repeatable smoke against running API
+src/core/schemas               Zod canonical model
+src/core/adapters              Read-only adapter + mutation guard
+src/core/engines               Gap, candidates, validation, review, eligibility, export
+src/core/pipeline.ts           Single product path
+src/api/                       createApp + server
+src/web/                       Integrated 7-screen UI + journey nav
 tests/e2e.http.journey.test.ts
+tests/eligibility.regression.test.ts
 IMPLEMENTATION_PLAN.md
 BUILD_STATUS.md
 ```
+
+## Fixture guidance
+
+| Fixture | Expected outcome |
+| --- | --- |
+| `demo-org.yaml` | Analysis runs; eligibility gate → `BLOCKED_NO_ELIGIBLE_CANDIDATE` (no approve/export) |
+| `eligible-org.yaml` | Eligible candidate selectable; approve/export succeeds (advisory only) |

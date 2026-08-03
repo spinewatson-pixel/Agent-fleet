@@ -230,7 +230,8 @@ export class BuilderPipeline {
       changeSet: {
         ...recommendationFresh.changeSet,
         approvalState: "exported",
-        outcome: "Human approved advisory export. No deployment performed.",
+        outcome:
+          "Human approved advisory recommendation and exported plan (state=exported). No deployment performed.",
         updatedAt: nowIso(),
         candidateId: recommendationFresh.chosenCandidateId ?? undefined,
       },

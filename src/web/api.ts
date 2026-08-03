@@ -150,6 +150,17 @@ export type WorkspaceSnapshot = {
     }>;
     notes: string;
   };
+  eligibility?: {
+    assessments: Array<{
+      candidateId: string;
+      eligible: boolean;
+      reasons: string[];
+    }>;
+    blockReasons: string[];
+    selectionStatus: string;
+    chosenCandidateId?: string | null;
+    eligibleCandidateIds?: string[];
+  };
   changeHistory: Array<Record<string, unknown>>;
   exports: Array<{
     id: string;
@@ -163,6 +174,7 @@ export type WorkspaceSnapshot = {
 
 export type IntentProfile = {
   id: string;
+  updatedAt?: string;
   mission?: string;
   successMeasures: string[];
   constraints: string[];
@@ -188,6 +200,10 @@ async function req<T>(url: string, init?: RequestInit): Promise<T> {
 export const api = {
   list: () => req<{ organizationId: string; name: string; updatedAt: string }[]>("/api/workspaces"),
   importDemo: () => req<WorkspaceSnapshot>("/api/workspaces/import/demo", { method: "POST" }),
+  importFixture: (name: string) =>
+    req<WorkspaceSnapshot>(`/api/workspaces/import/fixture/${encodeURIComponent(name)}`, {
+      method: "POST",
+    }),
   importContent: (content: string, format: "json" | "yaml") =>
     req<WorkspaceSnapshot>("/api/workspaces/import", {
       method: "POST",

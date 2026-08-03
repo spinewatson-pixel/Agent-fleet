@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { EligibilityPanel } from "../components/EligibilityPanel";
 import { JourneyNav } from "../components/JourneyNav";
 
 export function CandidatesScreen() {
@@ -12,6 +13,7 @@ export function CandidatesScreen() {
 
   const { candidates, notes } = snap.candidates;
   const comparison = snap.baselineComparison;
+  const eligibility = snap.recommendation?.eligibility ?? snap.eligibility;
 
   return (
     <div>
@@ -22,6 +24,15 @@ export function CandidatesScreen() {
       </p>
       <JourneyNav current="/candidates" />
       <p className="mono">{notes}</p>
+
+      <EligibilityPanel
+        assessments={eligibility?.assessments}
+        selectionStatus={
+          snap.recommendation?.selectionStatus ?? eligibility?.selectionStatus
+        }
+        chosenCandidateId={snap.recommendation?.chosenCandidateId}
+        blockReasons={eligibility?.blockReasons}
+      />
 
       {comparison && (
         <div className="panel">
@@ -57,7 +68,7 @@ export function CandidatesScreen() {
               {comparison.proposals.map((p) => (
                 <tr key={p.candidateId}>
                   <td>
-                    <EvidenceBadge status="recommendation" /> {p.name}
+                    <EvidenceBadge status="inference" /> {p.name}
                   </td>
                   <td className="mono" colSpan={3}>
                     remediates: {p.remediates.join("; ") || "—"}
@@ -74,24 +85,23 @@ export function CandidatesScreen() {
               ))}
             </tbody>
           </table>
-          <ul className="mono">
-            {comparison.proposals.map((p) => (
-              <li key={`${p.candidateId}-vs`}>{p.vsBaseline}</li>
-            ))}
-          </ul>
         </div>
       )}
 
       <div className="compare">
         {candidates.map((c) => {
           const val = snap.validationResults!.find((v) => v.candidateId === c.id);
+          const elig = eligibility?.assessments.find((a) => a.candidateId === c.id);
           return (
             <div className="panel" key={c.id}>
               <h2>{c.name}</h2>
               <p>{c.summary}</p>
               <p>
-                <EvidenceBadge status="recommendation" />{" "}
-                <span className="mono">{c.template}</span>
+                <EvidenceBadge status="inference" />{" "}
+                <span className="mono">{c.template}</span>{" "}
+                <span className={`badge ${elig?.eligible ? "PASS" : "BLOCKED"}`}>
+                  {elig?.eligible ? "eligible" : "ineligible"}
+                </span>
               </p>
               <h3>Trade-offs</h3>
               <ul className="mono">
@@ -107,12 +117,6 @@ export function CandidatesScreen() {
                   <li key={b}>{b}</li>
                 ))}
               </ul>
-              <h3>Costs / risks</h3>
-              <ul>
-                {[...c.costs, ...c.risks].map((x) => (
-                  <li key={x}>{x}</li>
-                ))}
-              </ul>
               <h3>Do not use when</h3>
               <ul>
                 {c.doNotUseWhen.map((x) => (
@@ -122,7 +126,7 @@ export function CandidatesScreen() {
               <h3>
                 Validation{" "}
                 <span className={`badge ${val?.overallPass ? "PASS" : "BLOCKED"}`}>
-                  {val?.overallPass ? "structural-ok" : "issues"}
+                  {val?.overallPass ? "projected-ok" : "projected-fail"}
                 </span>
               </h3>
               <p>
@@ -132,30 +136,35 @@ export function CandidatesScreen() {
                 <thead>
                   <tr>
                     <th>Check</th>
-                    <th>Kind</th>
-                    <th>Result</th>
+                    <th>Current state</th>
+                    <th>Projected</th>
+                    <th>Notes</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(val?.checks ?? []).map((ch) => (
                     <tr key={ch.id}>
-                      <td>{ch.name}</td>
-                      <td className="mono">{ch.kind}</td>
                       <td>
-                        <span className={`badge ${ch.pass ? "ok" : "critical"}`}>
-                          projected={ch.pass ? "pass" : "fail"}
-                        </span>{" "}
+                        {ch.name}
+                        <div className="mono">{ch.kind}</div>
+                      </td>
+                      <td>
                         <EvidenceBadge status="observation" />{" "}
-                        <span className="mono">
-                          current=
-                          {"currentStatePass" in ch
-                            ? String((ch as { currentStatePass?: boolean }).currentStatePass)
-                            : "n/a"}
+                        <span className={`badge ${ch.currentStatePass ? "ok" : "critical"}`}>
+                          {ch.currentStatePass ? "pass" : "fail"}
                         </span>
+                      </td>
+                      <td>
+                        <EvidenceBadge status="simulation" />{" "}
+                        <span className={`badge ${ch.pass ? "ok" : "critical"}`}>
+                          {ch.pass ? "pass" : "fail"}
+                        </span>
+                      </td>
+                      <td>
                         <div className="mono">{ch.observations[0]}</div>
                         {(ch.assumptions?.length ?? 0) > 0 && (
                           <div className="mono">
-                            assumption: {ch.assumptions[0]}
+                            <EvidenceBadge status="assertion" /> {ch.assumptions[0]}
                           </div>
                         )}
                       </td>
@@ -169,11 +178,6 @@ export function CandidatesScreen() {
                   <li key={l}>{l}</li>
                 ))}
               </ul>
-              <p className="mono">
-                modeled: {(val?.modeled ?? []).join(", ")}
-                <br />
-                not modeled: {(val?.notModeled ?? []).join(", ")}
-              </p>
             </div>
           );
         })}
