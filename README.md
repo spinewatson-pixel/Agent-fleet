@@ -9,7 +9,7 @@ Live brokerage execution is **hard-disabled**.
 | Artifact | Role |
 |----------|------|
 | `config/watchfloor_registry.json` | Machine-readable roster (285 agents) |
-| `ui/watchfloor.html` | Org UI (registry-backed) |
+| `ui/watchfloor.html` | Org UI (loads rebuilt blueprints from `ui/data/`) |
 | `docs/14_watchfloor_reconciliation.md` | Council mapping onto Watchfloor seats |
 | `docs/00_audit.md` … `docs/13_*.md` | Institutional redesign deliverables |
 
