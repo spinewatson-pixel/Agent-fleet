@@ -8,7 +8,7 @@ Live brokerage execution is **hard-disabled**.
 
 | Artifact | Role |
 |----------|------|
-| `config/watchfloor_registry.json` | Machine-readable roster (279 agents) |
+| `config/watchfloor_registry.json` | Machine-readable roster (285 agents) |
 | `ui/watchfloor.html` | Org UI (registry-backed) |
 | `docs/14_watchfloor_reconciliation.md` | Council mapping onto Watchfloor seats |
 | `docs/00_audit.md` … `docs/13_*.md` | Institutional redesign deliverables |
@@ -55,15 +55,15 @@ Every Watchfloor agent has a complete operating blueprint:
 **Control:** Constraints · Triggers · Scheduling · Logging · Self-Reflection · Escalation · Versioning · Health Monitoring
 
 ```bash
-agent-fleet blueprints   # → docs/agent_blueprints/blueprints.json
+./scripts/rebuild_from_watchfloor.sh   # sync UI → registry + contracts + blueprints → ui/data/
+agent-fleet blueprints                 # → docs/agent_blueprints/blueprints.json
 ```
 
-Open any agent in `ui/watchfloor.html` → **BLUEPRINT** tile.
-
-Open the org UI:
+Open any agent in `ui/watchfloor.html` → **BLUEPRINT** tile (prefers rebuilt `ui/data/blueprints.json`).
 
 ```bash
-open ui/watchfloor.html   # or serve the file in a browser
+cd ui && python3 -m http.server 8765 --bind 127.0.0.1
+# http://127.0.0.1:8765/watchfloor.html
 ```
 
 ## Operating chain (Watchfloor IDs)

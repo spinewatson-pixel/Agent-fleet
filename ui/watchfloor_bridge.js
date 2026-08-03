@@ -1,45 +1,87 @@
 /**
- * Watchfloor registry bridge — loads config/watchfloor_registry.json and
- * exposes agent counts / authority helpers for future UI wiring.
+ * Watchfloor registry + blueprint bridge.
+ * Loads rebuilt artifacts published under ui/data/ (from scripts/rebuild_from_watchfloor.sh).
  *
- * Usage (from ui/watchfloor.html):
- *   const reg = await WatchfloorBridge.loadRegistry();
- *   WatchfloorBridge.summary(reg);
+ * Usage:
+ *   await WatchfloorBridge.bootstrap();
+ *   WatchfloorBridge.blueprintFor("AAPL-L");
+ *   WatchfloorBridge.summary(WatchfloorBridge.registry);
  */
 (function (global) {
   "use strict";
 
-  const DEFAULT_REGISTRY_URL = new URL(
-    "../config/watchfloor_registry.json",
-    global.location ? global.location.href : "file:///workspace/ui/"
-  ).href;
-
-  let _cache = null;
-
-  async function loadRegistry(url = DEFAULT_REGISTRY_URL) {
-    if (_cache && (!url || url === DEFAULT_REGISTRY_URL)) {
-      return _cache;
+  function resolve(rel) {
+    if (global.location && global.location.href) {
+      return new URL(rel, global.location.href).href;
     }
+    return rel;
+  }
+
+  const DEFAULT_REGISTRY_URL = resolve("./data/watchfloor_registry.json");
+  const DEFAULT_BLUEPRINTS_URL = resolve("./data/blueprints.json");
+  const DEFAULT_META_URL = resolve("./data/rebuild_meta.json");
+
+  let _registry = null;
+  let _blueprints = null;
+  let _meta = null;
+  let _bootstrapped = false;
+
+  async function fetchJson(url) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
-      throw new Error(`Failed to load watchfloor registry (${res.status})`);
+      throw new Error(`Failed to load ${url} (${res.status})`);
     }
-    const data = await res.json();
+    return res.json();
+  }
+
+  async function loadRegistry(url = DEFAULT_REGISTRY_URL) {
+    const data = await fetchJson(url);
     if (!data || !Array.isArray(data.agents)) {
       throw new Error("Invalid watchfloor registry: missing agents[]");
     }
-    if (!url || url === DEFAULT_REGISTRY_URL) {
-      _cache = data;
-    }
+    _registry = data;
     return data;
   }
 
+  async function loadBlueprints(url = DEFAULT_BLUEPRINTS_URL) {
+    const data = await fetchJson(url);
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid blueprints payload");
+    }
+    _blueprints = data;
+    return data;
+  }
+
+  async function loadMeta(url = DEFAULT_META_URL) {
+    try {
+      _meta = await fetchJson(url);
+    } catch (_e) {
+      _meta = null;
+    }
+    return _meta;
+  }
+
+  async function bootstrap(opts) {
+    const o = opts || {};
+    const [reg, bp] = await Promise.all([
+      loadRegistry(o.registryUrl || DEFAULT_REGISTRY_URL),
+      loadBlueprints(o.blueprintsUrl || DEFAULT_BLUEPRINTS_URL),
+    ]);
+    await loadMeta(o.metaUrl || DEFAULT_META_URL);
+    _bootstrapped = true;
+    return { registry: reg, blueprints: bp, meta: _meta };
+  }
+
   function clearCache() {
-    _cache = null;
+    _registry = null;
+    _blueprints = null;
+    _meta = null;
+    _bootstrapped = false;
   }
 
   function agents(registry) {
-    return Array.isArray(registry?.agents) ? registry.agents : [];
+    const r = registry || _registry;
+    return Array.isArray(r?.agents) ? r.agents : [];
   }
 
   function agentById(registry, id) {
@@ -60,29 +102,30 @@
   }
 
   function proposers(registry) {
-    if (Array.isArray(registry?.proposer_ids) && registry.proposer_ids.length) {
-      const set = new Set(registry.proposer_ids);
-      return agents(registry).filter((a) => set.has(a.id));
+    const r = registry || _registry;
+    if (Array.isArray(r?.proposer_ids) && r.proposer_ids.length) {
+      const set = new Set(r.proposer_ids);
+      return agents(r).filter((a) => set.has(a.id));
     }
-    return agents(registry).filter((a) => a.may_propose_trades);
+    return agents(r).filter((a) => a.may_propose_trades);
   }
 
   function executors(registry) {
-    if (Array.isArray(registry?.executor_ids) && registry.executor_ids.length) {
-      return registry.executor_ids.slice();
+    const r = registry || _registry;
+    if (Array.isArray(r?.executor_ids) && r.executor_ids.length) {
+      return r.executor_ids.slice();
     }
-    return agents(registry)
+    return agents(r)
       .filter((a) => a.may_place_orders)
       .map((a) => a.id);
   }
 
   function authorityFor(registry, agentId) {
-    const a = agentById(registry, agentId);
-    if (!a) {
-      return null;
-    }
-    const veto = new Set(registry.veto_agents || []);
-    const chain = registry.approval_chain || [];
+    const r = registry || _registry;
+    const a = agentById(r, agentId);
+    if (!a) return null;
+    const veto = new Set(r.veto_agents || []);
+    const chain = r.approval_chain || [];
     return {
       id: a.id,
       division: a.division,
@@ -100,36 +143,114 @@
   }
 
   function hardRules(registry) {
-    return { ...(registry?.hard_rules || {}) };
+    return { ...((registry || _registry)?.hard_rules || {}) };
   }
 
   function institutionalCouncilMap(registry) {
-    return { ...(registry?.institutional_council_map || {}) };
+    return { ...((registry || _registry)?.institutional_council_map || {}) };
+  }
+
+  function blueprintFor(agentId) {
+    if (!_blueprints) return null;
+    return _blueprints[agentId] || null;
+  }
+
+  const LAYER_KEYS = [
+    ["Identity", "identity"],
+    ["Goal", "goal"],
+    ["Responsibilities", "responsibilities"],
+    ["Functions", "functions"],
+    ["Tools", "tools"],
+    ["Capabilities", "capabilities"],
+    ["Memory", "memory"],
+    ["Knowledge Base", "knowledge_base"],
+    ["Skills", "skills"],
+    ["Workflows", "workflows"],
+    ["Decision Rules", "decision_rules"],
+    ["Communication", "communication"],
+    ["Inputs", "inputs"],
+    ["Outputs", "outputs"],
+    ["Learning", "learning"],
+    ["Evaluation", "evaluation"],
+    ["Permissions", "permissions"],
+    ["Constraints", "constraints"],
+    ["Triggers", "triggers"],
+    ["Scheduling", "scheduling"],
+    ["Logging", "logging"],
+    ["Self-Reflection", "self_reflection"],
+    ["Escalation", "escalation"],
+    ["Versioning", "versioning"],
+    ["Health Monitoring", "health_monitoring"],
+  ];
+
+  function formatLayerValue(key, value) {
+    if (value == null) return [];
+    if (key === "tools" && Array.isArray(value)) {
+      return value.map(function (t) {
+        if (typeof t === "string") return t;
+        var label = t.name || "tool";
+        if (t.access) label += " [" + t.access + "]";
+        if (t.purpose) label += " — " + t.purpose;
+        return label;
+      });
+    }
+    if (Array.isArray(value)) return value.map(String);
+    return [String(value)];
+  }
+
+  function layersFromBlueprint(bp) {
+    if (!bp) return null;
+    return LAYER_KEYS.map(function (pair) {
+      return [pair[0], formatLayerValue(pair[1], bp[pair[1]])];
+    });
   }
 
   function summary(registry) {
-    const counts = registry?.counts || {};
-    const list = agents(registry);
+    const r = registry || _registry;
+    const counts = r?.counts || {};
+    const list = agents(r);
     return {
-      organization: registry?.organization || null,
-      version: registry?.version || null,
-      source: registry?.source || null,
+      organization: r?.organization || null,
+      version: r?.version || null,
+      source: r?.source || null,
+      rebuiltAt: r?.rebuilt_at || (_meta && _meta.rebuilt_at) || null,
       totalAgents: counts.total_agents ?? list.length,
-      proposers: counts.proposers ?? proposers(registry).length,
-      executors: executors(registry),
-      divisions: counts.divisions ?? Object.keys(countByDivision(registry)).length,
-      byDivision: countByDivision(registry),
-      paperOnly: !!(registry?.hard_rules?.paper_only),
-      liveExecutionEnabled: !!(registry?.hard_rules?.live_execution_enabled),
-      agentCeiling: registry?.hard_rules?.agent_ceiling ?? null,
-      vetoAgents: [...(registry?.veto_agents || [])],
-      approvalChain: [...(registry?.approval_chain || [])],
+      proposers: counts.proposers ?? proposers(r).length,
+      executors: executors(r),
+      divisions: counts.divisions ?? Object.keys(countByDivision(r)).length,
+      byDivision: countByDivision(r),
+      paperOnly: !!(r?.hard_rules?.paper_only),
+      liveExecutionEnabled: !!(r?.hard_rules?.live_execution_enabled),
+      agentCeiling: r?.hard_rules?.agent_ceiling ?? null,
+      vetoAgents: [...(r?.veto_agents || [])],
+      approvalChain: [...(r?.approval_chain || [])],
+      blueprintsLoaded: !!_blueprints,
+      blueprintCount: _blueprints ? Object.keys(_blueprints).length : 0,
+      meta: _meta,
     };
   }
 
   const api = {
     DEFAULT_REGISTRY_URL,
+    DEFAULT_BLUEPRINTS_URL,
+    DEFAULT_META_URL,
+    LAYER_KEYS,
+    get registry() {
+      return _registry;
+    },
+    get blueprints() {
+      return _blueprints;
+    },
+    get meta() {
+      return _meta;
+    },
+    get bootstrapped() {
+      return _bootstrapped;
+    },
     loadRegistry,
+    loadBlueprints,
+    loadMeta,
+    bootstrap,
     clearCache,
     agents,
     agentById,
@@ -140,6 +261,8 @@
     authorityFor,
     hardRules,
     institutionalCouncilMap,
+    blueprintFor,
+    layersFromBlueprint,
     summary,
   };
 

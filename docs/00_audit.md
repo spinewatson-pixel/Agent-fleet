@@ -11,7 +11,7 @@ At first commit the git tree contained only `README.md` → `# Agent-fleet`. No 
 ### Correction — Watchfloor skeleton is the real org
 The user subsequently provided the **Watchfloor Quant Lab** single-file org UI: the complete agent-skeleton fleet across Mission Control, Global Intel, Predictions, Trading Floor, The Lab, Quant Research, Fund Floor, Great Minds, Learning Loop, Data Core, Perimeter, and Contractors.
 
-**Canonical machine extract:** `config/watchfloor_registry.json` (**279 agents**, 128 proposers, executor `EXEC-1` only).  
+**Canonical machine extract:** `config/watchfloor_registry.json` (**285 agents**, 128 proposers, executor `EXEC-1` only).  
 **Human/org UI:** `ui/watchfloor.html` (registry-backed; preserves Watchfloor design language).  
 **Reconciliation:** `docs/14_watchfloor_reconciliation.md`.
 

@@ -6,7 +6,7 @@ Prior audit treated the repo as empty. The user has a complete Watchfloor Quant 
 
 ## What was preserved
 
-- Full division/department/agent roster → config/watchfloor_registry.json (279 agents)
+- Full division/department/agent roster → config/watchfloor_registry.json (285 agents)
 - Paper sandbox, thesis-before-trade, $1-2 sizing, swing ≤1 week, agent ceiling 150
 - Human Mode B veto, RISK-1/COMP-1 halt, SEC-HALT kill switch
 - Quant wing thesis-exempt; discretionary thesis-required

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-30T06:38:01.145480+00:00",
+  "generated_at": "2026-08-03T03:09:19.098105+00:00",
   "organization": "watchfloor quant lab",
-  "registry_version": "0.5.0",
+  "registry_version": "0.4.0",
   "agent_counts": {
     "total_agents": 285,
     "proposers": 128,

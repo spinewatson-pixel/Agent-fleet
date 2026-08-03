@@ -156,10 +156,33 @@ const executors = enriched.filter((a) => a.may_place_orders || a.execution_role)
 let prior = {};
 if (fs.existsSync(outPath)) prior = JSON.parse(fs.readFileSync(outPath, "utf8"));
 
+function nextVersion(counts) {
+  const priorCounts = (prior && prior.counts) || {};
+  const same =
+    priorCounts.total_agents === counts.total_agents &&
+    priorCounts.proposers === counts.proposers &&
+    priorCounts.executors === counts.executors &&
+    priorCounts.divisions === counts.divisions;
+  if (same && prior.version) return prior.version;
+  const base = String((prior && prior.version) || "0.5.1");
+  const parts = base.split(".").map((n) => parseInt(n, 10) || 0);
+  while (parts.length < 3) parts.push(0);
+  parts[2] += 1;
+  return parts.join(".");
+}
+
+const counts = {
+  total_agents: enriched.length,
+  proposers: proposers.length,
+  executors: executors.length,
+  divisions: new Set(enriched.map((a) => a.division)).size,
+};
+
 const registry = {
   source: "ui/watchfloor.html baseDivisions()",
   organization: "watchfloor quant lab",
-  version: "0.4.0",
+  version: nextVersion(counts),
+  rebuilt_at: new Date().toISOString(),
   hard_rules: Object.assign(
     {},
     prior.hard_rules || {},
@@ -198,13 +221,10 @@ const registry = {
     "CIT-RISK",
     "BRK-SAFE",
   ],
-  counts: {
-    total_agents: enriched.length,
-    proposers: proposers.length,
-    executors: executors.length,
-    divisions: new Set(enriched.map((a) => a.division)).size,
-  },
+  counts,
   division_summary: payload.divisions,
+  proposer_ids: proposers.map((a) => a.id),
+  executor_ids: executors.map((a) => a.id),
   agents: enriched,
 };
 

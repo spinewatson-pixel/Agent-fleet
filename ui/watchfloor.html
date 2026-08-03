@@ -414,6 +414,7 @@ border-radius:8px;padding:4px 8px}
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="watchfloor_bridge.js"></script>
 <script>
 /* ============ BASE DATA ============ */
 var TICKERS=[["AAPL","Apple"],["NVDA","Nvidia"],["PLTR","Palantir"],["MSFT","Microsoft"],["GOOGL","Google"],["META","Meta"],["WM","Waste Mgmt"],["AMZN","Amazon"],["TSLA","Tesla"],["AMD","AMD"],["AVGO","Broadcom"],["NFLX","Netflix"],["JPM","JPMorgan"],["XOM","Exxon"]];
@@ -752,6 +753,17 @@ persistent=true;
 }catch(e){persistent=false}
 var lt=document.getElementById("liveTag");
 if(persistent){lt.textContent="SYNCED"}else{lt.textContent="SESSION ONLY";lt.classList.add("off")}
+if(window.WatchfloorBridge&&WatchfloorBridge.bootstrap){
+try{
+await WatchfloorBridge.bootstrap();
+var sum=WatchfloorBridge.summary();
+lt.textContent=(sum.totalAgents||285)+" · v"+(sum.version||"?");
+lt.title="Rebuilt registry + blueprints loaded ("+(sum.blueprintCount||0)+" blueprints)";
+lt.classList.remove("off");
+}catch(bridgeErr){
+console.warn("WatchfloorBridge bootstrap failed — using embedded roster",bridgeErr);
+}
+}
 applyCustom();
 cur="home";
 render();
@@ -889,6 +901,10 @@ meas:"Measured on ideas that survived The Lab — never on ideas produced."}
 };
 function KP(a){return PROF[a.kind]||PROF.trader}
 function blueprintLayers(a){
+  if(window.WatchfloorBridge&&WatchfloorBridge.layersFromBlueprint){
+    var rebuilt=WatchfloorBridge.layersFromBlueprint(WatchfloorBridge.blueprintFor(a.id));
+    if(rebuilt&&rebuilt.length)return rebuilt;
+  }
   var p=KP(a);
   var id=a.id+" — «"+a.nick+"» — "+curDeptName(a)+" · "+(cur?cur.name:"");
   var goal=(p.objs&&p.objs[0])?p.objs[0]:("Execute the mandate of "+a.nick+" at expert standard.");
@@ -1156,12 +1172,15 @@ R(a,"Cadence",p.cad)+R(a,"Autonomy",p.auto)+
 
 if(t==="BLUEPRINT"){
   var layers=blueprintLayers(a);
-  return '<div class="pnote">Complete operating blueprint — 25 layers (structural + operating + control). Expert standard for this seat.</div>'+
+  var fromRebuild=!!(window.WatchfloorBridge&&WatchfloorBridge.blueprintFor&&WatchfloorBridge.blueprintFor(a.id));
+  return '<div class="pnote">'+(fromRebuild
+    ?'Rebuilt expert blueprint from Watchfloor registry — 25 layers (structural + operating + control).'
+    :'Complete operating blueprint — 25 layers (structural + operating + control). Expert standard for this seat.')+'</div>'+
   layers.map(function(L){
     var body=Array.isArray(L[1])?L[1].map(function(x){return "• "+esc(x)}).join("<br>"):esc(L[1]);
     return '<div class="box" style="margin-bottom:10px"><div class="k">'+esc(L[0])+'</div><div class="v" style="font-size:13px;line-height:1.55">'+body+'</div></div>';
   }).join("")+
-  '<div class="pfoot">PAPER ONLY · NO SELF-APPROVE · NO SELF-EXECUTE · LIVE LOCKED</div>';
+  '<div class="pfoot">PAPER ONLY · NO SELF-APPROVE · NO SELF-EXECUTE · LIVE LOCKED'+(fromRebuild?' · REBUILT': '')+'</div>';
 }
 
 if(t==="OBJECTIVES")return '<div class="pnote">'+esc(a.role)+'</div>'+

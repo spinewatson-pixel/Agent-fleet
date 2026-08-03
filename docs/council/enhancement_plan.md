@@ -1,7 +1,7 @@
 # Institutional Design Council — Enhancement Plan
 
-Generated: `2026-07-30T06:38:01.145480+00:00`
-Organization: **watchfloor quant lab** (registry v0.5.0)
+Generated: `2026-08-03T03:09:19.098105+00:00`
+Organization: **watchfloor quant lab** (registry v0.4.0)
 Agents: `{'total_agents': 285, 'proposers': 128, 'executors': 1, 'divisions': 12}`
 
 ## Reasoning
