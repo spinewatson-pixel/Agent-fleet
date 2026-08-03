@@ -1669,6 +1669,2511 @@
       "non_trading": true
     }
   },
+  "BLD-CHIEF": {
+    "agent_name": "The Architect",
+    "agent_id": "BLD-CHIEF",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "GOV-CHAIR",
+    "role": "systems_intelligence",
+    "strategy": "Chairs the Builder control plane. Owns the enhancement queue for the whole org. Designs structure \u2014 never proposes or executes trades.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-CHIEF-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-CHIEF' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-CHIEF"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "GOV-CHAIR"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "GOV-CHAIR",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "GOV-CHAIR",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-DISC": {
+    "agent_name": "Surveyor",
+    "agent_id": "BLD-DISC",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Read-only discovery \u2014 inventories agents, tools, topology, hard rules and evidence with confidence labels.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-DISC-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-DISC' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-DISC"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-INTENT": {
+    "agent_name": "Intent",
+    "agent_id": "BLD-INTENT",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Reconstructs mission, constraints and success criteria. Flags unresolved fields \u2014 never guesses ownership or risk tolerance.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-INTENT-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-INTENT' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-INTENT"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-GAP": {
+    "agent_name": "Gapfinder",
+    "agent_id": "BLD-GAP",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Compares current vs ideal capabilities. Keeps a preserve list of strengths that must not be casually removed.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-GAP-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-GAP' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-GAP"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-SYNTH": {
+    "agent_name": "Composer",
+    "agent_id": "BLD-SYNTH",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Synthesizes multiple candidate architectures from AKB patterns. Frameworks are substrates, not goals.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-SYNTH-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-SYNTH' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-SYNTH"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-SIM": {
+    "agent_name": "Twin",
+    "agent_id": "BLD-SIM",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Static analysis and scenario tests against the digital twin. Predictions with intervals \u2014 never declared facts.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-SIM-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-SIM' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-SIM"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-REVIEW": {
+    "agent_name": "Red Arch",
+    "agent_id": "BLD-REVIEW",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Independent adversarial architecture review. Tries to disprove designs; can block unsafe recommendations.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-REVIEW-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-REVIEW' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-REVIEW"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-PLAN": {
+    "agent_name": "Roadmap",
+    "agent_id": "BLD-PLAN",
+    "department": "Architecture Control Plane",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Turns chosen designs into reversible migration plans with gates, owners and success measures. Export only until approved.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-PLAN-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-PLAN' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-PLAN"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "IDC-RISK": {
+    "agent_name": "Stress",
+    "agent_id": "IDC-RISK",
+    "department": "Design Council Vetoes",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Portfolio & risk design veto \u2014 limits, concentration, halt readiness. Can kill an enhancement that weakens SoD or paper-only gates.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "IDC-RISK-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'IDC-RISK' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for IDC-RISK"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "IDC-GOV": {
+    "agent_name": "Controls",
+    "agent_id": "IDC-GOV",
+    "department": "Design Council Vetoes",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Governance & operations veto \u2014 change requests, escalation, agent-ceiling gates, audit completeness.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "IDC-GOV-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'IDC-GOV' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for IDC-GOV"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "IDC-CAP": {
+    "agent_name": "Steward",
+    "agent_id": "IDC-CAP",
+    "department": "Design Council Vetoes",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Capital stewardship veto \u2014 activity quality, patient capital, forge thresholds. Blocks noisy agent sprawl.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "IDC-CAP-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'IDC-CAP' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for IDC-CAP"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-SPEC": {
+    "agent_name": "Specwright",
+    "agent_id": "BLD-SPEC",
+    "department": "Agent Engineering",
+    "supervisory_agent_id": "BLD-ENHANCE",
+    "role": "systems_intelligence",
+    "strategy": "Writes complete operating blueprints for every seat \u2014 identity through health monitoring \u2014 so agents know how to work.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-SPEC-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-SPEC' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-SPEC"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-ENHANCE"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-ENHANCE",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-ENHANCE",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-WIRE": {
+    "agent_name": "Circuit",
+    "agent_id": "BLD-WIRE",
+    "department": "Agent Engineering",
+    "supervisory_agent_id": "BLD-ENHANCE",
+    "role": "systems_intelligence",
+    "strategy": "Operating contracts and message wiring \u2014 permissions, SoD, ResearchSignal schema, approval chain hooks.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-WIRE-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-WIRE' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-WIRE"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-ENHANCE"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-ENHANCE",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-ENHANCE",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-TEST": {
+    "agent_name": "Proving",
+    "agent_id": "BLD-TEST",
+    "department": "Agent Engineering",
+    "supervisory_agent_id": "BLD-ENHANCE",
+    "role": "systems_intelligence",
+    "strategy": "Acceptance engineer \u2014 paper-chain drills, SoD asserts, halt drills. A seat is not done until it passes.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-TEST-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-TEST' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-TEST"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-ENHANCE"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-ENHANCE",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-ENHANCE",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
+  "BLD-ENHANCE": {
+    "agent_name": "Forge Lead",
+    "agent_id": "BLD-ENHANCE",
+    "department": "Agent Engineering",
+    "supervisory_agent_id": "BLD-CHIEF",
+    "role": "systems_intelligence",
+    "strategy": "Runs the enhance-fleet sequence: council findings \u2192 concrete agent upgrades \u2192 Mission Control proposals. Owns the Builder\u2192Watchfloor handoff.",
+    "economic_rationale": "Watchfloor systems_intelligence seat \u2014 does not propose trades; owns mandate outputs and escalations only.",
+    "assets_permitted": [
+      "N/A"
+    ],
+    "markets_permitted": [
+      "US_EQUITIES"
+    ],
+    "excluded_assets": [],
+    "holding_period_days_min": 0,
+    "holding_period_days_max": 0,
+    "trading_frequency": "event_driven",
+    "valid_regimes": [
+      "trending_bull",
+      "trending_bear",
+      "range_bound",
+      "high_volatility",
+      "low_volatility",
+      "risk_off",
+      "risk_on",
+      "earnings_season",
+      "macro_event",
+      "unknown"
+    ],
+    "invalid_regimes": [],
+    "required_data_inputs": [
+      "org_events",
+      "mem_1_namespace"
+    ],
+    "data_sources": {
+      "org_events": "MEM-1",
+      "halt": "SEC-HALT"
+    },
+    "indicators_features_models": [],
+    "setup_detection_rules": [
+      {
+        "rule_id": "BLD-ENHANCE-MANDATE-01",
+        "description": "Seat activates on matching org events within mandate",
+        "expression": "event.recipient_ids CONTAINS 'BLD-ENHANCE' OR event.tags OVERLAP mandate_tags",
+        "required_inputs": [
+          "event_type",
+          "payload",
+          "correlation_id"
+        ],
+        "lookback": 1
+      }
+    ],
+    "entry_exit": {
+      "entry_rules": [
+        "activate on mandate event for BLD-ENHANCE"
+      ],
+      "exit_rules": [
+        "release after output written to MEM-1"
+      ],
+      "stop_loss_rule": "escalate_on_repeated_failure",
+      "take_profit_rule": null,
+      "invalidation_rules": [
+        "mandate_breach",
+        "halt",
+        "permission_denied"
+      ],
+      "time_stop_days": null
+    },
+    "position_sizing": {
+      "method": "fixed_fraction",
+      "max_pct_nav": 0.0001,
+      "min_pct_nav": 0.0,
+      "vol_target_ann": null,
+      "kelly_fraction_cap": null,
+      "max_concurrent_positions": 0,
+      "max_sector_pct": 0.0,
+      "notes": "Non-trading seat \u2014 no capital authority"
+    },
+    "information_received_from": [
+      "MEM-1",
+      "BLD-CHIEF"
+    ],
+    "outputs_sent_to": [
+      "MEM-1",
+      "BLD-CHIEF",
+      "GOV-CHAIR"
+    ],
+    "approval": {
+      "requires_independent_validation": false,
+      "requires_portfolio_evaluation": false,
+      "requires_risk_approval": false,
+      "requires_capital_stewardship_review": false,
+      "requires_governance_check": true,
+      "can_self_approve": false,
+      "can_self_execute": false,
+      "can_set_own_capital_limits": false,
+      "can_evaluate_own_performance": false
+    },
+    "execution": {
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "may_cancel_orders": false,
+      "may_force_close": false,
+      "paper_only": true,
+      "live_enabled": false,
+      "max_notional_usd": 0.0
+    },
+    "monitoring_after_entry": [
+      "mandate_sla",
+      "escalation_latency"
+    ],
+    "memory_retained": [
+      "outputs",
+      "escalations",
+      "rejects"
+    ],
+    "performance_measurements": [
+      "sla_hit_rate",
+      "escalation_quality",
+      "false_alarm_rate"
+    ],
+    "failure_shutdown": {
+      "on_data_gap": "pause_new_proposals; alert GOV-OPS-001",
+      "on_model_error": "disable_agent; escalate",
+      "on_limit_breach": "halt_agent; notify PORT-RISK-001",
+      "on_repeated_rejects": "reduce_proposal_rate; review after 10 rejects/day",
+      "kill_switch_triggers": [
+        "daily_loss_halt",
+        "drawdown_halt",
+        "data_integrity_fail",
+        "governance_shutdown"
+      ],
+      "escalate_to": [
+        "BLD-CHIEF",
+        "GOV-CHAIR",
+        "SEC-HALT"
+      ]
+    },
+    "testing_deployment_status": "paper",
+    "strategy_version": "watchfloor-0.4.0",
+    "self_improvement": {
+      "may_propose_changes": true,
+      "may_auto_apply_to_production": false,
+      "required_sequence": [
+        "documented",
+        "statistical_test",
+        "out_of_sample",
+        "paper_trade",
+        "risk_review",
+        "versioned",
+        "approved",
+        "gradual_deploy"
+      ],
+      "min_oos_sharpe": 0.5,
+      "min_paper_days": 20,
+      "max_parameter_change_pct": 20.0
+    },
+    "owns_stages": [],
+    "authority_actions": [],
+    "extra": {
+      "watchfloor_division": "builder",
+      "watchfloor_kind": "builder",
+      "contract_completeness": "stub_measurable_v1",
+      "non_trading": true
+    }
+  },
   "GEO-1": {
     "agent_name": "Flashpoint",
     "agent_id": "GEO-1",

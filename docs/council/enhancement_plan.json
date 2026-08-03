@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-03T03:09:19.098105+00:00",
+  "generated_at": "2026-08-03T03:21:33.265035+00:00",
   "organization": "watchfloor quant lab",
-  "registry_version": "0.4.0",
+  "registry_version": "0.5.2",
   "agent_counts": {
-    "total_agents": 285,
+    "total_agents": 300,
     "proposers": 128,
     "executors": 1,
-    "divisions": 12
+    "divisions": 13
   },
   "findings": [
     {
@@ -347,7 +347,7 @@
       "team_name": "Governance and Operations",
       "kind": "recommended_improvement",
       "title": "Agent ceiling decision in force; enforce in UI create flow",
-      "detail": "Roster 285 \u2264 ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.",
+      "detail": "Roster 300 \u2264 ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.",
       "evidence": [
         "docs/council/decisions/GOV-CEIL-2026-07-28.md"
       ],

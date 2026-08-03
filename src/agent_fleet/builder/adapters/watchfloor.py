@@ -393,7 +393,8 @@ class WatchfloorReadOnlyAdapter(Adapter):
             ("CAP-SIM", "Digital twin / architecture simulation", False, "missing"),
             ("CAP-OBS", "Live architecture observability & drift", False, "nascent"),
             ("CAP-CHANGE", "Formal change-request lifecycle", False, "nascent"),
-            ("CAP-AKB", "Consult Architecture Knowledge Base", False, "nascent"),
+            ("CAP-AKB", "Consult Architecture Knowledge Base", "BLD-CHIEF" in ids, "working"),
+            ("CAP-BUILDER", "Builder control plane + agent engineering", "BLD-ENHANCE" in ids, "working"),
             ("CAP-CEIL-GATE", "UI hard gate on agent ceiling", False, "missing"),
         ]
         out: list[Capability] = []

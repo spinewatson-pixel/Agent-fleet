@@ -15,7 +15,7 @@ Watchfloor is a strong paper trading organization, but lacks a governed architec
 
 ## Current state
 
-watchfloor quant lab v0.5.1: 285 workers, 17 capabilities modeled, adapter=watchfloor_readonly
+watchfloor quant lab v0.5.2: 300 workers, 18 capabilities modeled, adapter=watchfloor_readonly
 
 ## Preserved strengths
 
@@ -110,7 +110,7 @@ Owner: `HUMAN-1`
 
 ## Gap summary
 
-- Missing: CAP-INTENT, CAP-SIM, CAP-OBS, CAP-CHANGE, CAP-AKB, CAP-CEIL-GATE
+- Missing: CAP-INTENT, CAP-SIM, CAP-OBS, CAP-CHANGE, CAP-CEIL-GATE
 - Strong: CAP-DISCOVER, CAP-AUTHORITY, CAP-SOD, CAP-BLUEPRINT
 
 ## AKB policy

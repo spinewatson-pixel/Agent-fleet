@@ -46,7 +46,7 @@ That syncs `config/watchfloor_registry.json`, regenerates contracts/blueprints/c
 |---|---|
 | Hard rules | `hard_rules` |
 | Departments | `departments[]` / agent `department` |
-| Agents | `agents[]` (**285**) |
+| Agents | `agents[]` (**300**) |
 | Proposers / executor | `proposer_ids` / `executor_ids` (`EXEC-1` only) |
 | Approval / veto | `approval_chain`, `veto_agents` |
 | Institutional council | `institutional_council_map` |

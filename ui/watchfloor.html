@@ -453,6 +453,28 @@ A("COMP-1","The Line","Watches every agent against its charter. Breach → immed
 A("RECON-1","Book Recon","Reconciles internal Watchfloor book vs paper broker. Mismatch → COMP-1 halt on new proposals.",["GOVERNANCE","RECON"],{kind:"control"}),
 A("ACT-1","Throttle","Activity budget officer — caps new discretionary proposals per cohort per day and flags duplicate thesis families to BRK-INV.",["GOVERNANCE","ACTIVITY"],{kind:"control"})]}]},
 
+{key:"builder",em:"🏗️",name:"THE BUILDER",tab:"Builder",label:"DESIGNS & ENHANCES AGENTS · NEVER TRADES",
+desc:"Architecture control plane for this lab. Discovers the org, reconstructs intent, finds gaps, designs working agent specs, and enhances the fleet so seats actually run — blueprints, contracts, wiring, tests. Advisory only: proposes structural upgrades to Mission Control; never places trades.",
+pills:["ADVISORY ONLY","15 AGENTS","ENHANCE FLEET","AKB-BACKED"],depts:[
+{name:"Architecture Control Plane",sub:"DISCOVER → INTENT → GAP → SYNTHESIZE → REVIEW → PLAN",desc:"The Builder loop that turns Watchfloor into an explainable, testable organization. Human Command Layer is always on — evidence, questions, diffs, approvals. Never mutates production without GOV-CHAIR / HUMAN-1.",pills:["CONTROL PLANE","PAPER ORG FIRST"],open:true,agents:[
+A("BLD-CHIEF","The Architect","Chairs the Builder control plane. Owns the enhancement queue for the whole org. Designs structure — never proposes or executes trades.",["BUILDER","CHIEF","ADVISORY"],{kind:"builder"}),
+A("BLD-DISC","Surveyor","Read-only discovery — inventories agents, tools, topology, hard rules and evidence with confidence labels.",["BUILDER","DISCOVERY"],{kind:"builder"}),
+A("BLD-INTENT","Intent","Reconstructs mission, constraints and success criteria. Flags unresolved fields — never guesses ownership or risk tolerance.",["BUILDER","INTENT"],{kind:"builder"}),
+A("BLD-GAP","Gapfinder","Compares current vs ideal capabilities. Keeps a preserve list of strengths that must not be casually removed.",["BUILDER","GAP ANALYSIS"],{kind:"builder"}),
+A("BLD-SYNTH","Composer","Synthesizes multiple candidate architectures from AKB patterns. Frameworks are substrates, not goals.",["BUILDER","SYNTHESIS"],{kind:"builder"}),
+A("BLD-SIM","Twin","Static analysis and scenario tests against the digital twin. Predictions with intervals — never declared facts.",["BUILDER","SIMULATION"],{kind:"builder"}),
+A("BLD-REVIEW","Red Arch","Independent adversarial architecture review. Tries to disprove designs; can block unsafe recommendations.",["BUILDER","REVIEW","VETO DESIGN"],{kind:"builder"}),
+A("BLD-PLAN","Roadmap","Turns chosen designs into reversible migration plans with gates, owners and success measures. Export only until approved.",["BUILDER","PLANNING"],{kind:"builder"})]},
+{name:"Design Council Vetoes",sub:"ENHANCE FLEET · SAFETY LENSES",desc:"Specialty veto seats from the Institutional Design Council. They audit enhancement plans for risk, governance and capital quality before anything reaches Mission Control. Full nine-lens enhance still runs via agent-fleet enhance.",pills:["3 VETO LENSES","P0 SAFETY"],open:true,agents:[
+A("IDC-RISK","Stress","Portfolio & risk design veto — limits, concentration, halt readiness. Can kill an enhancement that weakens SoD or paper-only gates.",["BUILDER","COUNCIL","RISK VETO"],{kind:"builder"}),
+A("IDC-GOV","Controls","Governance & operations veto — change requests, escalation, agent-ceiling gates, audit completeness.",["BUILDER","COUNCIL","GOV VETO"],{kind:"builder"}),
+A("IDC-CAP","Steward","Capital stewardship veto — activity quality, patient capital, forge thresholds. Blocks noisy agent sprawl.",["BUILDER","COUNCIL","STEWARD VETO"],{kind:"builder"})]},
+{name:"Agent Engineering",sub:"MAKE SEATS ACTUALLY WORK",desc:"Turns enhancement plans into running agents: complete 25-layer blueprints, measurable operating contracts, bus wiring, and acceptance checks. Builders never self-certify — FIT-1 / GOV-CHAIR certify.",pills:["BLUEPRINTS","CONTRACTS","TESTS"],open:true,agents:[
+A("BLD-SPEC","Specwright","Writes complete operating blueprints for every seat — identity through health monitoring — so agents know how to work.",["BUILDER","BLUEPRINTS"],{kind:"builder"}),
+A("BLD-WIRE","Circuit","Operating contracts and message wiring — permissions, SoD, ResearchSignal schema, approval chain hooks.",["BUILDER","CONTRACTS","WIRING"],{kind:"builder"}),
+A("BLD-TEST","Proving","Acceptance engineer — paper-chain drills, SoD asserts, halt drills. A seat is not done until it passes.",["BUILDER","TESTS","ACCEPTANCE"],{kind:"builder"}),
+A("BLD-ENHANCE","Forge Lead","Runs the enhance-fleet sequence: council findings → concrete agent upgrades → Mission Control proposals. Owns the Builder→Watchfloor handoff.",["BUILDER","ENHANCE","HANDOFF"],{kind:"builder"})]}]},
+
 {key:"intel",em:"🌍",name:"GLOBAL INTEL",tab:"Intel",label:"WHAT CHANGED IN THE WORLD TODAY",
 desc:"News and research across everything that can move a stock — geopolitics to weather to tech adoption — plus deep company research. Every covered name keeps a live bull case and bear case.",
 pills:["24 AGENTS","9 DOMAINS","24/7 SCAN"],depts:[
@@ -789,10 +811,11 @@ quant:["Sweeping series for weak relationships","Re-weighting the ensemble stack
 fund:["Re-reading the doctrine against today's tape","Grading a candidate against desk rules","Paper-testing a setup from the playbook","Writing the post-mortem on the last exit","Petitioning the Forge for a new agent"],
 mind:["Reframing a stuck problem through a second domain","Interrogating a confident claim from another desk","Generating candidates before any filtering","Sketching the mechanism behind a correlation","Attaching a kill condition to a new idea"],
 contr:["Standing by — no active engagement","Awaiting sponsor scope","Final knowledge-transfer packet","Idle — available for engagement"],
-control:["Diffing internal book vs paper broker","Classifying an open break","Drafting halt request for COMP-1","Clearing a resolved recon item","Enforcing daily activity budgets"]};
+control:["Diffing internal book vs paper broker","Classifying an open break","Drafting halt request for COMP-1","Clearing a resolved recon item","Enforcing daily activity budgets"],
+builder:["Surveying Watchfloor topology and evidence gaps","Drafting a 25-layer blueprint for a weak seat","Running enhance-fleet against the current registry","Adversarial review of a candidate architecture","Wiring SoD checks into an operating contract","Proving a seat on the paper chain before handoff"]};
 var arr=t[a.kind]||t.trader;return arr[x%arr.length]}
 function tiles(a){var x=h(a.id);
-var m={trader:["📄","THESIS"],intel:["📄","REPORTS"],disc:["📡","FORECASTS"],lab:["🧪","EXPERIMENTS"],risk:["⚖️","REVIEWS"],meta:["🧾","AUDITS"],data:["🧮","PIPELINES"],gov:["🗳️","PROPOSALS"],contr:["📦","DELIVERY"],mind:["💡","IDEAS"],quant:["🔬","SIGNALS"],fund:["🏛️","PLAYBOOK"],control:["🧩","RECON"]};
+var m={trader:["📄","THESIS"],intel:["📄","REPORTS"],disc:["📡","FORECASTS"],lab:["🧪","EXPERIMENTS"],risk:["⚖️","REVIEWS"],meta:["🧾","AUDITS"],data:["🧮","PIPELINES"],gov:["🗳️","PROPOSALS"],contr:["📦","DELIVERY"],mind:["💡","IDEAS"],quant:["🔬","SIGNALS"],fund:["🏛️","PLAYBOOK"],control:["🧩","RECON"],builder:["🏗️","ENHANCE"]};
 var third=m[a.kind]||m.trader;
 return[["▦","OVERVIEW",null],["🧬","BLUEPRINT",null],["◎","OBJECTIVES",null],["⚙️","FUNCTIONS",null],["🛠️","TOOLS",null],
 ["📖","KNOWLEDGE",{n:3+x%6}],["📊","ANALYTICS",null],[third[0],third[1],null],["⚡","ACTIVITY",{live:1}],
@@ -808,6 +831,13 @@ srcs:[["Credential inventory","keys"],["Dependency manifest","pins"],["Incident 
 mets:[["Keys In Scope","%"],["Rotation Overdue","count"],["Drill Grade","/100"],["Open Incidents","live"]],
 objs:["Know every key that exists and the smallest thing it needs to reach.","Assume breach — keep shrinking what a stolen key could touch.","When in doubt, stop everything. Downtime is cheaper than compromise."],
 meas:"Judged on shrinking blast radius and drill speed — not on quiet weeks. A silent logbook proves nothing."},
+builder:{cad:"On enhance cycle · continuous discovery",auto:"Advisory only · never trades · never self-certifies",
+tools:[["🗺️","Org Registry","CONNECTED"],["🧬","Blueprint Forge","WRITE"],["📜","Contract Bench","WRITE"],["📚","AKB Consult","READ-ONLY"],["🧪","Twin Bench","SANDBOX"],["✅","Acceptance Suite","ENFORCED"],["📤","Enhance Export","WRITE"]],
+fns:["Discover before designing","Flag unresolved intent — never guess","Preserve proven strengths","Emit ≥2 architecture candidates","Block unsafe designs at review","Ship blueprints + contracts + tests together","Handoff to GOV-CHAIR — never self-approve"],
+srcs:[["Watchfloor registry","agents"],["Operating contracts","specs"],["25-layer blueprints","layers"],["Council enhancement plan","tasks"],["AKB seed patterns","patterns"],["Paper audit events","runs"]],
+mets:[["Seats Enhanced","/ cycle"],["Blueprint Coverage","%"],["Acceptance Pass","%"],["Blocked Unsafe","count"]],
+objs:["Make every Watchfloor seat operationally complete — blueprint, contract, wiring, proof.","Enhance the org toward its mission without weakening paper-only SoD.","Leave Mission Control an explainable plan humans can approve or reject."],
+meas:"Judged on agents that actually work after handoff — not on designs produced. A beautiful spec that fails the paper chain is a miss."},
 trader:{cad:"Every session · pre-open through close",auto:"Proposes trades · sandbox only",
 tools:[["📡","Live Tape Feed","CONNECTED"],["🧾","Paper Broker","SANDBOX"],["📉","Chart Engine","CONNECTED"],["📝","Thesis Log","WRITE"],["⚖️","Position Sizer","CONNECTED"],["🛑","Risk Gate","ENFORCED"]],
 fns:["Log thesis before every entry","Auto-flatten at session close","Refuse setups below confidence floor","Escalate anomalies to The Lab","Post-trade self-review"],
@@ -915,6 +945,10 @@ function blueprintLayers(a){
   }
   if(a.id==="EXEC-1")resp.push("Sole paper order placer after authority chain");
   if(a.id==="RECON-1"||a.id==="ACT-1")resp.push("Control seat — halt/recommend, never trade");
+  if(a.kind==="builder"||String(a.id).indexOf("BLD-")===0||String(a.id).indexOf("IDC-")===0){
+    resp.push("Enhances and designs agents — never proposes or executes trades");
+    resp.push("Never self-certifies — FIT-1 / GOV-CHAIR certify");
+  }
   var caps={
     trader:["Setup recognition","Falsifiable thesis drafting","Session risk hygiene","Post-trade critique"],
     intel:["Multi-source triangulation","Exposure mapping","Case-file discipline","Source scoring"],
@@ -929,7 +963,8 @@ function blueprintLayers(a){
     quant:["Weak-signal mining","Ensemble combination","Regime detection","Overfit/cost veto"],
     fund:["Doctrine analysis","Playbook grading","Patient sizing","Forge petitions"],
     mind:["Cross-domain analogy","First principles","Claim interrogation","Falsification"],
-    contr:["Scoped delivery","Knowledge transfer","Access hygiene"]
+    contr:["Scoped delivery","Knowledge transfer","Access hygiene"],
+    builder:["Org discovery","Intent reconstruction","Gap analysis","Blueprint authorship","Contract wiring","Adversarial design review","Acceptance proving"]
   };
   var mem={
     trader:["Trade journal","Rejects","Regime at entry","Applied lessons"],
@@ -945,7 +980,8 @@ function blueprintLayers(a){
     quant:["Signal library","OOS results","Regime log","Culls"],
     fund:["Playbook ledger","Doctrine reviews","Journals","Decay notes"],
     mind:["Idea ledger","Retractions","Stuck queue","Lab handoffs"],
-    contr:["Scopes","Deliveries","Engagement scores"]
+    contr:["Scopes","Deliveries","Engagement scores"],
+    builder:["Org snapshots","Enhancement plans","Blueprint drafts","Acceptance results","AKB consultations","Preserve lists"]
   };
   var ops={
     trader:{
@@ -1101,6 +1137,17 @@ function blueprintLayers(a){
       learning:["Leave org capable without you"],
       eval:["Knowledge retained %"],
       perms:["LIMITED sandbox","No standing access"]
+    },
+    builder:{
+      skills:["Discovery","Intent fields","Gap/preserve lists","Candidate synthesis","Twin scenarios","Adversarial review","Blueprint+contract authorship","Acceptance drills"],
+      workflows:["Discover → intent → gap → AKB consult → synthesize ≥2 → simulate → review → plan → enhance seats → GOV handoff"],
+      decisions:["Never guess unresolved intent","Never self-certify","Never enable live","Block on critical review failure","Preserve SoD and paper-only"],
+      comms:["← registry/contracts/blueprints/council","→ BLD-ENHANCE handoff","→ GOV-CHAIR/HUMAN-1 proposals","↔ ARCH-1/FIT-1/LIFE-1"],
+      inputs:["Watchfloor registry","Hard rules","AKB patterns","Council tasks","Paper audit events"],
+      outputs:["Org snapshot","Recommendation contract","Migration plan","Blueprints","Contracts","Acceptance report"],
+      learning:["AKB only after reviewed outcomes","Retire patterns that fail acceptance"],
+      eval:["Seats that pass paper chain","Evidence-backed claims %","Unsafe designs blocked"],
+      perms:["Advisory design only","No TradeProposal","No orders","No production mutate"]
     }
   };
   var o=ops[a.kind]||ops.trader;
@@ -1121,7 +1168,8 @@ function blueprintLayers(a){
     quant:{constraints:["Evidence required for RT","No self-certify","No live"],triggers:["Batch","Regime","Decay","Evidence ready"],scheduling:["Continuous · weekly OOS"],logging:["Signals","OOS","Culls"],reflect:["Decay autopsy"],escalation:["Budget→GOV-CHAIR"],versioning:["Signal+evidence IDs"],health:["Miner/regime heartbeat"]},
     fund:{constraints:["Paper only","Off-playbook win=miss"],triggers:["Doctrine clock","Pivotal tape","Forge threshold"],scheduling:["Every session · weekly doctrine"],logging:["Playbook ledger"],reflect:["Study source failures"],escalation:["Edge→Forge","Risk→RISK-1"],versioning:["Playbook versions"],health:["Fidelity drift","Decay timers"]},
     mind:{constraints:["Never trades","No raw ideas to floor"],triggers:["Stuck problem","Claim flag","Movers sweep"],scheduling:["On call · movers daily"],logging:["Idea ledger","Kill conditions"],reflect:["Methods that survive Lab"],escalation:["Survivors→Lab only"],versioning:["Idea/dossier versions"],health:["Queue aging"]},
-    contr:{constraints:["No scope=no work","No standing access"],triggers:["Scope signed","Timer end"],scheduling:["On demand"],logging:["Scope","Delivery","Revokes"],reflect:["Knowledge retained?"],escalation:["Scope creep→sponsor/GOV"],versioning:["Engagement IDs"],health:["Revoke alarms"]}
+    contr:{constraints:["No scope=no work","No standing access"],triggers:["Scope signed","Timer end"],scheduling:["On demand"],logging:["Scope","Delivery","Revokes"],reflect:["Knowledge retained?"],escalation:["Scope creep→sponsor/GOV"],versioning:["Engagement IDs"],health:["Revoke alarms"]},
+    builder:{constraints:["Never trades","Never self-certifies","Never enables live","No AKB write from unverified sim"],triggers:["Enhance cycle","Registry sync","Council plan refresh","Acceptance fail"],scheduling:["On enhance · continuous discovery"],logging:["Snapshots","Recommendations","Blueprint diffs","Acceptance"],reflect:["Did enhanced seats actually work?"],escalation:["Unsafe→BLD-REVIEW block","Structural→GOV-CHAIR","Mode-B→HUMAN-1"],versioning:["Recommendation + blueprint versions"],health:["Coverage gaps","Stale snapshots","Failed acceptance aging"]}
   };
   var c=ctrl[a.kind]||ctrl.trader;
   if(a.id==="EXEC-1"){
@@ -1280,13 +1328,13 @@ b.onclick=function(){cur=d;document.getElementById("q").value="";render()};el.ap
 function goDiv(key){cur=DIVISIONS.find(function(d){return d.key===key});document.getElementById("q").value="";render()}
 
 function webSVG(){
-var N={ctrl:[220,58,"🎛️","CONTROL"],intel:[80,128,"🌍","INTEL"],learn:[360,128,"🎓","LEARNING"],
-pred:[54,248,"🔮","PREDICT"],lab:[386,248,"🧪","LAB"],trade:[152,356,"📈","TRADING"],
-contr:[295,360,"🧰","HIRED"],data:[220,215,"🗄️","MEMORY"],minds:[140,424,"🧠","MINDS"],sec:[300,424,"🛡️","SHIELD"]};
+var N={ctrl:[220,48,"🎛️","CONTROL"],builder:[220,118,"🏗️","BUILDER"],intel:[70,168,"🌍","INTEL"],learn:[370,168,"🎓","LEARNING"],
+pred:[54,278,"🔮","PREDICT"],lab:[386,278,"🧪","LAB"],trade:[152,386,"📈","TRADING"],
+contr:[295,390,"🧰","HIRED"],data:[220,248,"🗄️","MEMORY"],minds:[140,454,"🧠","MINDS"],sec:[300,454,"🛡️","SHIELD"]};
 function ln(a,b,cls){return '<line class="'+cls+'" x1="'+N[a][0]+'" y1="'+N[a][1]+'" x2="'+N[b][0]+'" y2="'+N[b][1]+'"/>'}
 var edges='';
 /* faint spokes: every division reads & writes shared memory, continuously */
-["ctrl","intel","learn","pred","lab","trade","contr","minds","sec"].forEach(function(k){edges+=ln(k,"data","we-mem")});
+["ctrl","builder","intel","learn","pred","lab","trade","contr","minds","sec"].forEach(function(k){edges+=ln(k,"data","we-mem")});
 /* live streams */
 edges+=ln("intel","pred","we-live")+ln("pred","trade","we-live")+ln("intel","trade","we-live");
 /* daily cycles */
@@ -1296,13 +1344,14 @@ edges+=ln("trade","lab","we-daily")+ln("trade","learn","we-daily")+ln("pred","le
 edges+=ln("minds","lab","we-daily")+ln("minds","learn","we-daily");
 edges+=ln("minds","ctrl","we-week");edges+=ln("sec","ctrl","we-week")+ln("sec","trade","we-daily");
 edges+=ln("learn","ctrl","we-week")+ln("ctrl","lab","we-week")+ln("contr","ctrl","we-week")+ln("contr","lab","we-week");
+edges+=ln("builder","ctrl","we-week")+ln("builder","learn","we-daily")+ln("builder","lab","we-week");
 var nodes='';
 Object.keys(N).forEach(function(k){var n=N[k],x=n[0],y=n[1];
 nodes+='<g class="wnode'+(k==="data"?" hub":"")+'" data-go="'+k+'">'+
 '<rect x="'+(x-27)+'" y="'+(y-27)+'" width="54" height="54" rx="15"/>'+
 '<text class="wem" x="'+x+'" y="'+(y+7)+'" text-anchor="middle">'+n[2]+'</text>'+
 '<text class="wlb" x="'+x+'" y="'+(y+43)+'" text-anchor="middle">'+n[3]+'</text></g>'});
-return '<div class="web"><svg viewBox="0 0 440 476" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>'+
+return '<div class="web"><svg viewBox="0 0 440 510" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>'+
 '<div class="weblegend">'+
 '<span class="pill"><span class="lk"></span>LIVE STREAM</span>'+
 '<span class="pill"><span class="lk d"></span>DAILY CYCLE</span>'+
@@ -1341,6 +1390,9 @@ out+='<div class="conn"><div class="line"></div><div class="lbl">THE WEB · WHO 
 out+=webSVG();
 out+='<div class="conn"><div class="line"></div><div class="lbl">COMMAND · APPROVES EVERYTHING</div><div class="line"></div></div>';
 out+=ovwCard(DIVISIONS.find(function(d){return d.key==="ctrl"}));
+out+='<div class="conn"><div class="line"></div><div class="lbl">THE BUILDER · DESIGNS & ENHANCES AGENTS SO THEY WORK</div><div class="line"></div></div>';
+out+=ovwCard(DIVISIONS.find(function(d){return d.key==="builder"}));
+out+='<div style="margin:10px 2px 0;text-align:center"><a href="builder.html" style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--purple-hi);text-decoration:none;border:1px solid rgba(139,124,246,.45);border-radius:999px;padding:8px 14px;display:inline-block">OPEN BUILDER DECISION WORKSPACE →</a></div>';
 out+='<div class="conn"><div class="line"></div><div class="lbl">THE PIPELINE · INTEL → FORECASTS → TRADES → VERDICTS → LESSONS</div><div class="line"></div></div>';
 out+=["intel","pred","trade","lab","learn"].map(function(k,i){
 return ovwCard(DIVISIONS.find(function(d){return d.key===k}))+(i<4?'<div class="conn"><div class="line"></div></div>':"")}).join("");

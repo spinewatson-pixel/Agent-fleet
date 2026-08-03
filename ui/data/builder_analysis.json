@@ -18,7 +18,7 @@
     "lifecycle": "operating_paper",
     "criticality": "high",
     "environment": "paper",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "substrate": "custom_python_watchfloor",
     "evidence_ids": [
       "EV-REG-001",
@@ -33,7 +33,7 @@
       "production_broker_boundary",
       "success_metric_targets_numeric"
     ],
-    "updated_at": "2026-08-03T03:17:47.615406Z"
+    "updated_at": "2026-08-03T03:21:39.308631Z"
   },
   "intent": {
     "fields": {
@@ -81,7 +81,6 @@
       "CAP-SIM",
       "CAP-OBS",
       "CAP-CHANGE",
-      "CAP-AKB",
       "CAP-CEIL-GATE"
     ],
     "weak": [
@@ -91,7 +90,9 @@
       "CAP-EVIDENCE",
       "CAP-REGIME",
       "CAP-LEARN",
-      "CAP-CONTRACT"
+      "CAP-CONTRACT",
+      "CAP-AKB",
+      "CAP-BUILDER"
     ],
     "strong": [
       "CAP-DISCOVER",
@@ -131,12 +132,6 @@
       {
         "capability_id": "CAP-CHANGE",
         "purpose": "Formal change-request lifecycle",
-        "priority": "P1",
-        "preserve_conflict": false
-      },
-      {
-        "capability_id": "CAP-AKB",
-        "purpose": "Consult Architecture Knowledge Base",
         "priority": "P1",
         "preserve_conflict": false
       },
@@ -293,7 +288,7 @@
     "Simulation outputs are predictions with intervals \u2014 not facts"
   ],
   "evidence_count": 5,
-  "worker_count": 285,
+  "worker_count": 300,
   "human_command_layer": {
     "role": "cross_cutting",
     "surfaces": [

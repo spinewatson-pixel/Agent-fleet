@@ -1,8 +1,8 @@
 # Institutional Design Council — Enhancement Plan
 
-Generated: `2026-08-03T03:09:19.098105+00:00`
-Organization: **watchfloor quant lab** (registry v0.4.0)
-Agents: `{'total_agents': 285, 'proposers': 128, 'executors': 1, 'divisions': 12}`
+Generated: `2026-08-03T03:21:33.265035+00:00`
+Organization: **watchfloor quant lab** (registry v0.5.2)
+Agents: `{'total_agents': 300, 'proposers': 128, 'executors': 1, 'divisions': 13}`
 
 ## Reasoning
 Council ran independent audits against the Watchfloor registry and paper-org wiring, cross-critiqued trading vs risk vs stewardship tensions, applied standing live-execution vetoes, and ordered implementation by P0→P3.
@@ -141,7 +141,7 @@ Council ran independent audits against the Watchfloor registry and paper-org wir
 - `P2` `recommended_improvement` **Research and Strategy**: Bull/Bear split authors need conflict metadata on case files
   - BULL-1 and BEAR-1 must never share authorship on the same case version.
 - `P1` `recommended_improvement` **Governance and Operations**: Agent ceiling decision in force; enforce in UI create flow
-  - Roster 285 ≤ ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.
+  - Roster 300 ≤ ceiling 300 (GOV-CEIL-2026-07-28). UI still needs hard gate.
 - `P2` `recommended_improvement` **Governance and Operations**: RECON-1 seat added; automate book vs broker mismatch halt
   - Seat exists under COMP-1; runtime recon loop still to implement.
 - `P2` `recommended_improvement` **Governance and Operations**: Incident runbooks for SEC-HALT drills not versioned in repo

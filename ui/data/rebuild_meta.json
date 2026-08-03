@@ -1,14 +1,15 @@
 {
   "source": "ui/watchfloor.html",
-  "registry_version": "0.5.1",
+  "registry_version": "0.5.2",
   "rebuilt_at": "2026-08-03T03:09:18.625Z",
   "counts": {
-    "total_agents": 285,
+    "total_agents": 300,
     "proposers": 128,
     "executors": 1,
-    "divisions": 12
+    "divisions": 13
   },
-  "blueprint_agents": 285,
-  "contract_agents": 285,
-  "layers": 25
+  "blueprint_agents": 300,
+  "contract_agents": 300,
+  "layers": 25,
+  "builder_division": true
 }

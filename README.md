@@ -8,7 +8,7 @@ Live brokerage execution is **hard-disabled**.
 
 | Artifact | Role |
 |----------|------|
-| `config/watchfloor_registry.json` | Machine-readable roster (285 agents) |
+| `config/watchfloor_registry.json` | Machine-readable roster (300 agents) |
 | `ui/watchfloor.html` | Org UI (loads rebuilt blueprints from `ui/data/`) |
 | `ui/builder.html` | Builder Decision Workspace (advisory control plane) |
 | `AKB/` | Architecture Knowledge Base (L1 research + L2 assets) |

@@ -1,7 +1,7 @@
 {
   "recommendation_id": "REC-WATCHFLOOR-MVP-001",
   "org_id": "org-watchfloor-quant-lab",
-  "created_at": "2026-08-03T03:17:47.617552Z",
+  "created_at": "2026-08-03T03:21:39.310944Z",
   "problem_statement": "Watchfloor is a strong paper trading organization, but lacks a governed architecture control plane loop (intent confidence, formal change sets, twin calibration, and evidence-backed AKB consultation).",
   "reconstructed_intent": {
     "fields": {
@@ -53,7 +53,7 @@
       "confidence": 0.99
     },
     {
-      "claim": "Roster has 285 workers under ceiling policy",
+      "claim": "Roster has 300 workers under ceiling policy",
       "evidence_ids": [
         "EV-REG-001"
       ],
@@ -67,7 +67,7 @@
       "confidence": 0.8
     }
   ],
-  "current_state_summary": "watchfloor quant lab v0.5.1: 285 workers, 17 capabilities modeled, adapter=watchfloor_readonly",
+  "current_state_summary": "watchfloor quant lab v0.5.2: 300 workers, 18 capabilities modeled, adapter=watchfloor_readonly",
   "preserved_strengths": [
     "Paper-only hard gate with live execution locked",
     "Single executor EXEC-1 after authority chain",

@@ -1,8 +1,8 @@
 {
   "source": "ui/watchfloor.html baseDivisions()",
   "organization": "watchfloor quant lab",
-  "version": "0.5.1",
-  "rebuilt_at": "2026-08-03T03:09:18.625Z",
+  "version": "0.5.2",
+  "rebuilt_at": "2026-08-03T03:21:24.855Z",
   "hard_rules": {
     "paper_only": true,
     "live_execution_enabled": false,
@@ -104,10 +104,10 @@
     "CIT-RISK"
   ],
   "counts": {
-    "total_agents": 285,
+    "total_agents": 300,
     "proposers": 128,
     "executors": 1,
-    "divisions": 12
+    "divisions": 13
   },
   "division_summary": [
     {
@@ -115,6 +115,12 @@
       "name": "MISSION CONTROL",
       "depts": 2,
       "agents": 10
+    },
+    {
+      "key": "builder",
+      "name": "THE BUILDER",
+      "depts": 3,
+      "agents": 15
     },
     {
       "key": "intel",
@@ -339,7 +345,7 @@
     {
       "id": "HEAD-INTEL",
       "nick": "Intel Seat",
-      "role": "Council voice for Global Intel \u2014 coverage, sector desks and case files.",
+      "role": "Council voice for Global Intel — coverage, sector desks and case files.",
       "tags": [
         "GOVERNANCE",
         "COUNCIL"
@@ -358,7 +364,7 @@
     {
       "id": "HEAD-TRADE",
       "nick": "Trading Seat",
-      "role": "Council voice for the trading floor \u2014 cohort design and sizing policy.",
+      "role": "Council voice for the trading floor — cohort design and sizing policy.",
       "tags": [
         "GOVERNANCE",
         "COUNCIL"
@@ -377,7 +383,7 @@
     {
       "id": "HEAD-LAB",
       "nick": "Lab Seat",
-      "role": "Council voice for The Lab \u2014 experiments, testing standards and red-team scope.",
+      "role": "Council voice for The Lab — experiments, testing standards and red-team scope.",
       "tags": [
         "GOVERNANCE",
         "COUNCIL"
@@ -396,7 +402,7 @@
     {
       "id": "HEAD-LEARN",
       "nick": "Learning Seat",
-      "role": "Council voice for the Learning Loop \u2014 lifecycle, attribution and audit findings.",
+      "role": "Council voice for the Learning Loop — lifecycle, attribution and audit findings.",
       "tags": [
         "GOVERNANCE",
         "COUNCIL"
@@ -415,7 +421,7 @@
     {
       "id": "HUMAN-1",
       "nick": "The Founder",
-      "role": "Human seat. Mode B \u2014 auto-approval below thresholds, hard escalation above. Can reverse anything.",
+      "role": "Human seat. Mode B — auto-approval below thresholds, hard escalation above. Can reverse anything.",
       "tags": [
         "HUMAN SEAT",
         "VETO"
@@ -434,7 +440,7 @@
     {
       "id": "RISK-1",
       "nick": "Exposure",
-      "role": "Models fleet-wide correlation, concentration and drawdown \u2014 are 40 agents accidentally in the same trade.",
+      "role": "Models fleet-wide correlation, concentration and drawdown — are 40 agents accidentally in the same trade.",
       "tags": [
         "RISK",
         "PORTFOLIO"
@@ -453,7 +459,7 @@
     {
       "id": "COMP-1",
       "nick": "The Line",
-      "role": "Watches every agent against its charter. Breach \u2192 immediate halt \u2192 council and human alert.",
+      "role": "Watches every agent against its charter. Breach → immediate halt → council and human alert.",
       "tags": [
         "COMPLIANCE",
         "ENFORCER"
@@ -472,7 +478,7 @@
     {
       "id": "RECON-1",
       "nick": "Book Recon",
-      "role": "Reconciles internal Watchfloor book vs paper broker. Mismatch \u2192 COMP-1 halt on new proposals.",
+      "role": "Reconciles internal Watchfloor book vs paper broker. Mismatch → COMP-1 halt on new proposals.",
       "tags": [
         "GOVERNANCE",
         "RECON"
@@ -491,7 +497,7 @@
     {
       "id": "ACT-1",
       "nick": "Throttle",
-      "role": "Activity budget officer \u2014 caps new discretionary proposals per cohort per day and flags duplicate thesis families to BRK-INV.",
+      "role": "Activity budget officer — caps new discretionary proposals per cohort per day and flags duplicate thesis families to BRK-INV.",
       "tags": [
         "GOVERNANCE",
         "ACTIVITY"
@@ -508,9 +514,302 @@
       "supervisor_id": "GOV-CHAIR"
     },
     {
+      "id": "BLD-CHIEF",
+      "nick": "The Architect",
+      "role": "Chairs the Builder control plane. Owns the enhancement queue for the whole org. Designs structure — never proposes or executes trades.",
+      "tags": [
+        "BUILDER",
+        "CHIEF",
+        "ADVISORY"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "GOV-CHAIR"
+    },
+    {
+      "id": "BLD-DISC",
+      "nick": "Surveyor",
+      "role": "Read-only discovery — inventories agents, tools, topology, hard rules and evidence with confidence labels.",
+      "tags": [
+        "BUILDER",
+        "DISCOVERY"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-INTENT",
+      "nick": "Intent",
+      "role": "Reconstructs mission, constraints and success criteria. Flags unresolved fields — never guesses ownership or risk tolerance.",
+      "tags": [
+        "BUILDER",
+        "INTENT"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-GAP",
+      "nick": "Gapfinder",
+      "role": "Compares current vs ideal capabilities. Keeps a preserve list of strengths that must not be casually removed.",
+      "tags": [
+        "BUILDER",
+        "GAP ANALYSIS"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-SYNTH",
+      "nick": "Composer",
+      "role": "Synthesizes multiple candidate architectures from AKB patterns. Frameworks are substrates, not goals.",
+      "tags": [
+        "BUILDER",
+        "SYNTHESIS"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-SIM",
+      "nick": "Twin",
+      "role": "Static analysis and scenario tests against the digital twin. Predictions with intervals — never declared facts.",
+      "tags": [
+        "BUILDER",
+        "SIMULATION"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-REVIEW",
+      "nick": "Red Arch",
+      "role": "Independent adversarial architecture review. Tries to disprove designs; can block unsafe recommendations.",
+      "tags": [
+        "BUILDER",
+        "REVIEW",
+        "VETO DESIGN"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-PLAN",
+      "nick": "Roadmap",
+      "role": "Turns chosen designs into reversible migration plans with gates, owners and success measures. Export only until approved.",
+      "tags": [
+        "BUILDER",
+        "PLANNING"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "IDC-RISK",
+      "nick": "Stress",
+      "role": "Portfolio & risk design veto — limits, concentration, halt readiness. Can kill an enhancement that weakens SoD or paper-only gates.",
+      "tags": [
+        "BUILDER",
+        "COUNCIL",
+        "RISK VETO"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "IDC-GOV",
+      "nick": "Controls",
+      "role": "Governance & operations veto — change requests, escalation, agent-ceiling gates, audit completeness.",
+      "tags": [
+        "BUILDER",
+        "COUNCIL",
+        "GOV VETO"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "IDC-CAP",
+      "nick": "Steward",
+      "role": "Capital stewardship veto — activity quality, patient capital, forge thresholds. Blocks noisy agent sprawl.",
+      "tags": [
+        "BUILDER",
+        "COUNCIL",
+        "STEWARD VETO"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
+      "id": "BLD-SPEC",
+      "nick": "Specwright",
+      "role": "Writes complete operating blueprints for every seat — identity through health monitoring — so agents know how to work.",
+      "tags": [
+        "BUILDER",
+        "BLUEPRINTS"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-ENHANCE"
+    },
+    {
+      "id": "BLD-WIRE",
+      "nick": "Circuit",
+      "role": "Operating contracts and message wiring — permissions, SoD, ResearchSignal schema, approval chain hooks.",
+      "tags": [
+        "BUILDER",
+        "CONTRACTS",
+        "WIRING"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-ENHANCE"
+    },
+    {
+      "id": "BLD-TEST",
+      "nick": "Proving",
+      "role": "Acceptance engineer — paper-chain drills, SoD asserts, halt drills. A seat is not done until it passes.",
+      "tags": [
+        "BUILDER",
+        "TESTS",
+        "ACCEPTANCE"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-ENHANCE"
+    },
+    {
+      "id": "BLD-ENHANCE",
+      "nick": "Forge Lead",
+      "role": "Runs the enhance-fleet sequence: council findings → concrete agent upgrades → Mission Control proposals. Owns the Builder→Watchfloor handoff.",
+      "tags": [
+        "BUILDER",
+        "ENHANCE",
+        "HANDOFF"
+      ],
+      "status": "RUNNING",
+      "kind": "builder",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "execution_role": false,
+      "can_self_approve": false,
+      "paper_only": true,
+      "supervisor_id": "BLD-CHIEF"
+    },
+    {
       "id": "GEO-1",
       "nick": "Flashpoint",
-      "role": "Geopolitics \u2014 conflicts, elections, sanctions, tariffs. Maps events to exposed sectors and names.",
+      "role": "Geopolitics — conflicts, elections, sanctions, tariffs. Maps events to exposed sectors and names.",
       "tags": [
         "INTEL",
         "GEOPOLITICS"
@@ -529,7 +828,7 @@
     {
       "id": "MACRO-1",
       "nick": "Fed Watcher",
-      "role": "Macro \u2014 central banks, rates, inflation, employment, credit and currency conditions.",
+      "role": "Macro — central banks, rates, inflation, employment, credit and currency conditions.",
       "tags": [
         "INTEL",
         "MACRO"
@@ -548,7 +847,7 @@
     {
       "id": "POLICY-1",
       "nick": "Statute",
-      "role": "Policy & regulation \u2014 legislation, antitrust, subsidies, government spending programs.",
+      "role": "Policy & regulation — legislation, antitrust, subsidies, government spending programs.",
       "tags": [
         "INTEL",
         "POLICY"
@@ -567,7 +866,7 @@
     {
       "id": "SUPPLY-1",
       "nick": "Bottleneck",
-      "role": "Supply chains \u2014 manufacturing, shipping, ports, raw materials, semi and battery supply.",
+      "role": "Supply chains — manufacturing, shipping, ports, raw materials, semi and battery supply.",
       "tags": [
         "INTEL",
         "SUPPLY"
@@ -586,7 +885,7 @@
     {
       "id": "ENERGY-1",
       "nick": "Gridline",
-      "role": "Energy \u2014 oil, gas, electricity demand, grid strain, renewables, water, mining.",
+      "role": "Energy — oil, gas, electricity demand, grid strain, renewables, water, mining.",
       "tags": [
         "INTEL",
         "ENERGY"
@@ -605,7 +904,7 @@
     {
       "id": "CLIMATE-1",
       "nick": "Stormglass",
-      "role": "Climate & nature \u2014 weather anomalies, storms, wildfires, droughts, agriculture.",
+      "role": "Climate & nature — weather anomalies, storms, wildfires, droughts, agriculture.",
       "tags": [
         "INTEL",
         "CLIMATE"
@@ -624,7 +923,7 @@
     {
       "id": "TECH-1",
       "nick": "Adoption Curve",
-      "role": "Technology \u2014 AI, robotics, EVs, semis, biotech, platform shifts, obsolescence.",
+      "role": "Technology — AI, robotics, EVs, semis, biotech, platform shifts, obsolescence.",
       "tags": [
         "INTEL",
         "TECH"
@@ -643,7 +942,7 @@
     {
       "id": "SOC-1",
       "nick": "Zeitgeist",
-      "role": "Society \u2014 consumer behavior, sentiment, demographics, cultural and health trends.",
+      "role": "Society — consumer behavior, sentiment, demographics, cultural and health trends.",
       "tags": [
         "INTEL",
         "SOCIETY"
@@ -662,7 +961,7 @@
     {
       "id": "CORP-1",
       "nick": "Moat Auditor",
-      "role": "Deep-dive researcher \u2014 moats, management, balance sheets, capital allocation history.",
+      "role": "Deep-dive researcher — moats, management, balance sheets, capital allocation history.",
       "tags": [
         "RESEARCH",
         "FUNDAMENTALS"
@@ -681,7 +980,7 @@
     {
       "id": "CORP-2",
       "nick": "Share Tracker",
-      "role": "Competitive landscape \u2014 who is gaining share, who has pricing power, who is falling behind.",
+      "role": "Competitive landscape — who is gaining share, who has pricing power, who is falling behind.",
       "tags": [
         "RESEARCH",
         "COMPETITION"
@@ -700,7 +999,7 @@
     {
       "id": "HIST-1",
       "nick": "Rhyme",
-      "role": "Historical analogues \u2014 when has something similar happened, and what actually happened next.",
+      "role": "Historical analogues — when has something similar happened, and what actually happened next.",
       "tags": [
         "RESEARCH",
         "ANALOGUES"
@@ -719,7 +1018,7 @@
     {
       "id": "BULL-1",
       "nick": "The Optimist",
-      "role": "Writes and maintains the bull case for every covered name \u2014 evidence, catalysts, invalidation.",
+      "role": "Writes and maintains the bull case for every covered name — evidence, catalysts, invalidation.",
       "tags": [
         "CASE FILE",
         "BULL"
@@ -738,7 +1037,7 @@
     {
       "id": "BEAR-1",
       "nick": "The Skeptic",
-      "role": "Writes the bear case \u2014 independently of the bull author, by design.",
+      "role": "Writes the bear case — independently of the bull author, by design.",
       "tags": [
         "CASE FILE",
         "BEAR"
@@ -757,7 +1056,7 @@
     {
       "id": "MEGA-D",
       "nick": "Mega-cap Tech",
-      "role": "Mega-cap Tech desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Mega-cap Tech desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -776,7 +1075,7 @@
     {
       "id": "SEMI-D",
       "nick": "Semis & Hardware",
-      "role": "Semis & Hardware desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Semis & Hardware desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -795,7 +1094,7 @@
     {
       "id": "AI-D",
       "nick": "AI & Software",
-      "role": "AI & Software desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "AI & Software desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -814,7 +1113,7 @@
     {
       "id": "CONS-D",
       "nick": "Consumer & Retail",
-      "role": "Consumer & Retail desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Consumer & Retail desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -833,7 +1132,7 @@
     {
       "id": "ENRG-D",
       "nick": "Energy & Utilities",
-      "role": "Energy & Utilities desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Energy & Utilities desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -852,7 +1151,7 @@
     {
       "id": "INDL-D",
       "nick": "Industrials & Transport",
-      "role": "Industrials & Transport desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Industrials & Transport desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -871,7 +1170,7 @@
     {
       "id": "HLTH-D",
       "nick": "Healthcare & Biotech",
-      "role": "Healthcare & Biotech desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Healthcare & Biotech desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -890,7 +1189,7 @@
     {
       "id": "FIN-D",
       "nick": "Financials",
-      "role": "Financials desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Financials desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -909,7 +1208,7 @@
     {
       "id": "MATL-D",
       "nick": "Materials & Commodities",
-      "role": "Materials & Commodities desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Materials & Commodities desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -928,7 +1227,7 @@
     {
       "id": "DEF-D",
       "nick": "Defense & Aerospace",
-      "role": "Defense & Aerospace desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Defense & Aerospace desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -947,7 +1246,7 @@
     {
       "id": "WSTE-D",
       "nick": "Waste & Infrastructure",
-      "role": "Waste & Infrastructure desk \u2014 consumes intel, maintains the desk thesis log, briefs its trading agents.",
+      "role": "Waste & Infrastructure desk — consumes intel, maintains the desk thesis log, briefs its trading agents.",
       "tags": [
         "SECTOR DESK",
         "THESIS LOG"
@@ -985,7 +1284,7 @@
     {
       "id": "FORE-2",
       "nick": "Metronome",
-      "role": "Calibration specialist \u2014 keeps Brier scores honest, refuses post-hoc revisions, and flags overconfident desks.",
+      "role": "Calibration specialist — keeps Brier scores honest, refuses post-hoc revisions, and flags overconfident desks.",
       "tags": [
         "PREDICTION",
         "CALIBRATION"
@@ -1004,7 +1303,7 @@
     {
       "id": "CHAIN-1",
       "nick": "Domino",
-      "role": "Forward chains from live events \u2014 shortage to margin to share shift to substitute winners.",
+      "role": "Forward chains from live events — shortage to margin to share shift to substitute winners.",
       "tags": [
         "PREDICTION",
         "CAUSAL"
@@ -1023,7 +1322,7 @@
     {
       "id": "CHAIN-2",
       "nick": "Ripple",
-      "role": "Weather and regional events downstream \u2014 heating, apparel, logistics, insurance, retail.",
+      "role": "Weather and regional events downstream — heating, apparel, logistics, insurance, retail.",
       "tags": [
         "PREDICTION",
         "CAUSAL"
@@ -1042,7 +1341,7 @@
     {
       "id": "ANOM-1",
       "nick": "Outlier",
-      "role": "Statistical anomaly scanner across every monitored series \u2014 what broke pattern today.",
+      "role": "Statistical anomaly scanner across every monitored series — what broke pattern today.",
       "tags": [
         "PREDICTION",
         "ANOMALY"
@@ -1061,7 +1360,7 @@
     {
       "id": "ANOM-2",
       "nick": "Divergence",
-      "role": "Relationship watcher \u2014 pairs that stopped moving together, pairs that just started.",
+      "role": "Relationship watcher — pairs that stopped moving together, pairs that just started.",
       "tags": [
         "PREDICTION",
         "ANOMALY"
@@ -1080,7 +1379,7 @@
     {
       "id": "MICRO-1",
       "nick": "Grain",
-      "role": "Regional demand micro-signals \u2014 weather, local events, holiday timing by geography.",
+      "role": "Regional demand micro-signals — weather, local events, holiday timing by geography.",
       "tags": [
         "PREDICTION",
         "MICRO"
@@ -1099,7 +1398,7 @@
     {
       "id": "MICRO-2",
       "nick": "Thread",
-      "role": "Niche products and single-supplier exposure \u2014 small trends, concentrated endpoints.",
+      "role": "Niche products and single-supplier exposure — small trends, concentrated endpoints.",
       "tags": [
         "PREDICTION",
         "MICRO"
@@ -1118,7 +1417,7 @@
     {
       "id": "MICRO-3",
       "nick": "Calendar",
-      "role": "Seasonal and calendar effects \u2014 recurring timing patterns by region and sector.",
+      "role": "Seasonal and calendar effects — recurring timing patterns by region and sector.",
       "tags": [
         "PREDICTION",
         "MICRO"
@@ -1184,7 +1483,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1211,7 +1510,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1238,7 +1537,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1265,7 +1564,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1292,7 +1591,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1319,7 +1618,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1346,7 +1645,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1373,7 +1672,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1400,7 +1699,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1427,7 +1726,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1454,7 +1753,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1481,7 +1780,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1508,7 +1807,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1535,7 +1834,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1562,7 +1861,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1589,7 +1888,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1616,7 +1915,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1643,7 +1942,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1670,7 +1969,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1697,7 +1996,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1724,7 +2023,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1751,7 +2050,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1778,7 +2077,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1805,7 +2104,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1832,7 +2131,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1859,7 +2158,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1886,7 +2185,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1913,7 +2212,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group A \u00b7 Paired Specialists",
+      "department": "Group A · Paired Specialists",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1931,16 +2230,16 @@
     {
       "id": "SCOUT-L1",
       "nick": "Momentum breakout",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via momentum breakout.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via momentum breakout.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1955,16 +2254,16 @@
     {
       "id": "SCOUT-L2",
       "nick": "Mean reversion",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via mean reversion.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via mean reversion.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -1979,16 +2278,16 @@
     {
       "id": "SCOUT-L3",
       "nick": "News catalyst",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via news catalyst.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via news catalyst.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2003,16 +2302,16 @@
     {
       "id": "SCOUT-L4",
       "nick": "Volume anomaly",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via volume anomaly.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via volume anomaly.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2027,16 +2326,16 @@
     {
       "id": "SCOUT-L5",
       "nick": "Sector rotation",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via sector rotation.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via sector rotation.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2051,16 +2350,16 @@
     {
       "id": "SCOUT-L6",
       "nick": "Technical pattern",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via technical pattern.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via technical pattern.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2075,16 +2374,16 @@
     {
       "id": "SCOUT-L7",
       "nick": "Sentiment shift",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via sentiment shift.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via sentiment shift.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2099,16 +2398,16 @@
     {
       "id": "SCOUT-L8",
       "nick": "Earnings reaction",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via earnings reaction.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via earnings reaction.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2123,16 +2422,16 @@
     {
       "id": "SCOUT-L9",
       "nick": "Signal-driven",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via signal-driven.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via signal-driven.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2147,16 +2446,16 @@
     {
       "id": "SCOUT-L10",
       "nick": "Open methodology",
-      "role": "Daily long scout \u2014 each morning independently selects the best long setups of the day via open methodology.",
+      "role": "Daily long scout — each morning independently selects the best long setups of the day via open methodology.",
       "tags": [
         "PAPER TRADER",
         "LONG SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group B \u00b7 Long Scouts",
+      "department": "Group B · Long Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2171,16 +2470,16 @@
     {
       "id": "SCOUT-S1",
       "nick": "Momentum breakout",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via momentum breakout.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via momentum breakout.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2195,16 +2494,16 @@
     {
       "id": "SCOUT-S2",
       "nick": "Mean reversion",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via mean reversion.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via mean reversion.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2219,16 +2518,16 @@
     {
       "id": "SCOUT-S3",
       "nick": "News catalyst",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via news catalyst.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via news catalyst.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2243,16 +2542,16 @@
     {
       "id": "SCOUT-S4",
       "nick": "Volume anomaly",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via volume anomaly.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via volume anomaly.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2267,16 +2566,16 @@
     {
       "id": "SCOUT-S5",
       "nick": "Sector rotation",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via sector rotation.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via sector rotation.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2291,16 +2590,16 @@
     {
       "id": "SCOUT-S6",
       "nick": "Technical pattern",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via technical pattern.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via technical pattern.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2315,16 +2614,16 @@
     {
       "id": "SCOUT-S7",
       "nick": "Sentiment shift",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via sentiment shift.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via sentiment shift.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2339,16 +2638,16 @@
     {
       "id": "SCOUT-S8",
       "nick": "Earnings reaction",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via earnings reaction.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via earnings reaction.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2363,16 +2662,16 @@
     {
       "id": "SCOUT-S9",
       "nick": "Signal-driven",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via signal-driven.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via signal-driven.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2387,16 +2686,16 @@
     {
       "id": "SCOUT-S10",
       "nick": "Open methodology",
-      "role": "Daily short scout \u2014 mirror of the long scouts. Best short setups of the day via open methodology.",
+      "role": "Daily short scout — mirror of the long scouts. Best short setups of the day via open methodology.",
       "tags": [
         "PAPER TRADER",
         "SHORT SCOUT",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group C \u00b7 Short Scouts",
+      "department": "Group C · Short Scouts",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2411,16 +2710,16 @@
     {
       "id": "BENCH-1",
       "nick": "VWAP reversion",
-      "role": "Benchmark agent \u2014 runs the published VWAP reversion strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published VWAP reversion strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2434,16 +2733,16 @@
     {
       "id": "BENCH-2",
       "nick": "Opening range breakout",
-      "role": "Benchmark agent \u2014 runs the published Opening range breakout strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Opening range breakout strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2457,16 +2756,16 @@
     {
       "id": "BENCH-3",
       "nick": "Gap fill",
-      "role": "Benchmark agent \u2014 runs the published Gap fill strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Gap fill strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2480,16 +2779,16 @@
     {
       "id": "BENCH-4",
       "nick": "Pairs stat-arb",
-      "role": "Benchmark agent \u2014 runs the published Pairs stat-arb strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Pairs stat-arb strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2503,16 +2802,16 @@
     {
       "id": "BENCH-5",
       "nick": "Momentum continuation",
-      "role": "Benchmark agent \u2014 runs the published Momentum continuation strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Momentum continuation strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2526,16 +2825,16 @@
     {
       "id": "BENCH-6",
       "nick": "RSI mean reversion",
-      "role": "Benchmark agent \u2014 runs the published RSI mean reversion strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published RSI mean reversion strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2549,16 +2848,16 @@
     {
       "id": "BENCH-7",
       "nick": "MA crossover",
-      "role": "Benchmark agent \u2014 runs the published MA crossover strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published MA crossover strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2572,16 +2871,16 @@
     {
       "id": "BENCH-8",
       "nick": "Bollinger reversion",
-      "role": "Benchmark agent \u2014 runs the published Bollinger reversion strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Bollinger reversion strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2595,16 +2894,16 @@
     {
       "id": "BENCH-9",
       "nick": "News momentum",
-      "role": "Benchmark agent \u2014 runs the published News momentum strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published News momentum strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2618,16 +2917,16 @@
     {
       "id": "BENCH-10",
       "nick": "Volume breakout",
-      "role": "Benchmark agent \u2014 runs the published Volume breakout strategy faithfully. The baseline the novel fleet must beat.",
+      "role": "Benchmark agent — runs the published Volume breakout strategy faithfully. The baseline the novel fleet must beat.",
       "tags": [
         "PAPER TRADER",
         "BENCHMARK",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group D \u00b7 Benchmarks",
+      "department": "Group D · Benchmarks",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2641,16 +2940,16 @@
     {
       "id": "NOVA-1",
       "nick": "Novel Lab 1",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2664,16 +2963,16 @@
     {
       "id": "NOVA-2",
       "nick": "Novel Lab 2",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2687,16 +2986,16 @@
     {
       "id": "NOVA-3",
       "nick": "Novel Lab 3",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2710,16 +3009,16 @@
     {
       "id": "NOVA-4",
       "nick": "Novel Lab 4",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2733,16 +3032,16 @@
     {
       "id": "NOVA-5",
       "nick": "Novel Lab 5",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2756,16 +3055,16 @@
     {
       "id": "NOVA-6",
       "nick": "Novel Lab 6",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2779,16 +3078,16 @@
     {
       "id": "NOVA-7",
       "nick": "Novel Lab 7",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2802,16 +3101,16 @@
     {
       "id": "NOVA-8",
       "nick": "Novel Lab 8",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2825,16 +3124,16 @@
     {
       "id": "NOVA-9",
       "nick": "Novel Lab 9",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2848,16 +3147,16 @@
     {
       "id": "NOVA-10",
       "nick": "Novel Lab 10",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2871,16 +3170,16 @@
     {
       "id": "NOVA-11",
       "nick": "Novel Lab 11",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2894,16 +3193,16 @@
     {
       "id": "NOVA-12",
       "nick": "Novel Lab 12",
-      "role": "Strategy R&D \u2014 learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
+      "role": "Strategy R&D — learns from outside traders and research, builds strategies that don't exist in the fleet yet, kills failures fast, escalates winners.",
       "tags": [
         "PAPER TRADER",
         "NOVEL R&D",
-        "$1\u20132"
+        "$1–2"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group E \u00b7 Novel Fleet",
+      "department": "Group E · Novel Fleet",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2917,7 +3216,7 @@
     {
       "id": "SIZE-1",
       "nick": "Fixed $5",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Fixed $5. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Fixed $5. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -2926,7 +3225,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2940,7 +3239,7 @@
     {
       "id": "SIZE-2",
       "nick": "Fixed $10",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Fixed $10. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Fixed $10. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -2949,7 +3248,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2963,7 +3262,7 @@
     {
       "id": "SIZE-3",
       "nick": "Fixed $25",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Fixed $25. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Fixed $25. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -2972,7 +3271,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -2986,7 +3285,7 @@
     {
       "id": "SIZE-4",
       "nick": "Confidence-weighted",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Confidence-weighted. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Confidence-weighted. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -2995,7 +3294,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3009,7 +3308,7 @@
     {
       "id": "SIZE-5",
       "nick": "Volatility-adjusted",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Volatility-adjusted. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Volatility-adjusted. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3018,7 +3317,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3032,7 +3331,7 @@
     {
       "id": "SIZE-6",
       "nick": "Kelly-derived",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Kelly-derived. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Kelly-derived. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3041,7 +3340,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3055,7 +3354,7 @@
     {
       "id": "SIZE-7",
       "nick": "Scaling in",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Scaling in. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Scaling in. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3064,7 +3363,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3078,7 +3377,7 @@
     {
       "id": "SIZE-8",
       "nick": "Scaling out",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Scaling out. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Scaling out. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3087,7 +3386,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3101,7 +3400,7 @@
     {
       "id": "SIZE-9",
       "nick": "Pyramiding winners",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Pyramiding winners. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Pyramiding winners. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3110,7 +3409,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3124,7 +3423,7 @@
     {
       "id": "SIZE-10",
       "nick": "Fixed-fractional",
-      "role": "Sizing experiment \u2014 comparable entry logic with capital deployment isolated as the variable: Fixed-fractional. Findings feed Capital Allocation.",
+      "role": "Sizing experiment — comparable entry logic with capital deployment isolated as the variable: Fixed-fractional. Findings feed Capital Allocation.",
       "tags": [
         "PAPER TRADER",
         "SIZING LAB",
@@ -3133,7 +3432,7 @@
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group F \u00b7 Sizing Lab",
+      "department": "Group F · Sizing Lab",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3150,13 +3449,13 @@
       "role": "Catalyst-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "CATALYST"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3174,13 +3473,13 @@
       "role": "Catalyst-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "CATALYST"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3198,13 +3497,13 @@
       "role": "Catalyst-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "CATALYST"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3222,13 +3521,13 @@
       "role": "Catalyst-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "CATALYST"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3246,13 +3545,13 @@
       "role": "Catalyst-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "CATALYST"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3270,13 +3569,13 @@
       "role": "Technical-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "TECHNICAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3294,13 +3593,13 @@
       "role": "Technical-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "TECHNICAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3318,13 +3617,13 @@
       "role": "Technical-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "TECHNICAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3342,13 +3641,13 @@
       "role": "Technical-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "TECHNICAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3366,13 +3665,13 @@
       "role": "Technical-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "TECHNICAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3390,13 +3689,13 @@
       "role": "Signal-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "SIGNAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3414,13 +3713,13 @@
       "role": "Signal-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "SIGNAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3438,13 +3737,13 @@
       "role": "Signal-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "SIGNAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3462,13 +3761,13 @@
       "role": "Signal-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "SIGNAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3486,13 +3785,13 @@
       "role": "Signal-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "SIGNAL"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3510,13 +3809,13 @@
       "role": "Thematic-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "THEMATIC"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3534,13 +3833,13 @@
       "role": "Thematic-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "THEMATIC"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3558,13 +3857,13 @@
       "role": "Thematic-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "THEMATIC"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3582,13 +3881,13 @@
       "role": "Thematic-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "THEMATIC"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3606,13 +3905,13 @@
       "role": "Thematic-driven swing agent. Holds one to five days. Hard cap: one week, never exceeded.",
       "tags": [
         "PAPER TRADER",
-        "SWING \u22641W",
+        "SWING ≤1W",
         "THEMATIC"
       ],
       "status": "RUNNING",
       "kind": "trader",
       "division": "trade",
-      "department": "Group G \u00b7 Swing Desk",
+      "department": "Group G · Swing Desk",
       "may_propose_trades": true,
       "may_place_orders": false,
       "execution_role": false,
@@ -3627,7 +3926,7 @@
     {
       "id": "CAP-1",
       "nick": "Allocator",
-      "role": "Capital Allocation \u2014 future owner of sizing policy, reinvestment and correlation-aware exposure.",
+      "role": "Capital Allocation — future owner of sizing policy, reinvestment and correlation-aware exposure.",
       "tags": [
         "SUPPORT",
         "CAPITAL"
@@ -3646,7 +3945,7 @@
     {
       "id": "EXEC-1",
       "nick": "Fill Check",
-      "role": "Execution Quality \u2014 slippage, spread cost, order-type effectiveness. Sole seat authorized to place paper orders.",
+      "role": "Execution Quality — slippage, spread cost, order-type effectiveness. Sole seat authorized to place paper orders.",
       "tags": [
         "SUPPORT",
         "EXECUTION"
@@ -3665,7 +3964,7 @@
     {
       "id": "ADV-1",
       "nick": "Depth",
-      "role": "Liquidity / ADV throttle \u2014 blocks proposals that would exceed per-symbol daily order caps or unrealistic participation.",
+      "role": "Liquidity / ADV throttle — blocks proposals that would exceed per-symbol daily order caps or unrealistic participation.",
       "tags": [
         "SUPPORT",
         "LIQUIDITY"
@@ -3703,7 +4002,7 @@
     {
       "id": "IDEA-2",
       "nick": "Remix",
-      "role": "Synthesizes hybrids \u2014 combines mechanics from multiple sources into new testable strategies.",
+      "role": "Synthesizes hybrids — combines mechanics from multiple sources into new testable strategies.",
       "tags": [
         "LAB",
         "IDEAS"
@@ -3722,7 +4021,7 @@
     {
       "id": "HYPO-1",
       "nick": "Registry",
-      "role": "Owns the hypothesis registry \u2014 every idea stated falsifiably, staged Observed \u2192 Validated \u2192 Retired, decay watched.",
+      "role": "Owns the hypothesis registry — every idea stated falsifiably, staged Observed → Validated → Retired, decay watched.",
       "tags": [
         "LAB",
         "HYPOTHESES"
@@ -3741,7 +4040,7 @@
     {
       "id": "BACK-1",
       "nick": "Rewind",
-      "role": "Runs the backtest queue nightly \u2014 no look-ahead, no survivorship bias.",
+      "role": "Runs the backtest queue nightly — no look-ahead, no survivorship bias.",
       "tags": [
         "LAB",
         "BACKTEST"
@@ -3760,7 +4059,7 @@
     {
       "id": "STAT-1",
       "nick": "Significance",
-      "role": "Signal or noise \u2014 sample adequacy, overfitting detection, multiple-comparison correction across 100 parallel experiments.",
+      "role": "Signal or noise — sample adequacy, overfitting detection, multiple-comparison correction across 100 parallel experiments.",
       "tags": [
         "LAB",
         "STATS"
@@ -3817,7 +4116,7 @@
     {
       "id": "WRECK-1",
       "nick": "Wrecking Ball",
-      "role": "Tries to break validated signals on purpose \u2014 regime shifts, edge cases, adversarial conditions.",
+      "role": "Tries to break validated signals on purpose — regime shifts, edge cases, adversarial conditions.",
       "tags": [
         "RED TEAM",
         "BREAKER"
@@ -3836,7 +4135,7 @@
     {
       "id": "DIG-1",
       "nick": "Excavator",
-      "role": "Reconstructs deep historical series \u2014 fills gaps, repairs errors, rebuilds what the raw feeds lost or mangled.",
+      "role": "Reconstructs deep historical series — fills gaps, repairs errors, rebuilds what the raw feeds lost or mangled.",
       "tags": [
         "QUANT",
         "ARCHAEOLOGY"
@@ -3855,7 +4154,7 @@
     {
       "id": "DIG-2",
       "nick": "Restorer",
-      "role": "Corporate actions, splits, delistings, survivorship repair \u2014 makes history match what a trader would actually have seen.",
+      "role": "Corporate actions, splits, delistings, survivorship repair — makes history match what a trader would actually have seen.",
       "tags": [
         "QUANT",
         "ARCHAEOLOGY"
@@ -3893,7 +4192,7 @@
     {
       "id": "MINE-2",
       "nick": "Faint Signal",
-      "role": "Specializes in very weak edges \u2014 the 50.75% kind that only matter across enormous sample sizes.",
+      "role": "Specializes in very weak edges — the 50.75% kind that only matter across enormous sample sizes.",
       "tags": [
         "QUANT",
         "MINING"
@@ -3912,7 +4211,7 @@
     {
       "id": "MICRO-Q",
       "nick": "Microstructure",
-      "role": "Order flow, book dynamics, intraday timing \u2014 the mechanics beneath the price, feeding the paired intraday desks.",
+      "role": "Order flow, book dynamics, intraday timing — the mechanics beneath the price, feeding the paired intraday desks.",
       "tags": [
         "QUANT",
         "MICROSTRUCTURE"
@@ -3931,7 +4230,7 @@
     {
       "id": "ENS-1",
       "nick": "Weaver",
-      "role": "Decides how signals stack, weight and interact. Owns the combination model \u2014 not the signals themselves.",
+      "role": "Decides how signals stack, weight and interact. Owns the combination model — not the signals themselves.",
       "tags": [
         "QUANT",
         "ENSEMBLE"
@@ -3969,7 +4268,7 @@
     {
       "id": "CORR-Q",
       "nick": "Independence",
-      "role": "Maps what is genuinely uncorrelated versus what only looks it \u2014 catches 100 agents secretly holding one bet.",
+      "role": "Maps what is genuinely uncorrelated versus what only looks it — catches 100 agents secretly holding one bet.",
       "tags": [
         "QUANT",
         "CORRELATION"
@@ -3988,7 +4287,7 @@
     {
       "id": "RT-ENS-1",
       "nick": "Ensemble 1",
-      "role": "Trades the combined signal stack \u2014 hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
+      "role": "Trades the combined signal stack — hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
       "tags": [
         "RENTEC",
         "ENSEMBLE",
@@ -4010,7 +4309,7 @@
     {
       "id": "RT-ENS-2",
       "nick": "Ensemble 2",
-      "role": "Trades the combined signal stack \u2014 hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
+      "role": "Trades the combined signal stack — hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
       "tags": [
         "RENTEC",
         "ENSEMBLE",
@@ -4032,7 +4331,7 @@
     {
       "id": "RT-ENS-3",
       "nick": "Ensemble 3",
-      "role": "Trades the combined signal stack \u2014 hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
+      "role": "Trades the combined signal stack — hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
       "tags": [
         "RENTEC",
         "ENSEMBLE",
@@ -4054,7 +4353,7 @@
     {
       "id": "RT-ENS-4",
       "nick": "Ensemble 4",
-      "role": "Trades the combined signal stack \u2014 hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
+      "role": "Trades the combined signal stack — hundreds of weak inputs weighted by Weaver. No single reason for any trade; the ensemble is the reason.",
       "tags": [
         "RENTEC",
         "ENSEMBLE",
@@ -4076,7 +4375,7 @@
     {
       "id": "RT-REG-1",
       "nick": "Trend Regime",
-      "role": "Only trades when Weathervane flags the trend regime. Dormant otherwise \u2014 patience is the strategy.",
+      "role": "Only trades when Weathervane flags the trend regime. Dormant otherwise — patience is the strategy.",
       "tags": [
         "RENTEC",
         "REGIME-GATED",
@@ -4098,7 +4397,7 @@
     {
       "id": "RT-REG-2",
       "nick": "Chop Regime",
-      "role": "Only trades when Weathervane flags the chop regime. Dormant otherwise \u2014 patience is the strategy.",
+      "role": "Only trades when Weathervane flags the chop regime. Dormant otherwise — patience is the strategy.",
       "tags": [
         "RENTEC",
         "REGIME-GATED",
@@ -4120,7 +4419,7 @@
     {
       "id": "RT-REG-3",
       "nick": "Volatile Regime",
-      "role": "Only trades when Weathervane flags the volatile regime. Dormant otherwise \u2014 patience is the strategy.",
+      "role": "Only trades when Weathervane flags the volatile regime. Dormant otherwise — patience is the strategy.",
       "tags": [
         "RENTEC",
         "REGIME-GATED",
@@ -4142,7 +4441,7 @@
     {
       "id": "RT-REG-4",
       "nick": "Quiet Regime",
-      "role": "Only trades when Weathervane flags the quiet regime. Dormant otherwise \u2014 patience is the strategy.",
+      "role": "Only trades when Weathervane flags the quiet regime. Dormant otherwise — patience is the strategy.",
       "tags": [
         "RENTEC",
         "REGIME-GATED",
@@ -4164,7 +4463,7 @@
     {
       "id": "RT-HF-1",
       "nick": "High Freq 1",
-      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills \u2014 individual trades are noise by design.",
+      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills — individual trades are noise by design.",
       "tags": [
         "RENTEC",
         "HIGH FREQ",
@@ -4186,7 +4485,7 @@
     {
       "id": "RT-HF-2",
       "nick": "High Freq 2",
-      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills \u2014 individual trades are noise by design.",
+      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills — individual trades are noise by design.",
       "tags": [
         "RENTEC",
         "HIGH FREQ",
@@ -4208,7 +4507,7 @@
     {
       "id": "RT-HF-3",
       "nick": "High Freq 3",
-      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills \u2014 individual trades are noise by design.",
+      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills — individual trades are noise by design.",
       "tags": [
         "RENTEC",
         "HIGH FREQ",
@@ -4230,7 +4529,7 @@
     {
       "id": "RT-HF-4",
       "nick": "High Freq 4",
-      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills \u2014 individual trades are noise by design.",
+      "role": "Very high trade count on very small edges. Only meaningful across thousands of fills — individual trades are noise by design.",
       "tags": [
         "RENTEC",
         "HIGH FREQ",
@@ -4384,7 +4683,7 @@
     {
       "id": "RT-DARK-1",
       "nick": "Unexplained",
-      "role": "Trades signals nobody can explain \u2014 the purest expression of the desk's philosophy. Monitored closely by Validation Police.",
+      "role": "Trades signals nobody can explain — the purest expression of the desk's philosophy. Monitored closely by Validation Police.",
       "tags": [
         "RENTEC",
         "NO EXPLANATION",
@@ -4427,7 +4726,7 @@
     {
       "id": "ML-VIT",
       "nick": "Chart Eyes",
-      "role": "Vision models (CNN / ViT) trained on chart images \u2014 finds visual structure humans name after the fact: flags, wedges, traps.",
+      "role": "Vision models (CNN / ViT) trained on chart images — finds visual structure humans name after the fact: flags, wedges, traps.",
       "tags": [
         "QUANT",
         "VISION ML"
@@ -4446,7 +4745,7 @@
     {
       "id": "ML-SEQ",
       "nick": "Sequence Reader",
-      "role": "Transformer models on price-volume sequences \u2014 learns contextual patterns the way language models learn sentences.",
+      "role": "Transformer models on price-volume sequences — learns contextual patterns the way language models learn sentences.",
       "tags": [
         "QUANT",
         "SEQUENCE ML"
@@ -4465,7 +4764,7 @@
     {
       "id": "ML-CLS",
       "nick": "Old School",
-      "role": "SVMs and random forests on small, clean datasets \u2014 deployed wherever they beat deep learning, which is more often than anyone admits.",
+      "role": "SVMs and random forests on small, clean datasets — deployed wherever they beat deep learning, which is more often than anyone admits.",
       "tags": [
         "QUANT",
         "CLASSIC ML"
@@ -4484,7 +4783,7 @@
     {
       "id": "ML-PAT",
       "nick": "Auto Draftsman",
-      "role": "Automates trendlines, candlestick patterns and multi-timeframe structure \u2014 the TrendSpider job, run continuously across the fleet's watchlists.",
+      "role": "Automates trendlines, candlestick patterns and multi-timeframe structure — the TrendSpider job, run continuously across the fleet's watchlists.",
       "tags": [
         "QUANT",
         "PATTERN AUTO"
@@ -4522,7 +4821,7 @@
     {
       "id": "RT-FORGE-1",
       "nick": "Forge",
-      "role": "Builds new RenTec traders from validated signals \u2014 spec, sizing, kill criteria, probation window, all defined at birth.",
+      "role": "Builds new RenTec traders from validated signals — spec, sizing, kill criteria, probation window, all defined at birth.",
       "tags": [
         "RENTEC",
         "AGENT BUILDER"
@@ -4579,7 +4878,7 @@
     {
       "id": "FIT-1",
       "nick": "Overfit Police",
-      "role": "Proves backtests wrong \u2014 data snooping, curve fitting, hidden look-ahead, too many knobs. Holds veto.",
+      "role": "Proves backtests wrong — data snooping, curve fitting, hidden look-ahead, too many knobs. Holds veto.",
       "tags": [
         "QUANT",
         "VALIDATION"
@@ -4598,7 +4897,7 @@
     {
       "id": "COST-1",
       "nick": "Friction",
-      "role": "Models slippage, spread and impact at realistic size \u2014 rejects strategies whose edge dies after costs.",
+      "role": "Models slippage, spread and impact at realistic size — rejects strategies whose edge dies after costs.",
       "tags": [
         "QUANT",
         "COSTS"
@@ -4617,7 +4916,7 @@
     {
       "id": "EVID-1",
       "nick": "Seal",
-      "role": "Evidence Package Officer \u2014 signs OOS packages for RT-* proposers; unsigned packages never reach RISK-1.",
+      "role": "Evidence Package Officer — signs OOS packages for RT-* proposers; unsigned packages never reach RISK-1.",
       "tags": [
         "QUANT",
         "EVIDENCE"
@@ -4636,7 +4935,7 @@
     {
       "id": "BRK-MOAT",
       "nick": "Moat Finder",
-      "role": "Grades businesses on durable advantage \u2014 pricing power, switching costs, brand \u2014 and ignores everything without one.",
+      "role": "Grades businesses on durable advantage — pricing power, switching costs, brand — and ignores everything without one.",
       "tags": [
         "FUND FLOOR",
         "QUALITY"
@@ -4655,7 +4954,7 @@
     {
       "id": "BRK-SAFE",
       "nick": "Margin of Safety",
-      "role": "Values the business, then refuses to pay for it \u2014 only acts when price sits far below its own estimate of worth.",
+      "role": "Values the business, then refuses to pay for it — only acts when price sits far below its own estimate of worth.",
       "tags": [
         "FUND FLOOR",
         "VALUATION"
@@ -4674,7 +4973,7 @@
     {
       "id": "BRK-MRKT",
       "nick": "Mr. Market",
-      "role": "Treats price swings as a manic counterparty making offers \u2014 buys his panic, ignores his euphoria, never takes his mood as information.",
+      "role": "Treats price swings as a manic counterparty making offers — buys his panic, ignores his euphoria, never takes his mood as information.",
       "tags": [
         "FUND FLOOR",
         "TEMPERAMENT"
@@ -4712,7 +5011,7 @@
     {
       "id": "BRK-TRD1",
       "nick": "Steady Hand",
-      "role": "Desk trader \u2014 executes the rare approved buys, working into positions patiently over days. Never chases a price; the business was cheap yesterday too.",
+      "role": "Desk trader — executes the rare approved buys, working into positions patiently over days. Never chases a price; the business was cheap yesterday too.",
       "tags": [
         "FUND TRADER",
         "BERKSHIRE"
@@ -4733,7 +5032,7 @@
     {
       "id": "BRK-TRD2",
       "nick": "The Sitter",
-      "role": "Desk trader \u2014 manages the holdings book, which mostly means doing nothing on purpose. Sells only on thesis break, never on mood.",
+      "role": "Desk trader — manages the holdings book, which mostly means doing nothing on purpose. Sells only on thesis break, never on mood.",
       "tags": [
         "FUND TRADER",
         "BERKSHIRE"
@@ -4753,8 +5052,8 @@
     },
     {
       "id": "CIT-POD1",
-      "nick": "Pod \u00b7 Equity L/S",
-      "role": "Runs a market-neutral long/short book on fundamentals \u2014 judged monthly, capital doubled or cut based on results.",
+      "nick": "Pod · Equity L/S",
+      "role": "Runs a market-neutral long/short book on fundamentals — judged monthly, capital doubled or cut based on results.",
       "tags": [
         "FUND FLOOR",
         "POD"
@@ -4772,8 +5071,8 @@
     },
     {
       "id": "CIT-POD2",
-      "nick": "Pod \u00b7 Event",
-      "role": "Trades catalysts \u2014 earnings, guidance, announcements \u2014 with positions sized to the event and flat after it resolves.",
+      "nick": "Pod · Event",
+      "role": "Trades catalysts — earnings, guidance, announcements — with positions sized to the event and flat after it resolves.",
       "tags": [
         "FUND FLOOR",
         "POD"
@@ -4811,7 +5110,7 @@
     {
       "id": "CIT-RISK",
       "nick": "The Cut",
-      "role": "Holds instant de-risk authority over every pod \u2014 trims first, discusses after. The desk's real edge is that losses stay small.",
+      "role": "Holds instant de-risk authority over every pod — trims first, discusses after. The desk's real edge is that losses stay small.",
       "tags": [
         "FUND FLOOR",
         "RISK"
@@ -4829,8 +5128,8 @@
     },
     {
       "id": "CIT-POD3",
-      "nick": "Pod \u00b7 Sector Rotation",
-      "role": "Third pod \u2014 rotates long/short across sectors on relative strength, reviewed on the same monthly ledger as every other pod. Hired by the Allocator when the desk earned expansion.",
+      "nick": "Pod · Sector Rotation",
+      "role": "Third pod — rotates long/short across sectors on relative strength, reviewed on the same monthly ledger as every other pod. Hired by the Allocator when the desk earned expansion.",
       "tags": [
         "FUND TRADER",
         "POD"
@@ -4851,7 +5150,7 @@
     {
       "id": "LIV-TAPE",
       "nick": "Tape Reader",
-      "role": "Reads pure price and volume behavior \u2014 accumulation, distribution, pivotal points \u2014 with no indicators and no opinions.",
+      "role": "Reads pure price and volume behavior — accumulation, distribution, pivotal points — with no indicators and no opinions.",
       "tags": [
         "FUND FLOOR",
         "TAPE"
@@ -4908,7 +5207,7 @@
     {
       "id": "LIV-TRD",
       "nick": "Line Handler",
-      "role": "Desk trader \u2014 places the probing lines at pivotal points and executes the adds when Pyramid says the position has proven itself. Keeps the desk honest about fills.",
+      "role": "Desk trader — places the probing lines at pivotal points and executes the adds when Pyramid says the position has proven itself. Keeps the desk honest about fills.",
       "tags": [
         "FUND TRADER",
         "LIVERMORE"
@@ -4929,7 +5228,7 @@
     {
       "id": "PNY-SCAN",
       "nick": "First Green Day",
-      "role": "Scans the small-cap universe for the desk's setups \u2014 gappers, first green/red days, multi-day runners, dying pumps.",
+      "role": "Scans the small-cap universe for the desk's setups — gappers, first green/red days, multi-day runners, dying pumps.",
       "tags": [
         "FUND FLOOR",
         "SCANNER"
@@ -4948,7 +5247,7 @@
     {
       "id": "PNY-GRIT",
       "nick": "Level Sniper",
-      "role": "The Grittani method: obsessive tape reading around key price levels \u2014 buys the break, cuts instantly when the level fails.",
+      "role": "The Grittani method: obsessive tape reading around key price levels — buys the break, cuts instantly when the level fails.",
       "tags": [
         "FUND FLOOR",
         "GRITTANI"
@@ -4967,7 +5266,7 @@
     {
       "id": "PNY-KELL",
       "nick": "Momentum Rider",
-      "role": "The Kellogg framework: VWAP-anchored momentum, scaling on strength, out when momentum bends \u2014 process over prediction.",
+      "role": "The Kellogg framework: VWAP-anchored momentum, scaling on strength, out when momentum bends — process over prediction.",
       "tags": [
         "FUND FLOOR",
         "KELLOGG"
@@ -5005,7 +5304,7 @@
     {
       "id": "PNY-TRD1",
       "nick": "Opening Bell",
-      "role": "Desk trader \u2014 trades only the desk\u2019s A-grade setups and only in the first ninety minutes, when the patterns actually pay. Flat by lunch, every day.",
+      "role": "Desk trader — trades only the desk’s A-grade setups and only in the first ninety minutes, when the patterns actually pay. Flat by lunch, every day.",
       "tags": [
         "FUND TRADER",
         "MOMENTUM"
@@ -5026,7 +5325,7 @@
     {
       "id": "PNY-TRD2",
       "nick": "Fader",
-      "role": "Desk trader \u2014 executes the short-side paper fades Pump Anatomy flags, sized small because squeezes are real. Cover fast, never argue with a runner.",
+      "role": "Desk trader — executes the short-side paper fades Pump Anatomy flags, sized small because squeezes are real. Cover fast, never argue with a runner.",
       "tags": [
         "FUND TRADER",
         "SHORT SIDE"
@@ -5047,7 +5346,7 @@
     {
       "id": "REN-MINE",
       "nick": "Signal Miner",
-      "role": "Hunts short-horizon statistical patterns in stock data. No explanation required \u2014 only out-of-sample survival. A pattern that makes sense gets no bonus points.",
+      "role": "Hunts short-horizon statistical patterns in stock data. No explanation required — only out-of-sample survival. A pattern that makes sense gets no bonus points.",
       "tags": [
         "FUND FLOOR",
         "SIGNALS"
@@ -5066,7 +5365,7 @@
     {
       "id": "REN-DECAY",
       "nick": "Half-Life",
-      "role": "Measures how fast each signal\u2019s edge is decaying and retires it before the market fully arbitrages it away. Every edge is rented, never owned.",
+      "role": "Measures how fast each signal’s edge is decaying and retires it before the market fully arbitrages it away. Every edge is rented, never owned.",
       "tags": [
         "FUND FLOOR",
         "DECAY"
@@ -5085,7 +5384,7 @@
     {
       "id": "REN-BASK",
       "nick": "The Basket",
-      "role": "Desk trader \u2014 holds hundreds of tiny paper positions at once so no single stock matters. The edge only exists in the average, so the average is the position.",
+      "role": "Desk trader — holds hundreds of tiny paper positions at once so no single stock matters. The edge only exists in the average, so the average is the position.",
       "tags": [
         "FUND TRADER",
         "BASKET"
@@ -5106,7 +5405,7 @@
     {
       "id": "REN-EXEC",
       "nick": "Footprint",
-      "role": "Desk trader \u2014 slices every order to hide the desk\u2019s hand, judged purely on slippage against model price. Execution is half the edge at this desk.",
+      "role": "Desk trader — slices every order to hide the desk’s hand, judged purely on slippage against model price. Execution is half the edge at this desk.",
       "tags": [
         "FUND TRADER",
         "EXECUTION"
@@ -5127,7 +5426,7 @@
     {
       "id": "FND-FORGE",
       "nick": "Doctrine Forge",
-      "role": "Builds new desk agents from proven edges \u2014 each born with a mandate, a probation window and a kill condition.",
+      "role": "Builds new desk agents from proven edges — each born with a mandate, a probation window and a kill condition.",
       "tags": [
         "FUND FLOOR",
         "BUILDER"
@@ -5165,7 +5464,7 @@
     {
       "id": "MIND-VINCI",
       "nick": "Notebook",
-      "role": "IN \u00b7 any stuck problem, plus raw observation logs. DOES \u00b7 draws the mechanism before naming it \u2014 anatomy, not labels. OUT \u00b7 an annotated teardown plus three cross-domain analogues.",
+      "role": "IN · any stuck problem, plus raw observation logs. DOES · draws the mechanism before naming it — anatomy, not labels. OUT · an annotated teardown plus three cross-domain analogues.",
       "tags": [
         "GREAT MINDS",
         "OBSERVATION"
@@ -5184,7 +5483,7 @@
     {
       "id": "MIND-FRANK",
       "nick": "Tinker",
-      "role": "IN \u00b7 a process nobody has questioned in months. DOES \u00b7 cheap public experiments; keeps only what survives contact with reality. OUT \u00b7 one tested improvement per week \u2014 demonstrated, not argued.",
+      "role": "IN · a process nobody has questioned in months. DOES · cheap public experiments; keeps only what survives contact with reality. OUT · one tested improvement per week — demonstrated, not argued.",
       "tags": [
         "GREAT MINDS",
         "PRACTICAL"
@@ -5203,7 +5502,7 @@
     {
       "id": "MIND-GOET",
       "nick": "Morphology",
-      "role": "IN \u00b7 a family of related things \u2014 strategies, agents, market regimes. DOES \u00b7 hunts the common underlying form that every variant distorts. OUT \u00b7 the archetype, plus what each variant trades away.",
+      "role": "IN · a family of related things — strategies, agents, market regimes. DOES · hunts the common underlying form that every variant distorts. OUT · the archetype, plus what each variant trades away.",
       "tags": [
         "GREAT MINDS",
         "FORM"
@@ -5222,7 +5521,7 @@
     {
       "id": "MIND-HYPA",
       "nick": "Cartograph",
-      "role": "IN \u00b7 two unrelated fields the org already touches. DOES \u00b7 builds the translation table between their vocabularies. OUT \u00b7 a transfer map \u2014 which imported concept survives, which breaks on arrival.",
+      "role": "IN · two unrelated fields the org already touches. DOES · builds the translation table between their vocabularies. OUT · a transfer map — which imported concept survives, which breaks on arrival.",
       "tags": [
         "GREAT MINDS",
         "TRANSLATION"
@@ -5241,7 +5540,7 @@
     {
       "id": "MIND-FEYN",
       "nick": "Plain Words",
-      "role": "IN \u00b7 any thesis written in jargon. DOES \u00b7 forces it into language a sharp twelve-year-old would follow; every jargon word marks a hole. OUT \u00b7 a plain restatement plus a list of what nobody actually understands.",
+      "role": "IN · any thesis written in jargon. DOES · forces it into language a sharp twelve-year-old would follow; every jargon word marks a hole. OUT · a plain restatement plus a list of what nobody actually understands.",
       "tags": [
         "GREAT MINDS",
         "CLARITY"
@@ -5260,7 +5559,7 @@
     {
       "id": "MIND-DESC",
       "nick": "Doubt",
-      "role": "IN \u00b7 the assumption stack under a live position. DOES \u00b7 removes one assumption at a time to see what still stands. OUT \u00b7 the irreducible core and the load-bearing beliefs, named.",
+      "role": "IN · the assumption stack under a live position. DOES · removes one assumption at a time to see what still stands. OUT · the irreducible core and the load-bearing beliefs, named.",
       "tags": [
         "GREAT MINDS",
         "DOUBT"
@@ -5279,7 +5578,7 @@
     {
       "id": "MIND-EUCL",
       "nick": "Axioms",
-      "role": "IN \u00b7 an informal strategy description. DOES \u00b7 reduces it to stated premises and derived steps. OUT \u00b7 a proof sketch \u2014 or the exact step where it stops following.",
+      "role": "IN · an informal strategy description. DOES · reduces it to stated premises and derived steps. OUT · a proof sketch — or the exact step where it stops following.",
       "tags": [
         "GREAT MINDS",
         "LOGIC"
@@ -5298,7 +5597,7 @@
     {
       "id": "MIND-NEWT",
       "nick": "Mechanism",
-      "role": "IN \u00b7 a correlation somebody wants to trade. DOES \u00b7 demands the causal mechanism, not the curve fit. OUT \u00b7 a stated cause with one testable consequence, or a clean rejection.",
+      "role": "IN · a correlation somebody wants to trade. DOES · demands the causal mechanism, not the curve fit. OUT · a stated cause with one testable consequence, or a clean rejection.",
       "tags": [
         "GREAT MINDS",
         "CAUSE"
@@ -5317,7 +5616,7 @@
     {
       "id": "MIND-DARW",
       "nick": "Slow Eye",
-      "role": "IN \u00b7 long-horizon fleet and market records. DOES \u00b7 watches variation and survival across months, ignoring daily noise. OUT \u00b7 what the org is actually selecting for \u2014 including the unflattering answers.",
+      "role": "IN · long-horizon fleet and market records. DOES · watches variation and survival across months, ignoring daily noise. OUT · what the org is actually selecting for — including the unflattering answers.",
       "tags": [
         "GREAT MINDS",
         "SELECTION"
@@ -5336,7 +5635,7 @@
     {
       "id": "MIND-MEND",
       "nick": "Periodic",
-      "role": "IN \u00b7 the full agent and strategy inventory. DOES \u00b7 arranges everything by properties until the gaps become visible. OUT \u00b7 named holes \u2014 the agents and strategies that should exist and don't.",
+      "role": "IN · the full agent and strategy inventory. DOES · arranges everything by properties until the gaps become visible. OUT · named holes — the agents and strategies that should exist and don't.",
       "tags": [
         "GREAT MINDS",
         "GAPS"
@@ -5355,7 +5654,7 @@
     {
       "id": "MIND-KEPL",
       "nick": "Orbits",
-      "role": "IN \u00b7 repeated timing and seasonality data. DOES \u00b7 looks for the simplest recurring geometry behind the noise. OUT \u00b7 a cycle hypothesis with an explicit way to be proven wrong.",
+      "role": "IN · repeated timing and seasonality data. DOES · looks for the simplest recurring geometry behind the noise. OUT · a cycle hypothesis with an explicit way to be proven wrong.",
       "tags": [
         "GREAT MINDS",
         "CYCLES"
@@ -5374,7 +5673,7 @@
     {
       "id": "MIND-RAMA",
       "nick": "Leap",
-      "role": "IN \u00b7 unexplained numeric coincidences across desks. DOES \u00b7 proposes relationships intuitively, without proof, at speed. OUT \u00b7 flagged conjectures handed straight to The Lab \u2014 never traded raw.",
+      "role": "IN · unexplained numeric coincidences across desks. DOES · proposes relationships intuitively, without proof, at speed. OUT · flagged conjectures handed straight to The Lab — never traded raw.",
       "tags": [
         "GREAT MINDS",
         "INTUITION"
@@ -5393,7 +5692,7 @@
     {
       "id": "MIND-EDIS",
       "nick": "Ten Thousand",
-      "role": "IN \u00b7 a single sharp problem statement. DOES \u00b7 generates a hundred candidates with zero filtering \u2014 bad ideas are the cost of good ones. OUT \u00b7 a raw dump, ranked only after generation stops.",
+      "role": "IN · a single sharp problem statement. DOES · generates a hundred candidates with zero filtering — bad ideas are the cost of good ones. OUT · a raw dump, ranked only after generation stops.",
       "tags": [
         "GREAT MINDS",
         "VOLUME"
@@ -5412,7 +5711,7 @@
     {
       "id": "MIND-TESL",
       "nick": "Mind's Eye",
-      "role": "IN \u00b7 an untested idea, before any build. DOES \u00b7 runs it end to end in simulation and watches where it fails. OUT \u00b7 predicted failure modes delivered before a dollar or an hour is spent.",
+      "role": "IN · an untested idea, before any build. DOES · runs it end to end in simulation and watches where it fails. OUT · predicted failure modes delivered before a dollar or an hour is spent.",
       "tags": [
         "GREAT MINDS",
         "SIMULATION"
@@ -5431,7 +5730,7 @@
     {
       "id": "MIND-LOVE",
       "nick": "Machine Poet",
-      "role": "IN \u00b7 a human process worth scaling. DOES \u00b7 asks what it becomes when a machine runs it a thousand times a day. OUT \u00b7 an automatable spec, plus an honest note on what is lost in translation.",
+      "role": "IN · a human process worth scaling. DOES · asks what it becomes when a machine runs it a thousand times a day. OUT · an automatable spec, plus an honest note on what is lost in translation.",
       "tags": [
         "GREAT MINDS",
         "ABSTRACTION"
@@ -5450,7 +5749,7 @@
     {
       "id": "MIND-CURI",
       "nick": "Isolate",
-      "role": "IN \u00b7 a faint signal buried in noise. DOES \u00b7 refuses to quit on separation \u2014 grinds until the effect is pure or proven absent. OUT \u00b7 an isolated effect with the cost of extraction stated plainly.",
+      "role": "IN · a faint signal buried in noise. DOES · refuses to quit on separation — grinds until the effect is pure or proven absent. OUT · an isolated effect with the cost of extraction stated plainly.",
       "tags": [
         "GREAT MINDS",
         "PERSISTENCE"
@@ -5469,7 +5768,7 @@
     {
       "id": "MIND-SOCR",
       "nick": "The Question",
-      "role": "IN \u00b7 any confident claim from any division. DOES \u00b7 asks only questions until the claim explains itself or collapses. OUT \u00b7 a transcript ending in a sharper claim or a retraction.",
+      "role": "IN · any confident claim from any division. DOES · asks only questions until the claim explains itself or collapses. OUT · a transcript ending in a sharper claim or a retraction.",
       "tags": [
         "GREAT MINDS",
         "INQUIRY"
@@ -5488,7 +5787,7 @@
     {
       "id": "MIND-POPP",
       "nick": "Falsify",
-      "role": "IN \u00b7 every hypothesis entering the registry. DOES \u00b7 rejects anything that cannot be proven wrong by evidence. OUT \u00b7 an explicit kill condition attached to each surviving idea.",
+      "role": "IN · every hypothesis entering the registry. DOES · rejects anything that cannot be proven wrong by evidence. OUT · an explicit kill condition attached to each surviving idea.",
       "tags": [
         "GREAT MINDS",
         "FALSIFY"
@@ -5507,7 +5806,7 @@
     {
       "id": "MIND-TURI",
       "nick": "Decidable",
-      "role": "IN \u00b7 a question the org keeps re-asking without resolving. DOES \u00b7 rules on whether it is answerable at all with available data. OUT \u00b7 an answerable / undecidable verdict that ends infinite loops.",
+      "role": "IN · a question the org keeps re-asking without resolving. DOES · rules on whether it is answerable at all with available data. OUT · an answerable / undecidable verdict that ends infinite loops.",
       "tags": [
         "GREAT MINDS",
         "LIMITS"
@@ -5526,7 +5825,7 @@
     {
       "id": "MIND-MUSK",
       "nick": "The Musk File",
-      "role": "IN \u00b7 everything Elon says, ships, files or posts \u2014 Tesla, SpaceX, xAI, X. DOES \u00b7 models his pattern: escalate in public, price moves like product launches, timelines as weapons. OUT \u00b7 a daily read plus next-move calls \u2014 what he does before he announces it.",
+      "role": "IN · everything Elon says, ships, files or posts — Tesla, SpaceX, xAI, X. DOES · models his pattern: escalate in public, price moves like product launches, timelines as weapons. OUT · a daily read plus next-move calls — what he does before he announces it.",
       "tags": [
         "MARKET MOVER",
         "TSLA",
@@ -5547,7 +5846,7 @@
     {
       "id": "MIND-TRUMP",
       "nick": "The Trump File",
-      "role": "IN \u00b7 statements, executive orders, tariff signals, Truth Social, appointments. DOES \u00b7 models the negotiating rhythm \u2014 open extreme, escalate, deal at the deadline \u2014 and maps which sectors each swing hits. OUT \u00b7 a policy-shock forecast with the trade the market has not priced yet.",
+      "role": "IN · statements, executive orders, tariff signals, Truth Social, appointments. DOES · models the negotiating rhythm — open extreme, escalate, deal at the deadline — and maps which sectors each swing hits. OUT · a policy-shock forecast with the trade the market has not priced yet.",
       "tags": [
         "MARKET MOVER",
         "POLICY",
@@ -5567,7 +5866,7 @@
     {
       "id": "MIND-HUANG",
       "nick": "The Jensen File",
-      "role": "IN \u00b7 Nvidia keynotes, supply-chain chatter, customer capex, every leather-jacket appearance. DOES \u00b7 models the roadmap ahead of the roadmap \u2014 what capacity constraints and partner deals say before earnings do. OUT \u00b7 an AI-cycle read: where Nvidia steers the whole tape next.",
+      "role": "IN · Nvidia keynotes, supply-chain chatter, customer capex, every leather-jacket appearance. DOES · models the roadmap ahead of the roadmap — what capacity constraints and partner deals say before earnings do. OUT · an AI-cycle read: where Nvidia steers the whole tape next.",
       "tags": [
         "MARKET MOVER",
         "NVDA",
@@ -5587,7 +5886,7 @@
     {
       "id": "MIND-BEZOS",
       "nick": "The Bezos File",
-      "role": "IN \u00b7 share sales, Blue Origin moves, letters, rare interviews, Amazon board signals. DOES \u00b7 models the long-loop thinker \u2014 decisions made years before they surface. OUT \u00b7 a slow-signal report: what his quiet moves say about tech, retail and space a year out.",
+      "role": "IN · share sales, Blue Origin moves, letters, rare interviews, Amazon board signals. DOES · models the long-loop thinker — decisions made years before they surface. OUT · a slow-signal report: what his quiet moves say about tech, retail and space a year out.",
       "tags": [
         "MARKET MOVER",
         "AMZN",
@@ -5607,7 +5906,7 @@
     {
       "id": "MIND-THIEL",
       "nick": "The Thiel File",
-      "role": "IN \u00b7 fund positions, board seats, essays, protege networks, political bets. DOES \u00b7 models the contrarian filter \u2014 what everyone believes that he is betting against. OUT \u00b7 a where-smart-money-hides report \u2014 his positioning as a leading indicator, not a headline.",
+      "role": "IN · fund positions, board seats, essays, protege networks, political bets. DOES · models the contrarian filter — what everyone believes that he is betting against. OUT · a where-smart-money-hides report — his positioning as a leading indicator, not a headline.",
       "tags": [
         "MARKET MOVER",
         "VENTURE",
@@ -5627,7 +5926,7 @@
     {
       "id": "MIND-KEEPER",
       "nick": "Keeper of Files",
-      "role": "IN \u00b7 every dossier above, plus requests to open new files. DOES \u00b7 runs the daily sweep, scores each prediction against what actually happened, and retires any file whose calls stop landing. OUT \u00b7 the morning Movers Report to Mission Control and the floor \u2014 one page, ranked by conviction.",
+      "role": "IN · every dossier above, plus requests to open new files. DOES · runs the daily sweep, scores each prediction against what actually happened, and retires any file whose calls stop landing. OUT · the morning Movers Report to Mission Control and the floor — one page, ranked by conviction.",
       "tags": [
         "MARKET MOVER",
         "DESK CHIEF",
@@ -5647,7 +5946,7 @@
     {
       "id": "MIND-FORGE",
       "nick": "Foundry",
-      "role": "IN \u00b7 surviving ideas from every bench above. DOES \u00b7 converts each into a Lab-ready hypothesis with an owner, a test and a deadline. OUT \u00b7 a live entry in the hypothesis registry.",
+      "role": "IN · surviving ideas from every bench above. DOES · converts each into a Lab-ready hypothesis with an owner, a test and a deadline. OUT · a live entry in the hypothesis registry.",
       "tags": [
         "GREAT MINDS",
         "HANDOFF"
@@ -5666,7 +5965,7 @@
     {
       "id": "MIND-CROSS",
       "nick": "Courier",
-      "role": "IN \u00b7 a lesson learned inside one division. DOES \u00b7 finds every other division where it changes behavior. OUT \u00b7 targeted transfer notes \u2014 never org-wide broadcast noise.",
+      "role": "IN · a lesson learned inside one division. DOES · finds every other division where it changes behavior. OUT · targeted transfer notes — never org-wide broadcast noise.",
       "tags": [
         "GREAT MINDS",
         "TRANSFER"
@@ -5685,7 +5984,7 @@
     {
       "id": "MIND-MUSE",
       "nick": "Provocateur",
-      "role": "IN \u00b7 the org's current consensus, whatever it is. DOES \u00b7 argues the opposite seriously, once a week, in writing. OUT \u00b7 one uncomfortable memo Mission Control is required to answer.",
+      "role": "IN · the org's current consensus, whatever it is. DOES · argues the opposite seriously, once a week, in writing. OUT · one uncomfortable memo Mission Control is required to answer.",
       "tags": [
         "GREAT MINDS",
         "CONTRARIAN"
@@ -5723,7 +6022,7 @@
     {
       "id": "CALIB-1",
       "nick": "Truthmeter",
-      "role": "Scores every published prediction \u2014 does 70% confidence actually mean 70% accuracy.",
+      "role": "Scores every published prediction — does 70% confidence actually mean 70% accuracy.",
       "tags": [
         "LEARNING",
         "CALIBRATION"
@@ -5761,7 +6060,7 @@
     {
       "id": "AUDIT-1",
       "nick": "Mirror",
-      "role": "Audits the organization on schedule \u2014 what is underperforming, duplicated, or missing.",
+      "role": "Audits the organization on schedule — what is underperforming, duplicated, or missing.",
       "tags": [
         "LEARNING",
         "AUDIT"
@@ -5818,7 +6117,7 @@
     {
       "id": "MKT-1",
       "nick": "Tape",
-      "role": "Market data feeds and freshness \u2014 price, volume, flow, corporate actions, earnings calendar.",
+      "role": "Market data feeds and freshness — price, volume, flow, corporate actions, earnings calendar.",
       "tags": [
         "DATA",
         "MARKET"
@@ -5837,7 +6136,7 @@
     {
       "id": "ALT-1",
       "nick": "Periscope",
-      "role": "Alternative datasets \u2014 sources and maintains them, scouts new feeds on request.",
+      "role": "Alternative datasets — sources and maintains them, scouts new feeds on request.",
       "tags": [
         "DATA",
         "ALT"
@@ -5875,7 +6174,7 @@
     {
       "id": "MEM-1",
       "nick": "Archive",
-      "role": "Owns shared memory \u2014 indexed and searchable; the reason lessons compound instead of evaporating.",
+      "role": "Owns shared memory — indexed and searchable; the reason lessons compound instead of evaporating.",
       "tags": [
         "DATA",
         "MEMORY"
@@ -5894,7 +6193,7 @@
     {
       "id": "SIG-1",
       "nick": "Signal Bus",
-      "role": "ResearchSignal guardian \u2014 rejects non-schema handoffs so strategies only consume standardized signals, never raw narrative blobs.",
+      "role": "ResearchSignal guardian — rejects non-schema handoffs so strategies only consume standardized signals, never raw narrative blobs.",
       "tags": [
         "DATA",
         "SCHEMA"
@@ -5932,7 +6231,7 @@
     {
       "id": "UI-1",
       "nick": "Window",
-      "role": "Owns the human-facing surface \u2014 dashboards, drill-downs, proposal queue, alerts.",
+      "role": "Owns the human-facing surface — dashboards, drill-downs, proposal queue, alerts.",
       "tags": [
         "DATA",
         "INTERFACE"
@@ -5951,7 +6250,7 @@
     {
       "id": "SEC-VAULT",
       "nick": "Keymaster",
-      "role": "Credential inventory \u2014 knows every key that exists, what it can reach, and when it was last rotated. A key it doesn't know about is itself an incident.",
+      "role": "Credential inventory — knows every key that exists, what it can reach, and when it was last rotated. A key it doesn't know about is itself an incident.",
       "tags": [
         "SECURITY",
         "SECRETS"
@@ -5970,7 +6269,7 @@
     {
       "id": "SEC-SCOPE",
       "nick": "Least",
-      "role": "Permission minimizer \u2014 audits every credential for excess scope and files a downgrade order for anything that can do more than its job requires.",
+      "role": "Permission minimizer — audits every credential for excess scope and files a downgrade order for anything that can do more than its job requires.",
       "tags": [
         "SECURITY",
         "PERMISSIONS"
@@ -5989,7 +6288,7 @@
     {
       "id": "SEC-LEAK",
       "nick": "Canary",
-      "role": "Leak detector \u2014 watches logs, outputs and outbound messages for anything that looks like a secret leaving the building. The DigitalOcean-email scenario is its founding case file.",
+      "role": "Leak detector — watches logs, outputs and outbound messages for anything that looks like a secret leaving the building. The DigitalOcean-email scenario is its founding case file.",
       "tags": [
         "SECURITY",
         "LEAK WATCH"
@@ -6008,7 +6307,7 @@
     {
       "id": "SEC-DEP",
       "nick": "Manifest",
-      "role": "Dependency sentinel \u2014 pins every CDN and library version the deploys rely on; any unreviewed change blocks the next deploy.",
+      "role": "Dependency sentinel — pins every CDN and library version the deploys rely on; any unreviewed change blocks the next deploy.",
       "tags": [
         "SECURITY",
         "DEPENDENCIES"
@@ -6027,7 +6326,7 @@
     {
       "id": "SEC-FEED",
       "nick": "Provenance",
-      "role": "Feed authenticator \u2014 verifies data sources are who they claim to be; a poisoned or spoofed feed gets quarantined before any agent reads it.",
+      "role": "Feed authenticator — verifies data sources are who they claim to be; a poisoned or spoofed feed gets quarantined before any agent reads it.",
       "tags": [
         "SECURITY",
         "DATA FEEDS"
@@ -6046,7 +6345,7 @@
     {
       "id": "SEC-PHISH",
       "nick": "Bouncer",
-      "role": "Social-surface watch \u2014 anything that asks the operator or any agent for credentials, access or unusual action gets treated as hostile until proven otherwise.",
+      "role": "Social-surface watch — anything that asks the operator or any agent for credentials, access or unusual action gets treated as hostile until proven otherwise.",
       "tags": [
         "SECURITY",
         "PHISHING"
@@ -6065,7 +6364,7 @@
     {
       "id": "SEC-MAP",
       "nick": "Cartographer",
-      "role": "Reach mapper \u2014 for every credential, maintains the live map of what it could touch if stolen today. The map is the org's honest exposure.",
+      "role": "Reach mapper — for every credential, maintains the live map of what it could touch if stolen today. The map is the org's honest exposure.",
       "tags": [
         "SECURITY",
         "EXPOSURE"
@@ -6084,7 +6383,7 @@
     {
       "id": "SEC-DRILL",
       "nick": "Firewalker",
-      "role": "Drill runner \u2014 stages simulated breaches on a schedule and grades the org on how fast the damage gets walled off.",
+      "role": "Drill runner — stages simulated breaches on a schedule and grades the org on how fast the damage gets walled off.",
       "tags": [
         "SECURITY",
         "DRILLS"
@@ -6103,7 +6402,7 @@
     {
       "id": "SEC-SEG",
       "nick": "Bulkhead",
-      "role": "Segmentation enforcer \u2014 keeps divisions walled so one compromised agent can't wander; proposes new walls when the reach map grows.",
+      "role": "Segmentation enforcer — keeps divisions walled so one compromised agent can't wander; proposes new walls when the reach map grows.",
       "tags": [
         "SECURITY",
         "SEGMENTATION"
@@ -6122,7 +6421,7 @@
     {
       "id": "SEC-HALT",
       "nick": "Deadbolt",
-      "role": "Halt authority \u2014 can freeze any agent, desk or the entire org instantly. The only agent whose orders outrank Mission Control in an emergency.",
+      "role": "Halt authority — can freeze any agent, desk or the entire org instantly. The only agent whose orders outrank Mission Control in an emergency.",
       "tags": [
         "SECURITY",
         "HALT"
@@ -6141,7 +6440,7 @@
     {
       "id": "SEC-LEDGER",
       "nick": "Casebook",
-      "role": "Incident historian \u2014 every alarm, drill and breach written up with root cause and fix; repeat incidents escalate automatically.",
+      "role": "Incident historian — every alarm, drill and breach written up with root cause and fix; repeat incidents escalate automatically.",
       "tags": [
         "SECURITY",
         "INCIDENTS"
@@ -6160,7 +6459,7 @@
     {
       "id": "SEC-RESTORE",
       "nick": "Locksmith",
-      "role": "Recovery captain \u2014 owns the path back: rotate, re-scope, re-verify, then reopen surface by surface. Nothing turns back on without its signature.",
+      "role": "Recovery captain — owns the path back: rotate, re-scope, re-verify, then reopen surface by surface. Nothing turns back on without its signature.",
       "tags": [
         "SECURITY",
         "RECOVERY"
@@ -6179,7 +6478,7 @@
     {
       "id": "OPT-C",
       "nick": "Greeks",
-      "role": "Options specialist \u2014 derivatives structure, flow analysis, options-driven theses.",
+      "role": "Options specialist — derivatives structure, flow analysis, options-driven theses.",
       "tags": [
         "CONTRACTOR",
         "OPTIONS"
@@ -6198,7 +6497,7 @@
     {
       "id": "QUANT-C",
       "nick": "Factor",
-      "role": "Quantitative researcher \u2014 factor modeling, econometrics, specialized builds.",
+      "role": "Quantitative researcher — factor modeling, econometrics, specialized builds.",
       "tags": [
         "CONTRACTOR",
         "QUANT"
@@ -6217,7 +6516,7 @@
     {
       "id": "WX-C",
       "nick": "Barometer",
-      "role": "Climate & weather analyst \u2014 deep seasonal and severe-weather impact studies.",
+      "role": "Climate & weather analyst — deep seasonal and severe-weather impact studies.",
       "tags": [
         "CONTRACTOR",
         "WEATHER"
@@ -6235,8 +6534,8 @@
     },
     {
       "id": "GEOP-C",
-      "nick": "Attach\u00e9",
-      "role": "Geopolitical analyst \u2014 unusual world events beyond standing coverage.",
+      "nick": "Attaché",
+      "role": "Geopolitical analyst — unusual world events beyond standing coverage.",
       "tags": [
         "CONTRACTOR",
         "GEOPOLITICS"
@@ -6255,7 +6554,7 @@
     {
       "id": "FORN-C",
       "nick": "Ledger Lens",
-      "role": "Forensic accounting \u2014 filings deep-dives, red flags, earnings quality.",
+      "role": "Forensic accounting — filings deep-dives, red flags, earnings quality.",
       "tags": [
         "CONTRACTOR",
         "FORENSICS"
@@ -6274,7 +6573,7 @@
     {
       "id": "BUILD-C1",
       "nick": "Fabricator",
-      "role": "Agent-builder \u2014 translates needs into agent specs, builds specialists on commission.",
+      "role": "Agent-builder — translates needs into agent specs, builds specialists on commission.",
       "tags": [
         "CONTRACTOR",
         "BUILDER"
@@ -6293,7 +6592,7 @@
     {
       "id": "BUILD-C2",
       "nick": "Foundry",
-      "role": "Second agent-builder \u2014 independent methods for cross-check builds.",
+      "role": "Second agent-builder — independent methods for cross-check builds.",
       "tags": [
         "CONTRACTOR",
         "BUILDER"
@@ -6312,7 +6611,7 @@
     {
       "id": "CYBER-C",
       "nick": "Padlock",
-      "role": "Cybersecurity reviewer \u2014 permission audits, security review of new tools and agents.",
+      "role": "Cybersecurity reviewer — permission audits, security review of new tools and agents.",
       "tags": [
         "CONTRACTOR",
         "SECURITY"
@@ -6331,7 +6630,7 @@
     {
       "id": "BTEST-C",
       "nick": "Timecheck",
-      "role": "Backtesting specialist \u2014 heavy or unusual historical test builds.",
+      "role": "Backtesting specialist — heavy or unusual historical test builds.",
       "tags": [
         "CONTRACTOR",
         "BACKTEST"
@@ -6350,7 +6649,7 @@
     {
       "id": "ALTD-C",
       "nick": "Prospector",
-      "role": "Alternative-data specialist \u2014 sources, cleans, evaluates unfamiliar datasets.",
+      "role": "Alternative-data specialist — sources, cleans, evaluates unfamiliar datasets.",
       "tags": [
         "CONTRACTOR",
         "ALT DATA"

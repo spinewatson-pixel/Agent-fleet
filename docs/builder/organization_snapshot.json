@@ -18,7 +18,7 @@
     "lifecycle": "operating_paper",
     "criticality": "high",
     "environment": "paper",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "substrate": "custom_python_watchfloor",
     "evidence_ids": [
       "EV-REG-001",
@@ -33,7 +33,7 @@
       "production_broker_boundary",
       "success_metric_targets_numeric"
     ],
-    "updated_at": "2026-08-03T03:17:47.615406Z"
+    "updated_at": "2026-08-03T03:21:39.308631Z"
   },
   "capabilities": [
     {
@@ -349,8 +349,28 @@
         "evidence_linked",
         "owner_assigned"
       ],
-      "present": false,
-      "maturity": "missing",
+      "present": true,
+      "maturity": "working",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "capability_id": "CAP-BUILDER",
+      "org_id": "org-watchfloor-quant-lab",
+      "purpose": "Builder control plane + agent engineering",
+      "inputs": [],
+      "outputs": [],
+      "slos": [],
+      "dependencies": [],
+      "failure_modes": [],
+      "evaluation_criteria": [
+        "evidence_linked",
+        "owner_assigned"
+      ],
+      "present": true,
+      "maturity": "working",
       "evidence_ids": [
         "EV-REG-001"
       ],
@@ -611,6 +631,366 @@
       "division": "ctrl",
       "department": "Risk & Limits",
       "supervisor_id": "GOV-CHAIR",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-CHIEF",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "The Architect",
+      "responsibilities": [
+        "Chairs the Builder control plane. Owns the enhancement queue for the whole org. Designs structure \u2014 never proposes or executes trades."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "GOV-CHAIR",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-DISC",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Surveyor",
+      "responsibilities": [
+        "Read-only discovery \u2014 inventories agents, tools, topology, hard rules and evidence with confidence labels."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-INTENT",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Intent",
+      "responsibilities": [
+        "Reconstructs mission, constraints and success criteria. Flags unresolved fields \u2014 never guesses ownership or risk tolerance."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-GAP",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Gapfinder",
+      "responsibilities": [
+        "Compares current vs ideal capabilities. Keeps a preserve list of strengths that must not be casually removed."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-SYNTH",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Composer",
+      "responsibilities": [
+        "Synthesizes multiple candidate architectures from AKB patterns. Frameworks are substrates, not goals."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-SIM",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Twin",
+      "responsibilities": [
+        "Static analysis and scenario tests against the digital twin. Predictions with intervals \u2014 never declared facts."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-REVIEW",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Red Arch",
+      "responsibilities": [
+        "Independent adversarial architecture review. Tries to disprove designs; can block unsafe recommendations."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-PLAN",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Roadmap",
+      "responsibilities": [
+        "Turns chosen designs into reversible migration plans with gates, owners and success measures. Export only until approved."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Architecture Control Plane",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "IDC-RISK",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Stress",
+      "responsibilities": [
+        "Portfolio & risk design veto \u2014 limits, concentration, halt readiness. Can kill an enhancement that weakens SoD or paper-only gates."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "IDC-GOV",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Controls",
+      "responsibilities": [
+        "Governance & operations veto \u2014 change requests, escalation, agent-ceiling gates, audit completeness."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "IDC-CAP",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Steward",
+      "responsibilities": [
+        "Capital stewardship veto \u2014 activity quality, patient capital, forge thresholds. Blocks noisy agent sprawl."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Design Council Vetoes",
+      "supervisor_id": "BLD-CHIEF",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-SPEC",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Specwright",
+      "responsibilities": [
+        "Writes complete operating blueprints for every seat \u2014 identity through health monitoring \u2014 so agents know how to work."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "supervisor_id": "BLD-ENHANCE",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-WIRE",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Circuit",
+      "responsibilities": [
+        "Operating contracts and message wiring \u2014 permissions, SoD, ResearchSignal schema, approval chain hooks."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "supervisor_id": "BLD-ENHANCE",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-TEST",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Proving",
+      "responsibilities": [
+        "Acceptance engineer \u2014 paper-chain drills, SoD asserts, halt drills. A seat is not done until it passes."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "supervisor_id": "BLD-ENHANCE",
+      "may_propose_trades": false,
+      "may_place_orders": false,
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "worker_id": "BLD-ENHANCE",
+      "org_id": "org-watchfloor-quant-lab",
+      "kind": "agent",
+      "name": "Forge Lead",
+      "responsibilities": [
+        "Runs the enhance-fleet sequence: council findings \u2192 concrete agent upgrades \u2192 Mission Control proposals. Owns the Builder\u2192Watchfloor handoff."
+      ],
+      "authority": [],
+      "model_runtime": "watchfloor_python",
+      "permissions": [
+        "paper_only"
+      ],
+      "cost_profile": "lab_seat",
+      "division": "builder",
+      "department": "Agent Engineering",
+      "supervisor_id": "BLD-CHIEF",
       "may_propose_trades": false,
       "may_place_orders": false,
       "evidence_ids": [
@@ -7765,7 +8145,7 @@
       "org_id": "org-watchfloor-quant-lab",
       "name": "Agent ceiling utilization",
       "definition": "total_agents / agent_ceiling",
-      "baseline": "285",
+      "baseline": "300",
       "target": "<= 300",
       "sampling_method": "",
       "dimensions": [
@@ -7816,18 +8196,18 @@
       "evidence_id": "EV-REG-001",
       "kind": "observed_fact",
       "source": "/workspace/config/watchfloor_registry.json",
-      "collected_at": "2026-08-03T03:17:47.615373Z",
+      "collected_at": "2026-08-03T03:21:39.308593Z",
       "integrity": "file_hash_not_computed",
       "relevance": 0.7,
       "confidence": 0.95,
       "lineage": [],
-      "summary": "Registry v0.5.1 \u00b7 285 agents"
+      "summary": "Registry v0.5.2 \u00b7 300 agents"
     },
     {
       "evidence_id": "EV-RULES-001",
       "kind": "observed_fact",
       "source": "hard_rules",
-      "collected_at": "2026-08-03T03:17:47.615384Z",
+      "collected_at": "2026-08-03T03:21:39.308610Z",
       "integrity": "unverified",
       "relevance": 0.7,
       "confidence": 0.99,
@@ -7838,29 +8218,29 @@
       "evidence_id": "EV-CONTRACTS-001",
       "kind": "observed_fact",
       "source": "/workspace/docs/agent_contracts/watchfloor_contracts.json",
-      "collected_at": "2026-08-03T03:17:47.615389Z",
+      "collected_at": "2026-08-03T03:21:39.308614Z",
       "integrity": "unverified",
       "relevance": 0.7,
       "confidence": 0.85,
       "lineage": [],
-      "summary": "285 operating contracts"
+      "summary": "300 operating contracts"
     },
     {
       "evidence_id": "EV-BP-001",
       "kind": "observed_fact",
       "source": "/workspace/docs/agent_blueprints/blueprints.json",
-      "collected_at": "2026-08-03T03:17:47.615391Z",
+      "collected_at": "2026-08-03T03:21:39.308617Z",
       "integrity": "unverified",
       "relevance": 0.7,
       "confidence": 0.85,
       "lineage": [],
-      "summary": "285 agent blueprints (25 layers)"
+      "summary": "300 agent blueprints (25 layers)"
     },
     {
       "evidence_id": "EV-IDC-001",
       "kind": "inference",
       "source": "/workspace/docs/council/enhancement_plan.json",
-      "collected_at": "2026-08-03T03:17:47.615395Z",
+      "collected_at": "2026-08-03T03:21:39.308619Z",
       "integrity": "unverified",
       "relevance": 0.7,
       "confidence": 0.7,

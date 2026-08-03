@@ -142,9 +142,18 @@ function enrich(a) {
       funds: "HEAD-TRADE",
       trade: "HEAD-TRADE",
       minds: "MIND-FORGE",
+      builder: "BLD-CHIEF",
     };
     out.supervisor_id = map[a.division] || "GOV-CHAIR";
     if (a.id === "RECON-1") out.supervisor_id = "COMP-1";
+    if (a.division === "builder") {
+      if (a.id === "BLD-CHIEF") out.supervisor_id = "GOV-CHAIR";
+      else if (String(a.id).startsWith("IDC-")) out.supervisor_id = "BLD-CHIEF";
+      else if (["BLD-SPEC", "BLD-WIRE", "BLD-TEST", "BLD-ENHANCE"].includes(a.id))
+        out.supervisor_id = "BLD-ENHANCE";
+      else out.supervisor_id = "BLD-CHIEF";
+      if (a.id === "BLD-ENHANCE") out.supervisor_id = "BLD-CHIEF";
+    }
   }
   return out;
 }

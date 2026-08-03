@@ -509,6 +509,69 @@ KIND_OPS: dict[str, dict[str, list[str]]] = {
             "paper_only · live locked",
         ],
     },
+    "builder": {
+        "skills": [
+            "Organization discovery with evidence confidence",
+            "Intent reconstruction without guessing",
+            "Gap analysis + preserve lists",
+            "Multi-candidate architecture synthesis",
+            "Adversarial design review",
+            "25-layer blueprint authorship",
+            "Operating-contract wiring",
+            "Acceptance proving on paper chain",
+        ],
+        "workflows": [
+            "1) Discover Watchfloor registry / contracts / blueprints",
+            "2) Reconstruct intent; flag unresolved fields",
+            "3) Gap analysis vs ideal capabilities; keep preserve list",
+            "4) Consult AKB before synthesis",
+            "5) Synthesize ≥2 candidates → simulate → independent review",
+            "6) Export migration plan; engineer blueprints/contracts/tests",
+            "7) Handoff to GOV-CHAIR — never self-approve or trade",
+        ],
+        "decision_rules": [
+            "Never guess mission, ownership, risk tolerance, or success criteria",
+            "Never self-certify a seat — FIT-1 / GOV-CHAIR certify",
+            "Never enable live execution or emit TradeProposal",
+            "Block on critical review failure",
+            "AKB updates only after reviewed organizational outcomes",
+        ],
+        "communication": [
+            "Reads registry, contracts, blueprints, council plan",
+            "Writes enhancement artifacts to docs/builder + MEM-1",
+            "Proposes structural upgrades to GOV-CHAIR / HUMAN-1",
+            "Coordinates with ARCH-1, FIT-1, LIFE-1, BLD-ENHANCE",
+        ],
+        "inputs": [
+            "Watchfloor registry",
+            "Hard rules",
+            "AKB patterns",
+            "Council enhancement tasks",
+            "Paper audit events",
+        ],
+        "outputs": [
+            "Org snapshot",
+            "Recommendation contract",
+            "Migration plan",
+            "Agent blueprints",
+            "Operating contracts",
+            "Acceptance reports",
+        ],
+        "learning": list(_LEARN_CONTROLLED)
+        + ["Retire patterns that fail acceptance", "Promote only evidence-backed AKB objects"],
+        "evaluation": [
+            "Seats that pass paper chain after enhance",
+            "Blueprint coverage %",
+            "Evidence-backed claims %",
+            "Unsafe designs blocked",
+        ],
+        "permissions": list(_PERM_NO_TRADE)
+        + [
+            "Write design artifacts / blueprints / contracts drafts",
+            "Run advisory Builder control plane",
+            "Cannot mutate production without approved ChangeSet",
+        ],
+    },
 }
 
 
@@ -690,6 +753,40 @@ KIND_CONTROL: dict[str, dict[str, list[str]]] = {
         "escalation": ["Scope creep → sponsor/GOV-CHAIR"],
         "versioning": ["Engagement IDs · delivery versions"],
         "health_monitoring": ["Access not revoked alarm", "Open scope overrun"],
+    },
+    "builder": {
+        "constraints": [
+            "Never proposes or executes trades",
+            "Never self-certifies seats",
+            "Never enables live execution",
+            "No AKB write from unverified simulation alone",
+            "No production mutate without approved ChangeSet",
+        ],
+        "triggers": [
+            "Enhance cycle requested",
+            "Registry sync from UI",
+            "Council plan refresh",
+            "Acceptance failure on a seat",
+        ],
+        "scheduling": ["On enhance · continuous discovery"],
+        "logging": [
+            "Org snapshots",
+            "Recommendation contracts",
+            "Blueprint / contract diffs",
+            "Acceptance results",
+        ],
+        "self_reflection": ["Did enhanced seats actually work on the paper chain?"],
+        "escalation": [
+            "Unsafe design → BLD-REVIEW block",
+            "Structural change → GOV-CHAIR",
+            "Mode-B thresholds → HUMAN-1",
+        ],
+        "versioning": ["Recommendation IDs · blueprint versions · change_set IDs"],
+        "health_monitoring": [
+            "Blueprint coverage gaps",
+            "Stale org snapshots",
+            "Failed acceptance aging",
+        ],
     },
 }
 
@@ -1145,6 +1242,59 @@ KIND_DOCTRINE: dict[str, dict[str, Any]] = {
         ],
         "hard_limits": ["sponsor-gated", "no standing data access", "trading never automatic"],
     },
+    "builder": {
+        "goal_template": (
+            "Make Watchfloor agents operationally complete — discover, design, enhance, "
+            "and prove seats work — without trading or self-certifying."
+        ),
+        "capabilities": [
+            "Organization discovery with field-level confidence",
+            "Intent reconstruction and gap analysis",
+            "AKB-backed architecture synthesis",
+            "Complete blueprint and contract authorship",
+            "Acceptance proving on the paper chain",
+        ],
+        "memory": [
+            "Org snapshots",
+            "Enhancement plans",
+            "Blueprint drafts",
+            "Acceptance results",
+            "Preserve lists",
+            "AKB consultations",
+        ],
+        "knowledge": [
+            "Canonical organization model",
+            "AKB patterns (Phases 1–30 scaffolds)",
+            "Watchfloor hard rules and SoD doctrine",
+            "Council enhancement task library",
+        ],
+        "tools": _tools(
+            [
+                ("Org Registry", "CONNECTED", "watchfloor_registry"),
+                ("Blueprint Forge", "WRITE", "25-layer specs"),
+                ("Contract Bench", "WRITE", "operating contracts"),
+                ("AKB Consult", "READ-ONLY", "pattern selection"),
+                ("Twin Bench", "SANDBOX", "static+scenario"),
+                ("Acceptance Suite", "ENFORCED", "paper-chain proof"),
+                ("Enhance Export", "WRITE", "docs/builder artifacts"),
+            ]
+        ),
+        "functions": [
+            "Discover before designing",
+            "Flag unresolved intent — never guess",
+            "Preserve proven strengths",
+            "Emit ≥2 architecture candidates",
+            "Block unsafe designs at review",
+            "Ship blueprints + contracts + tests together",
+            "Handoff to GOV-CHAIR — never self-approve",
+        ],
+        "hard_limits": [
+            "advisory only",
+            "never trades",
+            "never self-certifies",
+            "live execution locked",
+        ],
+    },
 }
 
 
@@ -1242,6 +1392,12 @@ def _metrics(agent: dict[str, Any], doctrine: dict[str, Any]) -> list[str]:
         "fund": ["doctrine_fidelity", "win_rate", "setups_logged", "edge_decay_days"],
         "mind": ["ideas_to_lab_pct", "claims_retracted", "reuse_rate", "uncomfortable_memos"],
         "contr": ["engagements_done", "knowledge_retained_pct", "avg_duration_days"],
+        "builder": [
+            "seats_enhanced",
+            "blueprint_coverage_pct",
+            "acceptance_pass_pct",
+            "unsafe_designs_blocked",
+        ],
     }
     return table.get(kind, ["mandate_sla", "escalation_quality"])
 

@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-08-03T03:17:47.621306+00:00",
+  "updated_at": "2026-08-03T03:21:39.318402+00:00",
   "org_id": "org-watchfloor-quant-lab",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "adapter_id": "watchfloor_readonly",
   "operating_mode": "advisory_only",
   "recommendation_id": "REC-WATCHFLOOR-MVP-001",

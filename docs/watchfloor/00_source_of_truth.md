@@ -15,7 +15,7 @@ Checksum: see `ui/WATCHFLOOR_SOURCE.txt`.
 
 `config/watchfloor_registry.json` is the machine extract used by the paper-trading organization (`WatchfloorOrganization`).
 
-- **285** agents, 128 proposers, executor `EXEC-1` only
+- **300** agents, 128 proposers, executor `EXEC-1` only
 - Agent ceiling 300; live execution disabled
 - Institutional Design Council seats mapped onto Watchfloor IDs
 - Rebuild with `./scripts/rebuild_from_watchfloor.sh` (publishes `ui/data/` for the bridge)
