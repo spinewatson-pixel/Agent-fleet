@@ -1,0 +1,31 @@
+{
+  "runId": "2026-08-02T12-49-11-745Z-4nja",
+  "projectId": "agent-fleet",
+  "recordedAt": "2026-08-02T12:49:22.085Z",
+  "commit": "32e7c9592bce44f5f9d436a3a0a18caa768620d3",
+  "branch": "cursor/nursing-os-ecosystem-d9ad",
+  "score": 100,
+  "verdict": "READY",
+  "metrics": {
+    "build.types.duration_ms": 3020,
+    "build.lint.duration_ms": 1324,
+    "build.bundle.bundle_kb": 193.35,
+    "build.bundle.gzip_kb": 61.07,
+    "build.bundle.duration_ms": 2051,
+    "deps.lockfile.duration_ms": 369,
+    "deps.declared.files_scanned": 62,
+    "deps.declared.imports_scanned": 235,
+    "deps.declared.declared_packages": 24,
+    "deps.declared.undeclared": 0,
+    "deps.declared.duration_ms": 337,
+    "e2e.journey.tests_passed": 1,
+    "e2e.journey.duration_ms": 786,
+    "contracts.schemas.tests_passed": 5,
+    "contracts.schemas.duration_ms": 603,
+    "governance.advisory.tests_passed": 8,
+    "governance.advisory.duration_ms": 707,
+    "perf.suite.tests_passed": 73,
+    "perf.suite.test_files": 9,
+    "perf.suite.duration_ms": 1140
+  }
+}

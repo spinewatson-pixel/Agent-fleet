@@ -40,7 +40,22 @@ pnpm typecheck
 pnpm lint
 pnpm build
 pnpm check                # typecheck + lint + test
+pnpm verify               # full build verification for every registered ecosystem
 ```
+
+## Build verification
+
+`pnpm verify` runs the reusable verification framework across every registered
+project. Each build produces build verification, dependency validation, end-to-end
+simulation, contract verification, capability/governance validation, performance
+metrics, a regression comparison against the last successful build, and a deployment
+readiness score. A failing required gate exits non-zero with a report naming exactly
+what failed, so any deployment step chained after it stops on its own. It runs in CI
+on every push (`.github/workflows/verify.yml`).
+
+Registered ecosystems: `agent-fleet` (this MVP) and `nursing-ecosystem`
+(`ecosystem/`). See **[docs/VERIFICATION.md](docs/VERIFICATION.md)** for the gate
+contract and how to onboard a new project.
 
 Against a running API:
 

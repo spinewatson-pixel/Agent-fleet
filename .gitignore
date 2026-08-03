@@ -7,3 +7,14 @@ data
 .env.*
 coverage
 .vite
+
+# Verification run history and reports (baselines under verification/ are committed)
+.verification/
+
+# Nursing OS / Ecosystem runtime
+ecosystem/ecosystem.db
+ecosystem/library/
+ecosystem/assets/
+ecosystem/textbook_*.html
+ecosystem/__pycache__/
+ecosystem/*.pyc
