@@ -151,6 +151,34 @@ Exit non-zero when the gate fails; the framework blocks either way.
 category coverage, regression rules pointing at real gates, required gates on the
 safety-critical categories, and a committed baseline.
 
+## Taking the framework to another repository
+
+The framework imports nothing but Node builtins (`node:fs`, `node:path`,
+`node:child_process`). There are no runtime npm dependencies, so sharing it is a file
+copy — verified by running it in a clean, unrelated repository with only these files
+present:
+
+```
+src/verification/*.ts          the framework (12 files, ~1,700 lines)
+scripts/verify.ts              the CLI
+```
+
+Then in the receiving repo:
+
+1. `package.json` needs `"type": "module"` and a script:
+   `"verify": "tsx scripts/verify.ts"`. `tsx` is only needed to execute TypeScript
+   directly — compiling with `tsc` or using Node's native TypeScript support works
+   equally well. The framework itself needs neither.
+2. Write `src/verification/manifests/index.ts` exporting `MANIFESTS` and
+   `getManifest`, plus one manifest per project.
+3. `pnpm verify:baseline` once green, and commit `verification/baselines/`.
+4. Copy `.github/workflows/verify.yml` so it runs without anyone remembering, and
+   give any deployment job `needs: verify`.
+
+Nothing else transfers. The manifests are the only repo-specific part, and
+`docs/VERIFICATION.md` plus `tests/verification.*.test.ts` are worth copying too —
+the tests enforce category coverage on whatever manifests the new repo writes.
+
 ## Worked example — the two shipped projects
 
 **`agent-fleet`** wraps commands the project already had (`typecheck`, `lint`,
