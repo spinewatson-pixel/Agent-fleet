@@ -5,6 +5,16 @@
 **PR:** https://github.com/spinewatson-pixel/Agent-fleet/pull/3  
 **Source of truth:** build brief (greenfield; blueprint files not in environment)
 
+## Enhancement pass (learned from branch)
+
+Follow-up polish on `cursor/mvp-architecture-control-plane-3e60` without scope creep:
+- Shared remediation helper (`src/core/engines/remediation.ts`) for gate/review/validation
+- Import UI: demo + eligible fixtures; seed both
+- Eligibility panel on Candidates & Review; claim-chain list on Review
+- Validation UI separates current-state observation vs projected simulation vs assumptions
+- Intent form resyncs on workspace change; owner gap categorized under governance
+- Docs updated for fixture guidance
+
 ## Release-blocking repair (eligibility gate)
 
 A **single eligibility gate** (`src/core/engines/eligibility.ts`) is now used by recommendation, review surfacing, approval, and export.
@@ -51,7 +61,7 @@ pnpm smoke                # demo blocked + eligible fixture export
 
 | Command | Result |
 | --- | --- |
-| `pnpm test` | **22 passed** (7 files; includes eligibility regressions + HTTP e2e) |
+| `pnpm test` | **25 passed** (8 files; eligibility + remediation + HTTP e2e) |
 | `pnpm test:e2e` | **1 passed** — demo blocked; eligible fixture exported |
 | `pnpm typecheck` | passed |
 | `pnpm lint` | passed |

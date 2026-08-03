@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceBadge } from "../components/EvidenceBadge";
+import { EligibilityPanel } from "../components/EligibilityPanel";
 import { JourneyNav } from "../components/JourneyNav";
 
 export function ReviewScreen() {
@@ -44,9 +45,25 @@ export function ReviewScreen() {
       </p>
       <JourneyNav current="/review" />
 
+      <div className="panel">
+        <h2>Claim chain</h2>
+        <ol className="mono">
+          {rec.traceChain.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
+      </div>
+
+      <EligibilityPanel
+        assessments={rec.eligibility?.assessments}
+        selectionStatus={rec.selectionStatus}
+        chosenCandidateId={rec.chosenCandidateId}
+        blockReasons={rec.eligibility?.blockReasons}
+      />
+
       {snap.baselineComparison && (
         <div className="panel">
-          <h2>Baseline vs chosen proposal</h2>
+          <h2>Baseline vs proposals</h2>
           <p className="mono">{snap.baselineComparison.baseline.summary}</p>
           <ul>
             {snap.baselineComparison.proposals.map((p) => (
@@ -60,31 +77,14 @@ export function ReviewScreen() {
       )}
 
       <div className="panel">
-        <p className="mono">trace: {rec.traceChain.join(" → ")}</p>
         <p>
           <EvidenceBadge status="recommendation" /> {rec.rationale}
         </p>
         <p className="mono">
-          selection={rec.selectionStatus ?? "n/a"} · chosen=
-          {rec.chosenCandidateId ?? "none"} · rejected=
+          chosen={rec.chosenCandidateId ?? "none"} · rejected=
           {rec.rejectedCandidateIds.join(", ") || "none"} · approval=
           {rec.approvalState}
         </p>
-        {rec.selectionStatus === "BLOCKED_NO_ELIGIBLE_CANDIDATE" && (
-          <div>
-            <p className="error">
-              No eligible candidate — approve/export is blocked. Remediate validation
-              failures and critical findings first.
-            </p>
-            <ul>
-              {(rec.eligibility?.blockReasons ?? []).slice(0, 12).map((r) => (
-                <li key={r} className="mono">
-                  {r}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
 
       {snap.reviewResults.map((r) => (

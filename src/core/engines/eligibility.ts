@@ -1,7 +1,8 @@
-import type { GapFinding, GapAnalysisResult } from "./gapAnalysis.js";
+import type { GapAnalysisResult } from "./gapAnalysis.js";
 import type { CandidateArchitecture } from "./candidateSynthesis.js";
 import type { ValidationResult } from "./validation.js";
 import type { ReviewResult } from "./review.js";
+import { listUnresolvedCriticalFindings } from "./remediation.js";
 
 export type SelectionStatus =
   | "SELECTED"
@@ -52,8 +53,9 @@ export function assessCandidateEligibility(
     }
   }
 
-  const unresolvedCritical = gaps.findings.filter(
-    (f) => f.severity === "critical" && !isCriticalFindingRemediated(candidate, f),
+  const unresolvedCritical = listUnresolvedCriticalFindings(
+    candidate,
+    gaps.findings,
   );
   const unresolvedCriticalFindings = unresolvedCritical.map((f) => f.id);
   for (const f of unresolvedCritical) {
@@ -170,19 +172,4 @@ export function assertEligibleForApprovalExport(input: {
     };
   }
   return { ok: true };
-}
-
-function isCriticalFindingRemediated(
-  candidate: CandidateArchitecture,
-  finding: GapFinding,
-): boolean {
-  if (finding.category === "contract") {
-    return finding.entityIds.some((id) => candidate.affectedEntityIds.includes(id));
-  }
-  if (finding.category === "governance" || finding.id === "gap_approval_gate") {
-    const text = `${candidate.summary} ${candidate.benefits.join(" ")}`.toLowerCase();
-    return text.includes("approval gate") || text.includes("human approval");
-  }
-  // Unknown critical findings are not assumed remediated by candidate claims alone.
-  return false;
 }

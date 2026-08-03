@@ -1,5 +1,6 @@
 import type { CanonicalOrganization } from "../schemas/entities.js";
 import type { CandidateArchitecture } from "./candidateSynthesis.js";
+import { getCandidateRemediationSignals } from "./remediation.js";
 
 export interface CheckResult {
   id: string;
@@ -39,7 +40,7 @@ export function validateCandidate(
   candidate: CandidateArchitecture,
 ): ValidationResult {
   const checks: CheckResult[] = [];
-  const text = `${candidate.summary} ${candidate.benefits.join(" ")} ${candidate.assumptions.join(" ")}`.toLowerCase();
+  const signals = getCandidateRemediationSignals(candidate);
 
   const topo = org.topologies[0];
   const nodeIds = new Set(topo?.nodes.map((n) => n.id) ?? []);
@@ -53,10 +54,6 @@ export function validateCandidate(
     (n) => n.kind === "worker" && !connected.has(n.id),
   );
   const currentOrphansOk = orphans.length === 0;
-  const remediatesOrphans =
-    candidate.template === "planner_worker_verifier" ||
-    text.includes("retire orphan") ||
-    text.includes("remove orphan");
   checks.push({
     id: "static_orphaned_nodes",
     name: "Orphaned nodes",
@@ -66,14 +63,14 @@ export function validateCandidate(
       orphans.length === 0
         ? ["No orphaned worker nodes in current topology."]
         : orphans.map((o) => `Current-state orphan: ${o.label}`),
-    pass: currentOrphansOk || remediatesOrphans,
+    pass: currentOrphansOk || signals.remediatesOrphans,
     observations:
       currentOrphansOk
         ? ["No orphaned worker nodes."]
-        : remediatesOrphans
+        : signals.remediatesOrphans
           ? orphans.map((o) => `Current-state orphan ${o.label}; candidate assumes remediation.`)
           : orphans.map((o) => `Orphan remains unresolved by candidate: ${o.label}`),
-    assumptions: remediatesOrphans && !currentOrphansOk
+    assumptions: signals.remediatesOrphans && !currentOrphansOk
       ? ["Candidate assumption: redesign retires orphan nodes."]
       : [],
   });
@@ -97,10 +94,6 @@ export function validateCandidate(
   });
 
   const cycle = detectCycle(topo?.edges.map((e) => [e.from, e.to] as [string, string]) ?? []);
-  const remediatesCycle =
-    candidate.template === "planner_worker_verifier" ||
-    (text.includes("break") && text.includes("loop")) ||
-    text.includes("bounded retry");
   checks.push({
     id: "static_circular_deps",
     name: "Circular dependencies",
@@ -109,16 +102,16 @@ export function validateCandidate(
     currentStateObservations: [
       cycle ? "Cycle detected in current topology edges." : "No cycle in current topology.",
     ],
-    pass: !cycle || remediatesCycle,
+    pass: !cycle || signals.remediatesCycle,
     observations: [
       !cycle
         ? "No cycle detected."
-        : remediatesCycle
+        : signals.remediatesCycle
           ? "Current-state cycle present; candidate assumes directed remediation."
           : "Cycle remains unresolved by candidate.",
     ],
     assumptions:
-      cycle && remediatesCycle
+      cycle && signals.remediatesCycle
         ? ["Candidate assumption: replace cyclic ack loop with bounded directed flow."]
         : [],
   });
@@ -126,7 +119,7 @@ export function validateCandidate(
   const missingContracts = org.interfaces.filter((i) => !i.contractSchema);
   const contractsAddressed =
     missingContracts.length === 0 ||
-    missingContracts.every((i) => candidate.affectedEntityIds.includes(i.id));
+    missingContracts.every((i) => signals.addressesContractEntity(i.id));
   checks.push({
     id: "static_missing_contracts",
     name: "Missing contracts",
@@ -143,7 +136,7 @@ export function validateCandidate(
         : missingContracts.map(
             (i) =>
               `Missing contract: ${i.name}${
-                candidate.affectedEntityIds.includes(i.id)
+                signals.addressesContractEntity(i.id)
                   ? " (candidate lists remediation)"
                   : " (unresolved by candidate)"
               }`,
@@ -154,11 +147,6 @@ export function validateCandidate(
   });
 
   const unowned = org.capabilities.filter((c) => c.ownerIds.length === 0);
-  // Do not infer owner remediation from unrelated affectedEntityIds (e.g. evaluation criteria).
-  const remediatesOwners =
-    text.includes("assign owner") ||
-    text.includes("absent owner") ||
-    /\bownership\b/.test(text);
   checks.push({
     id: "static_absent_owners",
     name: "Absent owners",
@@ -168,15 +156,15 @@ export function validateCandidate(
       unowned.length === 0
         ? ["All capabilities currently have owners."]
         : unowned.map((c) => `Current-state unowned capability: ${c.name}`),
-    pass: unowned.length === 0 || remediatesOwners,
+    pass: unowned.length === 0 || signals.remediatesOwners,
     observations:
       unowned.length === 0
         ? ["All capabilities have owners."]
-        : remediatesOwners
+        : signals.remediatesOwners
           ? unowned.map((c) => `Unowned ${c.name}; candidate assumes owner assignment.`)
           : unowned.map((c) => `Unowned capability unresolved by candidate: ${c.name}`),
     assumptions:
-      unowned.length > 0 && remediatesOwners
+      unowned.length > 0 && signals.remediatesOwners
         ? ["Candidate assumption: owners assigned in migration stage 1."]
         : unowned.length > 0
           ? ["No candidate remediation for absent owners."]
@@ -184,9 +172,7 @@ export function validateCandidate(
   });
 
   const orgHasGate = org.governancePolicies.some((p) => p.requiresHumanApprovalGate);
-  const candidateAddsGate =
-    text.includes("approval gate") || text.includes("human approval");
-  const hasGate = orgHasGate || candidateAddsGate;
+  const hasGate = orgHasGate || signals.addsApprovalGate;
   const needsGate =
     org.organization.criticality === "high" ||
     org.organization.criticality === "critical";
@@ -213,7 +199,7 @@ export function validateCandidate(
         : "Approval gate not required for current criticality.",
     ],
     assumptions:
-      needsGate && !orgHasGate && candidateAddsGate
+      needsGate && !orgHasGate && signals.addsApprovalGate
         ? ["Candidate assumption: human approval gate added before notify."]
         : ["Policy flag requiresHumanApprovalGate is the MVP signal."],
   });
@@ -228,16 +214,16 @@ export function validateCandidate(
         ? "Current-state potential retry/ack loop without declared limits."
         : "No unbounded retry loop detected in current topology.",
     ],
-    pass: !cycle || remediatesCycle,
+    pass: !cycle || signals.remediatesCycle,
     observations: [
       !cycle
         ? "No unbounded retry loop detected in topology."
-        : remediatesCycle
+        : signals.remediatesCycle
           ? "Current-state loop present; candidate assumes bounded retries / directed flow."
           : "Potential retry/ack loop without declared limits remains.",
     ],
     assumptions:
-      cycle && remediatesCycle
+      cycle && signals.remediatesCycle
         ? ["Candidate assumption: retries are bounded after topology remediation."]
         : ["Retry policies are not fully modeled; cycle used as proxy."],
   });
@@ -290,8 +276,6 @@ export function validateCandidate(
     const days = parseDays(k.freshness);
     return days !== null && days > 7;
   });
-  const remediatesFreshness =
-    text.includes("freshness") || text.includes("reindex") || text.includes("stale knowledge");
   checks.push({
     id: "scenario_stale_knowledge",
     name: "Stale knowledge",
@@ -302,15 +286,15 @@ export function validateCandidate(
         ? "Current-state knowledge freshness exceeds 7d threshold on at least one store."
         : "Current-state knowledge freshness within 7d threshold.",
     ],
-    pass: !staleKnowledge || remediatesFreshness,
+    pass: !staleKnowledge || signals.remediatesFreshness,
     observations: [
       !staleKnowledge
         ? "Knowledge freshness within 7d threshold."
-        : remediatesFreshness
+        : signals.remediatesFreshness
           ? "Stale knowledge in current state; candidate assumes freshness remediation."
           : "Stale knowledge remains unresolved by candidate.",
     ],
-    assumptions: remediatesFreshness && staleKnowledge
+    assumptions: signals.remediatesFreshness && staleKnowledge
       ? ["Candidate assumption: knowledge refresh before rollout."]
       : ["Freshness parsed from fixture strings like '21d'."],
   });

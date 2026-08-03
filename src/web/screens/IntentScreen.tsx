@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useWorkspace } from "../App";
 import { EvidenceBadge, EvidenceLegend } from "../components/EvidenceBadge";
@@ -7,13 +7,22 @@ import { JourneyNav } from "../components/JourneyNav";
 export function IntentScreen() {
   const { snap, setSnap, workspaceId } = useWorkspace();
   const intent = snap?.intent;
-  const [mission, setMission] = useState(intent?.mission ?? "");
-  const [success, setSuccess] = useState((intent?.successMeasures ?? []).join("\n"));
-  const [constraints, setConstraints] = useState((intent?.constraints ?? []).join("\n"));
-  const [risk, setRisk] = useState(intent?.riskTolerance ?? "unknown");
-  const [preserve, setPreserve] = useState((intent?.preserveList ?? []).join("\n"));
+  const [mission, setMission] = useState("");
+  const [success, setSuccess] = useState("");
+  const [constraints, setConstraints] = useState("");
+  const [risk, setRisk] = useState("unknown");
+  const [preserve, setPreserve] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  // Resync form when workspace / intent snapshot changes.
+  useEffect(() => {
+    setMission(intent?.mission ?? "");
+    setSuccess((intent?.successMeasures ?? []).join("\n"));
+    setConstraints((intent?.constraints ?? []).join("\n"));
+    setRisk(intent?.riskTolerance ?? "unknown");
+    setPreserve((intent?.preserveList ?? []).join("\n"));
+  }, [workspaceId, intent]);
 
   if (!snap || !workspaceId) return null;
 
@@ -43,7 +52,8 @@ export function IntentScreen() {
       <h1>Intent & Evidence Review</h1>
       <p className="lede">
         Complete mission, constraints, and preserve list. Missing fields become explicit
-        questions — the builder will not invent answers.
+        questions — the builder will not invent answers. Owner statements are assertions
+        (medium confidence) until corroborated by observation.
       </p>
       <JourneyNav current="/intent" />
       <EvidenceLegend />
