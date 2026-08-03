@@ -21,10 +21,14 @@ agent-fleet blueprints
 echo "==> Refresh Institutional Design Council plan"
 agent-fleet enhance
 
+echo "==> Builder advisory control plane"
+agent-fleet builder run --out-dir docs/builder
+
 echo "==> Publish UI data copies (served from ui/)"
 mkdir -p ui/data
 python3 - <<'PY'
 import json
+import shutil
 from pathlib import Path
 
 root = Path(".")
@@ -51,6 +55,16 @@ ui.mkdir(parents=True, exist_ok=True)
     json.dumps(reg, indent=2, ensure_ascii=True) + "\n", encoding="utf-8"
 )
 
+builder_dir = root / "docs/builder"
+for src_name, dest_name in [
+    ("builder_registry.json", "builder_registry.json"),
+    ("recommendation.json", "builder_recommendation.json"),
+    ("analysis.json", "builder_analysis.json"),
+]:
+    src = builder_dir / src_name
+    if src.exists():
+        shutil.copyfile(src, ui / dest_name)
+
 meta = {
     "source": "ui/watchfloor.html",
     "registry_version": reg.get("version"),
@@ -59,6 +73,7 @@ meta = {
     "blueprint_agents": len(bp),
     "contract_agents": len(contracts),
     "layers": 25,
+    "builder": "docs/builder + ui/data/builder_*.json",
 }
 (ui / "rebuild_meta.json").write_text(
     json.dumps(meta, indent=2, ensure_ascii=True) + "\n", encoding="utf-8"

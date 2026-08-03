@@ -1,0 +1,376 @@
+{
+  "recommendation_id": "REC-WATCHFLOOR-MVP-001",
+  "org_id": "org-watchfloor-quant-lab",
+  "created_at": "2026-08-03T03:17:47.617552Z",
+  "problem_statement": "Watchfloor is a strong paper trading organization, but lacks a governed architecture control plane loop (intent confidence, formal change sets, twin calibration, and evidence-backed AKB consultation).",
+  "reconstructed_intent": {
+    "fields": {
+      "mission": {
+        "value": "Operate a paper-only multi-agent trading laboratory with institutional separation of duties, measurable mandates, and human Mode-B governance \u2014 never silent live execution.",
+        "confidence": 0.8
+      },
+      "environment": {
+        "value": "paper",
+        "confidence": 0.95
+      },
+      "owners": {
+        "value": [
+          "HUMAN-1",
+          "GOV-CHAIR"
+        ],
+        "confidence": 0.9
+      },
+      "criticality": {
+        "value": "high",
+        "confidence": 0.7
+      },
+      "substrate": {
+        "value": "custom_python_watchfloor",
+        "confidence": 0.95
+      }
+    },
+    "unresolved": [
+      "external_capital_mandate",
+      "production_broker_boundary",
+      "regulatory_jurisdiction",
+      "success_metric_targets_numeric"
+    ],
+    "clarification_questions": [
+      "What external capital / customer mandate applies beyond the paper lab?",
+      "Which regulatory jurisdiction constraints apply if this ever leaves paper?",
+      "What numeric success targets define 'effective' for the trading lab?",
+      "Where is the production broker boundary \u2014 never, sandbox-only, or future gated?"
+    ],
+    "rule": "Do not guess mission, constraints, ownership, risk tolerance, or success criteria"
+  },
+  "claims": [
+    {
+      "claim": "Organization is paper-only with live execution disabled",
+      "evidence_ids": [
+        "EV-RULES-001"
+      ],
+      "freshness": "registry",
+      "confidence": 0.99
+    },
+    {
+      "claim": "Roster has 285 workers under ceiling policy",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "freshness": "registry",
+      "confidence": 0.95
+    },
+    {
+      "claim": "Digital twin / architecture simulation capability is missing",
+      "evidence_ids": [],
+      "freshness": "gap_analysis",
+      "confidence": 0.8
+    }
+  ],
+  "current_state_summary": "watchfloor quant lab v0.5.1: 285 workers, 17 capabilities modeled, adapter=watchfloor_readonly",
+  "preserved_strengths": [
+    "Paper-only hard gate with live execution locked",
+    "Single executor EXEC-1 after authority chain",
+    "Proposers cannot self-approve or self-execute",
+    "Institutional Design Council as designer/supervisor layer (no trades)",
+    "25-layer blueprints for every seat",
+    "Watchfloor IDs as canonical naming",
+    "Mode-B human seat HUMAN-1 with veto",
+    "Risk / compliance / stewardship / security veto paths"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "CAND-GOV-HARDEN",
+      "name": "Governance Hardening (advisory)",
+      "summary": "Close ceiling UI gate, formalize change-request lifecycle, deepen evidence provenance, keep paper-only SoD intact.",
+      "pattern_ids": [
+        "AKB-P01-SEP-DUTY",
+        "AKB-P01-HITL-MODEB",
+        "AKB-P08-PAPER-FIRST",
+        "AKB-P08-CHANGE-CR"
+      ],
+      "strengths": [
+        "Preserves Watchfloor strengths",
+        "Low reversibility risk",
+        "Aligns with first optimization objective: governance_and_reliability"
+      ],
+      "weaknesses": [
+        "Does not expand alpha research depth"
+      ],
+      "expected_value": "Higher trust in architecture map; fewer unsafe structural changes",
+      "expected_cost": "Low engineering cost; mainly control-plane + UI gate",
+      "risk": "Low",
+      "reversibility": "high",
+      "affected_stakeholders": [
+        "GOV-CHAIR",
+        "HUMAN-1",
+        "UI-1",
+        "COMP-1"
+      ],
+      "tradeoffs": {
+        "safety": "up",
+        "capability_coverage": "slight_up",
+        "latency": "neutral",
+        "cost": "slight_up"
+      }
+    },
+    {
+      "candidate_id": "CAND-OBS-TWIN",
+      "name": "Observability + Twin Slice",
+      "summary": "Add architecture telemetry hooks, static twin scenarios, and prediction/outcome calibration without enabling live execution.",
+      "pattern_ids": [
+        "AKB-P01-SEP-DUTY",
+        "AKB-P01-HITL-MODEB",
+        "AKB-P22-EVIDENCE-PROMOTE",
+        "AKB-P01-NO-BEST-TOPOLOGY"
+      ],
+      "strengths": [
+        "Enables calibrated improvement loop",
+        "Supports Builder north-star metrics"
+      ],
+      "weaknesses": [
+        "Needs instrumentation investment",
+        "Runtime fidelity still partial"
+      ],
+      "expected_value": "Faster issue\u2192plan cycle; measurable prediction calibration",
+      "expected_cost": "Medium",
+      "risk": "Medium \u2014 more moving parts",
+      "reversibility": "medium",
+      "affected_stakeholders": [
+        "ARCH-1",
+        "ATTR-1",
+        "MEM-1",
+        "DQ-1"
+      ],
+      "tradeoffs": {
+        "safety": "up",
+        "observability": "up",
+        "cost": "up",
+        "complexity": "up"
+      }
+    }
+  ],
+  "decision_criteria": [
+    "Preserve SoD and paper-only gates",
+    "Prefer high reversibility",
+    "Close governance gaps before autonomy expansion",
+    "Cite evidence; flag unresolved intent"
+  ],
+  "weighted_tradeoffs": {
+    "safety": 0.35,
+    "governance": 0.25,
+    "reliability": 0.2,
+    "cost": 0.1,
+    "capability_coverage": 0.1
+  },
+  "simulation_results": [
+    {
+      "mode": "static",
+      "name": "contract_orphan_policy_scan",
+      "passed": true,
+      "findings": [
+        "No critical static violations"
+      ],
+      "assumptions": [
+        "Registry is complete source for workers",
+        "No hidden runtime edges"
+      ],
+      "confidence_interval": "moderate",
+      "limitations": [
+        "Does not prove runtime behavior",
+        "No market simulation"
+      ]
+    },
+    {
+      "mode": "scenario",
+      "name": "attempt_enable_live_execution",
+      "passed": true,
+      "findings": [
+        "Policy gate must block live_execution_enabled=true",
+        "Builder advisory mode refuses apply"
+      ],
+      "assumptions": [
+        "Hard rules remain loaded at runtime"
+      ],
+      "confidence_interval": "narrow_for_policy",
+      "limitations": [
+        "Not a live broker test"
+      ]
+    },
+    {
+      "mode": "scenario",
+      "name": "candidate_CAND-GOV-HARDEN",
+      "passed": true,
+      "findings": [
+        "Preserve list size=8 respected in design",
+        "Pattern consultation: 4 patterns"
+      ],
+      "assumptions": [
+        "Human approval required before any apply"
+      ],
+      "confidence_interval": "wide",
+      "limitations": [
+        "Behavioral twin not fully implemented in MVP"
+      ]
+    },
+    {
+      "mode": "scenario",
+      "name": "candidate_CAND-OBS-TWIN",
+      "passed": true,
+      "findings": [
+        "Preserve list size=8 respected in design",
+        "Pattern consultation: 4 patterns"
+      ],
+      "assumptions": [
+        "Human approval required before any apply"
+      ],
+      "confidence_interval": "wide",
+      "limitations": [
+        "Behavioral twin not fully implemented in MVP"
+      ]
+    }
+  ],
+  "review_scores": [
+    {
+      "dimension": "intent_fit",
+      "score": 0.75,
+      "rationale": "Mission reconstructed from hard rules + org naming; numeric success targets unresolved",
+      "evidence_ids": [
+        "EV-RULES-001"
+      ],
+      "missing_evidence": [
+        "stakeholder-confirmed success metrics"
+      ],
+      "confidence": 0.65,
+      "remediation": "Run intent clarification with HUMAN-1",
+      "blocking": false
+    },
+    {
+      "dimension": "safety_governance",
+      "score": 0.92,
+      "rationale": "Paper-only + SoD + veto chain present",
+      "evidence_ids": [
+        "EV-RULES-001"
+      ],
+      "missing_evidence": [
+        "UI ceiling hard gate proof"
+      ],
+      "confidence": 0.9,
+      "remediation": "Implement CAP-CEIL-GATE before expanding roster",
+      "blocking": false
+    },
+    {
+      "dimension": "reliability_blast_radius",
+      "score": 0.7,
+      "rationale": "SPOFs noted: EXEC-1 sole paper executor, HUMAN-1 Mode-B overrides, MEM-1 org memory write path",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "missing_evidence": [
+        "recon drill evidence under load"
+      ],
+      "confidence": 0.6,
+      "remediation": "Schedule halt + recon drills; document recovery",
+      "blocking": false
+    },
+    {
+      "dimension": "observability",
+      "score": 0.45,
+      "rationale": "Audit events exist; architecture drift detection missing",
+      "evidence_ids": [],
+      "missing_evidence": [
+        "topology drift metrics",
+        "intent drift detector"
+      ],
+      "confidence": 0.7,
+      "remediation": "Adopt CAND-OBS-TWIN instrumentation slice",
+      "blocking": false
+    },
+    {
+      "dimension": "cost_capacity",
+      "score": 0.8,
+      "rationale": "Agent ceiling 300; roster within ceiling; compute ceiling declared",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "missing_evidence": [
+        "cost per successful paper outcome"
+      ],
+      "confidence": 0.6,
+      "remediation": "Add economics metrics to ATTR-1 / Learning Loop",
+      "blocking": false
+    },
+    {
+      "dimension": "human_operability",
+      "score": 0.85,
+      "rationale": "Watchfloor UI + HUMAN-1 Mode B + council artifacts",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "missing_evidence": [
+        "operator runbook completion rates"
+      ],
+      "confidence": 0.7,
+      "remediation": "Keep Builder advisory; export plans into Decision Workspace",
+      "blocking": false
+    },
+    {
+      "dimension": "modularity_portability",
+      "score": 0.7,
+      "rationale": "Canonical Watchfloor IDs; substrate-specific adapter isolated",
+      "evidence_ids": [
+        "EV-REG-001"
+      ],
+      "missing_evidence": [
+        "second adapter to prove portability"
+      ],
+      "confidence": 0.55,
+      "remediation": "Defer universal frameworks; keep org-model first",
+      "blocking": false
+    }
+  ],
+  "unresolved_questions": [
+    "What external capital / customer mandate applies beyond the paper lab?",
+    "Which regulatory jurisdiction constraints apply if this ever leaves paper?",
+    "What numeric success targets define 'effective' for the trading lab?",
+    "Where is the production broker boundary \u2014 never, sandbox-only, or future gated?"
+  ],
+  "chosen_candidate_id": "CAND-GOV-HARDEN",
+  "choice_rationale": "Selected CAND-GOV-HARDEN for objective=governance_and_reliability: maximizes safety/governance with high reversibility while preserving Watchfloor strengths.",
+  "rejected_rationale": {
+    "CAND-OBS-TWIN": "Higher complexity / cost before governance gaps (ceiling gate, CR lifecycle) close"
+  },
+  "migration_plan": {
+    "plan_id": "MIG-CAND-GOV-HARDEN",
+    "steps": [
+      "Confirm reconstructed intent fields with HUMAN-1 (no guessing)",
+      "Implement UI agent-ceiling hard gate (CAP-CEIL-GATE)",
+      "Introduce ChangeSet objects for structural roster changes",
+      "Wire Builder recommendation artifact into Decision Workspace",
+      "Keep live_execution_enabled=false; refuse production apply"
+    ],
+    "gates": [
+      "Human approval (HUMAN-1 / GOV-CHAIR)",
+      "Independent review has no blocking failures",
+      "Paper-only hard rule intact",
+      "No TradeProposal authority granted to Builder"
+    ],
+    "rollback": [
+      "Revert UI/gate commits",
+      "Restore prior registry version",
+      "Invalidate draft ChangeSets"
+    ],
+    "owner": "HUMAN-1",
+    "success_measures": [
+      "Trusted current-state map available in <1 command",
+      "% architectural claims with evidence IDs increases",
+      "Ceiling cannot be silently breached from UI",
+      "Zero live execution enables"
+    ],
+    "environment": "sandbox",
+    "requires_human_approval": true
+  },
+  "operating_mode": "advisory_only",
+  "approval_status": "pending_human",
+  "version": "1.0.0"
+}

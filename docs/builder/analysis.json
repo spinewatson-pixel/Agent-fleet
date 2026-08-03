@@ -1,0 +1,308 @@
+{
+  "organization": {
+    "org_id": "org-watchfloor-quant-lab",
+    "name": "watchfloor quant lab",
+    "mission": "Operate a paper-only multi-agent trading laboratory with institutional separation of duties, measurable mandates, and human Mode-B governance \u2014 never silent live execution.",
+    "scope": "Paper trading organization; research, risk, governance, learning loops",
+    "owners": [
+      "HUMAN-1",
+      "GOV-CHAIR"
+    ],
+    "stakeholders": [
+      "HUMAN-1",
+      "GOV-CHAIR",
+      "HEAD-TRADE",
+      "RISK-1",
+      "COMP-1"
+    ],
+    "lifecycle": "operating_paper",
+    "criticality": "high",
+    "environment": "paper",
+    "version": "0.5.1",
+    "substrate": "custom_python_watchfloor",
+    "evidence_ids": [
+      "EV-REG-001",
+      "EV-RULES-001",
+      "EV-CONTRACTS-001",
+      "EV-BP-001",
+      "EV-IDC-001"
+    ],
+    "unresolved_intent_fields": [
+      "external_capital_mandate",
+      "regulatory_jurisdiction",
+      "production_broker_boundary",
+      "success_metric_targets_numeric"
+    ],
+    "updated_at": "2026-08-03T03:17:47.615406Z"
+  },
+  "intent": {
+    "fields": {
+      "mission": {
+        "value": "Operate a paper-only multi-agent trading laboratory with institutional separation of duties, measurable mandates, and human Mode-B governance \u2014 never silent live execution.",
+        "confidence": 0.8
+      },
+      "environment": {
+        "value": "paper",
+        "confidence": 0.95
+      },
+      "owners": {
+        "value": [
+          "HUMAN-1",
+          "GOV-CHAIR"
+        ],
+        "confidence": 0.9
+      },
+      "criticality": {
+        "value": "high",
+        "confidence": 0.7
+      },
+      "substrate": {
+        "value": "custom_python_watchfloor",
+        "confidence": 0.95
+      }
+    },
+    "unresolved": [
+      "external_capital_mandate",
+      "production_broker_boundary",
+      "regulatory_jurisdiction",
+      "success_metric_targets_numeric"
+    ],
+    "clarification_questions": [
+      "What external capital / customer mandate applies beyond the paper lab?",
+      "Which regulatory jurisdiction constraints apply if this ever leaves paper?",
+      "What numeric success targets define 'effective' for the trading lab?",
+      "Where is the production broker boundary \u2014 never, sandbox-only, or future gated?"
+    ],
+    "rule": "Do not guess mission, constraints, ownership, risk tolerance, or success criteria"
+  },
+  "gaps": {
+    "missing": [
+      "CAP-INTENT",
+      "CAP-SIM",
+      "CAP-OBS",
+      "CAP-CHANGE",
+      "CAP-AKB",
+      "CAP-CEIL-GATE"
+    ],
+    "weak": [
+      "CAP-PAPER",
+      "CAP-RISK",
+      "CAP-RECON",
+      "CAP-EVIDENCE",
+      "CAP-REGIME",
+      "CAP-LEARN",
+      "CAP-CONTRACT"
+    ],
+    "strong": [
+      "CAP-DISCOVER",
+      "CAP-AUTHORITY",
+      "CAP-SOD",
+      "CAP-BLUEPRINT"
+    ],
+    "preserve_list": [
+      "Paper-only hard gate with live execution locked",
+      "Single executor EXEC-1 after authority chain",
+      "Proposers cannot self-approve or self-execute",
+      "Institutional Design Council as designer/supervisor layer (no trades)",
+      "25-layer blueprints for every seat",
+      "Watchfloor IDs as canonical naming",
+      "Mode-B human seat HUMAN-1 with veto",
+      "Risk / compliance / stewardship / security veto paths"
+    ],
+    "opportunities": [
+      {
+        "capability_id": "CAP-INTENT",
+        "purpose": "Intent reconstruction with field confidence",
+        "priority": "P1",
+        "preserve_conflict": false
+      },
+      {
+        "capability_id": "CAP-SIM",
+        "purpose": "Digital twin / architecture simulation",
+        "priority": "P1",
+        "preserve_conflict": false
+      },
+      {
+        "capability_id": "CAP-OBS",
+        "purpose": "Live architecture observability & drift",
+        "priority": "P1",
+        "preserve_conflict": false
+      },
+      {
+        "capability_id": "CAP-CHANGE",
+        "purpose": "Formal change-request lifecycle",
+        "priority": "P1",
+        "preserve_conflict": false
+      },
+      {
+        "capability_id": "CAP-AKB",
+        "purpose": "Consult Architecture Knowledge Base",
+        "priority": "P1",
+        "preserve_conflict": false
+      },
+      {
+        "capability_id": "CAP-CEIL-GATE",
+        "purpose": "UI hard gate on agent ceiling",
+        "priority": "P0",
+        "preserve_conflict": false
+      }
+    ],
+    "spof": [
+      "EXEC-1 sole paper executor",
+      "HUMAN-1 Mode-B overrides",
+      "MEM-1 org memory write path",
+      "ui/watchfloor.html as roster source of truth"
+    ]
+  },
+  "akb_consultation": [
+    {
+      "knowledge_id": "AKB-P01-SEP-DUTY",
+      "phase": 1,
+      "asset_type": "Design Patterns",
+      "title": "Propose \u2260 Approve \u2260 Execute",
+      "summary": "Trading organizations must separate proposal, approval, and execution into distinct workers with veto paths.",
+      "applicability": [
+        "trading",
+        "high_risk_automation"
+      ],
+      "counterexamples": [
+        "single-agent self-trading bots without governance"
+      ],
+      "confidence": 0.95,
+      "evidence": [
+        "Watchfloor hard_rules",
+        "institutional SoD"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    },
+    {
+      "knowledge_id": "AKB-P01-HITL-MODEB",
+      "phase": 1,
+      "asset_type": "Design Patterns",
+      "title": "Human-in-the-loop Mode B thresholds",
+      "summary": "Auto-approve below thresholds; hard escalate above. Human retains veto.",
+      "applicability": [
+        "enterprise_ai_orgs",
+        "trading_labs"
+      ],
+      "counterexamples": [],
+      "confidence": 0.9,
+      "evidence": [
+        "HUMAN-1 Mode B"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    },
+    {
+      "knowledge_id": "AKB-P08-PAPER-FIRST",
+      "phase": 8,
+      "asset_type": "Engineering Principles",
+      "title": "Paper-first with live hard-disabled",
+      "summary": "Do not enable live execution until rollback, recon, and audit prove readiness.",
+      "applicability": [
+        "financial_trading"
+      ],
+      "counterexamples": [],
+      "confidence": 0.95,
+      "evidence": [
+        "live_execution_enabled=false"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    },
+    {
+      "knowledge_id": "AKB-P08-CHANGE-CR",
+      "phase": 8,
+      "asset_type": "Implementation Templates",
+      "title": "Change request lifecycle",
+      "summary": "draft \u2192 review \u2192 approved \u2192 scheduled \u2192 deployed \u2192 verified \u2192 closed/rollback",
+      "applicability": [
+        "all_orgs"
+      ],
+      "counterexamples": [],
+      "confidence": 0.85,
+      "evidence": [
+        "Builder blueprint \u00a74D"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    },
+    {
+      "knowledge_id": "AKB-P22-EVIDENCE-PROMOTE",
+      "phase": 22,
+      "asset_type": "Design Patterns",
+      "title": "Evidence package before quant promotion",
+      "summary": "Quant/Rentec-style seats require OOS evidence packages before promotion; builders never self-certify.",
+      "applicability": [
+        "financial_trading",
+        "quant_research"
+      ],
+      "counterexamples": [],
+      "confidence": 0.88,
+      "evidence": [
+        "EVID-1",
+        "FIT-1",
+        "RT-FORGE-1 never self-certifies"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    },
+    {
+      "knowledge_id": "AKB-P01-NO-BEST-TOPOLOGY",
+      "phase": 1,
+      "asset_type": "Anti-Patterns",
+      "title": "Universal best topology myth",
+      "summary": "No topology is universally best; select by intent, cost, failure modes.",
+      "applicability": [
+        "all_orgs"
+      ],
+      "counterexamples": [],
+      "confidence": 0.9,
+      "evidence": [
+        "Builder blueprint Phase 1"
+      ],
+      "version": "0.1.0",
+      "owner": "AKB-STEWARD",
+      "status": "published"
+    }
+  ],
+  "akb_write_policy": {
+    "accepted": false,
+    "reason": "AKB updates require reviewed organizational outcomes with evidence, applicability bounds, version, and steward approval \u2014 not unverified simulation/recommendation alone (source=pre_outcome)."
+  },
+  "preserve_list": [
+    "Paper-only hard gate with live execution locked",
+    "Single executor EXEC-1 after authority chain",
+    "Proposers cannot self-approve or self-execute",
+    "Institutional Design Council as designer/supervisor layer (no trades)",
+    "25-layer blueprints for every seat",
+    "Watchfloor IDs as canonical naming",
+    "Mode-B human seat HUMAN-1 with veto",
+    "Risk / compliance / stewardship / security veto paths"
+  ],
+  "fidelity_notes": [
+    "Static design fidelity high (registry/contracts/blueprints)",
+    "Runtime behavior fidelity partial (no full production telemetry ingest in MVP)",
+    "Does not model market microstructure or broker latency",
+    "Simulation outputs are predictions with intervals \u2014 not facts"
+  ],
+  "evidence_count": 5,
+  "worker_count": 285,
+  "human_command_layer": {
+    "role": "cross_cutting",
+    "surfaces": [
+      "state",
+      "evidence",
+      "questions",
+      "diffs",
+      "approvals",
+      "rollback_options"
+    ]
+  }
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Builder — Architecture Control Plane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg0:#0b1210; --bg1:#12201c; --bg2:#1a2e28;
+  --ink:#e7f0ec; --mute:#8aa399; --line:rgba(140,180,160,.22);
+  --accent:#3dba8c; --warn:#d4a24c; --danger:#d16565; --ok:#5ecf9a;
+  --serif:"IBM Plex Serif",Georgia,serif; --sans:"IBM Plex Sans",sans-serif; --mono:"IBM Plex Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:var(--sans);color:var(--ink);
+background:
+  radial-gradient(900px 500px at 10% -10%, rgba(61,186,140,.18), transparent 55%),
+  radial-gradient(700px 400px at 90% 0%, rgba(212,162,76,.10), transparent 50%),
+  linear-gradient(180deg,var(--bg0),var(--bg1) 40%,var(--bg0));}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 64px}
+.brand{font-family:var(--serif);font-size:clamp(2rem,5vw,3rem);letter-spacing:-.02em;margin:0}
+.brand span{color:var(--accent);font-weight:600}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+.lede{max-width:38rem;margin:18px 0 28px;font-size:1.05rem;line-height:1.55;color:#c5d8cf}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+border:1px solid var(--line);background:rgba(26,46,40,.7);color:var(--ink);padding:10px 14px;border-radius:2px;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:rgba(61,186,140,.15);border-color:rgba(61,186,140,.45)}
+.grid{display:grid;gap:16px}
+@media(min-width:800px){.grid.two{grid-template-columns:1.2fr .8fr}}
+.panel{border:1px solid var(--line);background:rgba(18,32,28,.72);padding:18px 18px 16px;border-radius:2px;
+backdrop-filter:blur(6px)}
+.panel h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:0 0 12px;font-weight:500}
+.stat{font-family:var(--serif);font-size:2rem;margin:0;color:var(--accent)}
+.muted{color:var(--mute);font-size:.92rem;line-height:1.5}
+ul.clean{margin:0;padding-left:1.1rem}
+ul.clean li{margin:6px 0;line-height:1.45}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:4px 8px;border:1px solid var(--line);margin:2px 4px 2px 0}
+.pill.ok{color:var(--ok);border-color:rgba(94,207,154,.4)}
+.pill.warn{color:var(--warn);border-color:rgba(212,162,76,.4)}
+.err{color:var(--danger);font-family:var(--mono);font-size:12px}
+pre{white-space:pre-wrap;font-family:var(--mono);font-size:11px;line-height:1.5;color:#b7ccc2;margin:0;max-height:280px;overflow:auto}
+a{color:var(--accent)}
+.footer{margin-top:36px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="brand">Builder <span>control plane</span></h1>
+  <div class="tag" id="modeTag">Advisory only · organizations first</div>
+  <p class="lede">Discovers, models, and recommends architecture changes for AI organizations. Never silently trades or mutates production. Watchfloor Quant Lab is the first organization under review.</p>
+  <div class="row">
+    <a class="btn primary" href="watchfloor.html">Open Watchfloor org</a>
+    <button class="btn" id="reloadBtn" type="button">Reload artifacts</button>
+    <a class="btn" href="../docs/builder/recommendation.md">Recommendation MD</a>
+  </div>
+  <div class="grid two">
+    <section class="panel">
+      <h2>Organization</h2>
+      <p class="stat" id="orgName">—</p>
+      <p class="muted" id="orgMeta">Loading builder artifacts…</p>
+      <div id="pills" style="margin-top:12px"></div>
+    </section>
+    <section class="panel">
+      <h2>Recommendation</h2>
+      <p class="stat" id="chosen" style="font-size:1.35rem">—</p>
+      <p class="muted" id="approval">—</p>
+      <p class="muted" id="rationale" style="margin-top:10px"></p>
+    </section>
+  </div>
+  <div class="grid two" style="margin-top:16px">
+    <section class="panel">
+      <h2>Preserve list</h2>
+      <ul class="clean" id="preserve"></ul>
+    </section>
+    <section class="panel">
+      <h2>Unresolved intent</h2>
+      <ul class="clean" id="questions"></ul>
+    </section>
+  </div>
+  <div class="grid" style="margin-top:16px">
+    <section class="panel">
+      <h2>Independent review</h2>
+      <div id="review"></div>
+    </section>
+    <section class="panel">
+      <h2>Migration plan (export only)</h2>
+      <ol class="clean" id="steps"></ol>
+      <p class="muted" id="applyNote" style="margin-top:12px"></p>
+    </section>
+    <section class="panel">
+      <h2>Raw registry stamp</h2>
+      <pre id="raw">…</pre>
+    </section>
+  </div>
+  <p class="footer">Builder serves organizations · AKB consult before synthesis · human approval required</p>
+</div>
+<script>
+async function loadJson(url){
+  const r = await fetch(url, {cache:"no-store"});
+  if(!r.ok) throw new Error(url+" "+r.status);
+  return r.json();
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));}
+async function boot(){
+  const errHost = document.getElementById("orgMeta");
+  try{
+    const [reg, rec, analysis] = await Promise.all([
+      loadJson("./data/builder_registry.json").catch(()=>loadJson("../docs/builder/builder_registry.json")),
+      loadJson("./data/builder_recommendation.json").catch(()=>loadJson("../docs/builder/recommendation.json")),
+      loadJson("./data/builder_analysis.json").catch(()=>loadJson("../docs/builder/analysis.json")),
+    ]);
+    document.getElementById("orgName").textContent = (analysis.organization&&analysis.organization.name) || reg.org_id || "organization";
+    document.getElementById("orgMeta").textContent =
+      (analysis.organization&&analysis.organization.mission) || "No mission on file";
+    document.getElementById("modeTag").textContent =
+      (reg.operating_mode||"advisory_only")+" · v"+(analysis.organization&&analysis.organization.version||"?");
+    const pills = document.getElementById("pills");
+    pills.innerHTML = "";
+    [["workers", analysis.worker_count],["evidence", analysis.evidence_count],["approval", reg.approval_status]].forEach(([k,v])=>{
+      const s=document.createElement("span"); s.className="pill ok"; s.textContent=k+": "+v; pills.appendChild(s);
+    });
+    if(reg.blocked){const s=document.createElement("span"); s.className="pill warn"; s.textContent="blocked"; pills.appendChild(s);}
+    document.getElementById("chosen").textContent = rec.chosen_candidate_id || "NONE";
+    document.getElementById("approval").textContent = "Status: "+(rec.approval_status||"pending_human");
+    document.getElementById("rationale").textContent = rec.choice_rationale || "";
+    document.getElementById("preserve").innerHTML = (rec.preserved_strengths||[]).slice(0,8).map(x=>"<li>"+esc(x)+"</li>").join("")||"<li class='muted'>None</li>";
+    document.getElementById("questions").innerHTML = (rec.unresolved_questions||[]).map(x=>"<li>"+esc(x)+"</li>").join("")||"<li>None flagged</li>";
+    document.getElementById("review").innerHTML = (rec.review_scores||[]).map(s=>{
+      const cls = s.blocking ? "warn" : "ok";
+      return "<div style='margin:8px 0'><span class='pill "+cls+"'>"+esc(s.dimension)+" "+Number(s.score).toFixed(2)+"</span> <span class='muted'>"+esc(s.rationale)+"</span></div>";
+    }).join("");
+    const plan = rec.migration_plan || {};
+    document.getElementById("steps").innerHTML = (plan.steps||[]).map(x=>"<li>"+esc(x)+"</li>").join("")||"<li>No plan</li>";
+    document.getElementById("applyNote").textContent = "Apply refused in MVP — export for human approval. Owner: "+(plan.owner||"HUMAN-1");
+    document.getElementById("raw").textContent = JSON.stringify(reg, null, 2);
+  }catch(e){
+    errHost.innerHTML = "<span class='err'>Artifacts missing. Run: agent-fleet builder run</span>";
+    document.getElementById("raw").textContent = String(e);
+  }
+}
+document.getElementById("reloadBtn").onclick = boot;
+boot();
+</script>
+</body>
+</html>

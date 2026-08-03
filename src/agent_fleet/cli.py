@@ -57,6 +57,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     bp.add_argument("--out", default="docs/agent_blueprints/blueprints.json")
 
+    builder = sub.add_parser(
+        "builder",
+        help="AI Enterprise Architecture Engineer — advisory control plane",
+    )
+    builder_sub = builder.add_subparsers(dest="builder_cmd", required=True)
+    b_run = builder_sub.add_parser("run", help="Full discover→analyze→recommend loop (export only)")
+    b_run.add_argument("--out-dir", default="docs/builder")
+    b_run.add_argument(
+        "--objective",
+        default="governance_and_reliability",
+        help="Optimization objective for candidate ranking",
+    )
+    builder_sub.add_parser("discover", help="Read-only Watchfloor discovery → snapshot JSON")
+    builder_sub.add_parser("analyze", help="Intent + gap analysis + AKB consultation")
+    builder_sub.add_parser("decisions", help="Print settled MVP product decisions")
+    b_rec = builder_sub.add_parser("recommend", help="Emit recommendation contract JSON")
+    b_rec.add_argument("--objective", default="governance_and_reliability")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "paper-run":
@@ -188,6 +206,29 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0
+    if args.cmd == "builder":
+        from agent_fleet.builder import BuilderControlPlane, decisions_as_dict
+
+        plane = BuilderControlPlane()
+        if args.builder_cmd == "decisions":
+            print(json.dumps(decisions_as_dict(), indent=2))
+            return 0
+        if args.builder_cmd == "discover":
+            snap = plane.discover()
+            print(json.dumps(snap.to_dict(), indent=2, default=str))
+            return 0
+        if args.builder_cmd == "analyze":
+            print(json.dumps(plane.analyze(), indent=2, default=str))
+            return 0
+        if args.builder_cmd == "recommend":
+            rec = plane.recommend(objective=args.objective)
+            print(json.dumps(rec.to_dict(), indent=2, default=str))
+            return 0
+        if args.builder_cmd == "run":
+            summary = plane.run(objective=args.objective, out_dir=args.out_dir)
+            print(json.dumps(summary, indent=2))
+            return 0
+        return 1
     return 1
 
 

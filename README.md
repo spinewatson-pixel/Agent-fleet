@@ -10,6 +10,9 @@ Live brokerage execution is **hard-disabled**.
 |----------|------|
 | `config/watchfloor_registry.json` | Machine-readable roster (285 agents) |
 | `ui/watchfloor.html` | Org UI (loads rebuilt blueprints from `ui/data/`) |
+| `ui/builder.html` | Builder Decision Workspace (advisory control plane) |
+| `AKB/` | Architecture Knowledge Base (L1 research + L2 assets) |
+| `docs/builder/` | Builder product binding + generated recommendations |
 | `docs/14_watchfloor_reconciliation.md` | Council mapping onto Watchfloor seats |
 | `docs/00_audit.md` … `docs/13_*.md` | Institutional redesign deliverables |
 
@@ -22,9 +25,26 @@ pytest -q
 agent-fleet registry
 agent-fleet authority-map
 agent-fleet enhance                 # Design Council → docs/council/enhancement_plan.*
+agent-fleet builder run             # Architecture control plane → docs/builder/
 agent-fleet export-contracts --watchfloor
 agent-fleet paper-run --symbol AAPL --price 190 --agent AAPL-L
 ```
+
+## Builder — Architecture Control Plane
+
+The **Builder** is a governed architecture control plane for AI organizations (blueprint v1.1). It inventories Watchfloor, reconstructs intent with explicit gaps, consults the AKB, synthesizes ≥2 candidates, runs static/scenario checks, adversarially reviews, and exports a human-approved migration plan.
+
+- **Mode:** advisory only — no trades, no production mutation, no AKB writes from unverified sims
+- **First org:** Watchfloor Quant Lab (`watchfloor_readonly` adapter)
+- **AKB:** `AKB/` Phases 1–30 scaffolds + seed patterns in `agent_fleet.builder.akb`
+
+```bash
+agent-fleet builder decisions
+agent-fleet builder run --out-dir docs/builder
+# UI: http://127.0.0.1:8765/builder.html
+```
+
+See [`docs/builder/00_product_definition.md`](docs/builder/00_product_definition.md) and [`AKB/AKB_Master_Index.md`](AKB/AKB_Master_Index.md).
 
 ## Institutional Design Council (enhance fleet)
 
