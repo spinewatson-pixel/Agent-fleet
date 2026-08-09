@@ -155,6 +155,36 @@ JOBS = [
         ),
     ),
     dict(
+        out="fortress-wall.png",
+        refs=["f7a0ab15-IMG_8928.jpeg"],
+        cutout=False,
+        prompt=(
+            "Using this fortress photo as reference, generate a "
+            "photorealistic seamless tileable texture of its concrete wall "
+            "surface: weathered grey concrete with panel seams, bolts, "
+            "streaks and stains, cold overcast lighting with no strong "
+            "directional shadow so it reads evenly from any angle. "
+            "Uniform detail edge to edge, no windows, no doors, no text, no "
+            "logos, no people — just the wall material, suitable as a "
+            "repeating texture."
+        ),
+    ),
+    dict(
+        out="weapon-rifle.png",
+        refs=["e8423460-IMG_8933.jpeg"],
+        cutout=True,
+        prompt=(
+            "Generate a photorealistic modern tactical rifle matching the "
+            "one held by the commander in the reference photo — same dark "
+            "gunmetal finish, same general military style. Render it as a "
+            "first-person shooter viewmodel: angled as if held up by the "
+            "viewer, seen from slightly below and behind, barrel pointing "
+            "away into the distance, aiming toward the upper right of the "
+            "frame. Sharp, detailed, cinematic lighting."
+            + CHROMA_PROMPT_SUFFIX
+        ),
+    ),
+    dict(
         out="terrain-ground.png",
         refs=["2a9a5cce-IMG_8931.jpeg"],
         cutout=False,

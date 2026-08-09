@@ -220,6 +220,8 @@ const ASSET_PATHS = {
   backdrop: "assets/fortress-hero.png",
   groundTex: "assets/terrain-ground.png",
   mountainTex: "assets/mountain-skyline.png",
+  wallTex: "assets/fortress-wall.png",
+  rifleTex: "assets/weapon-rifle.png",
 };
 const TEX = {};
 function loadAssets(onDone){
@@ -239,6 +241,14 @@ function loadAssets(onDone){
 /* ================================================================== consts */
 const MAP_HALF = 260;
 const WATER_X0 = 120, WATER_X1 = MAP_HALF + 20;
+// walkable fortress interior. The distant fortress-hero backdrop sits at
+// z=-MAP_HALF-10 (visible looming ahead from spawn, which faces -Z at
+// yaw 0) so the walkable structure has to be on that same negative-Z side,
+// nearer to spawn than the backdrop, or the two would be in opposite,
+// unrelated directions.
+const FORT_CX = -40, FORT_W = 120, FORT_H = 24, FORT_GATE_W = 30;
+const FORT_FRONT_Z = -170; // gate mouth, facing the courtyard/spawn
+const FORT_BACK_Z = -246;  // deepest interior wall, still inside the MAP_HALF clamp
 const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 const rand = (a,b) => a + Math.random()*(b-a);
 const choice = (arr) => arr[(Math.random()*arr.length)|0];
@@ -330,6 +340,7 @@ function buildWorld(){
   for(let i=0;i<40;i++){
     const x = rand(-MAP_HALF+20, WATER_X0-10), z = rand(-MAP_HALF+40, MAP_HALF-20);
     if(Math.hypot(x,z) < 30) continue;
+    if(x > FORT_CX-FORT_W/2-6 && x < FORT_CX+FORT_W/2+6 && z < FORT_FRONT_Z+6) continue;
     const s = rand(2.5,6);
     const tone = rand(0.55,0.85);
     const warmth = rand(-0.05,0.08);
@@ -342,6 +353,71 @@ function buildWorld(){
     box.rotation.y = rand(0,Math.PI);
     scene.add(box);
     obstacles.push({x,z,r:s*0.6});
+  }
+}
+
+// axis-aligned wall block plus circular collision obstacles spaced along
+// its length, reusing the same {x,z,r} collision system as the cover boxes
+// rather than adding a separate AABB collider
+function addWall(xMin, xMax, zMin, zMax, height){
+  const w = xMax-xMin, d = zMax-zMin;
+  const mat = new THREE.MeshStandardMaterial({ map: TEX.wallTex, roughness:0.95 });
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, height, d), mat);
+  mesh.position.set((xMin+xMax)/2, height/2, (zMin+zMax)/2);
+  scene.add(mesh);
+
+  const horizontal = w >= d;
+  const length = horizontal ? w : d;
+  const thickness = horizontal ? d : w;
+  const steps = Math.max(1, Math.round(length/3));
+  for(let i=0;i<=steps;i++){
+    const t = i/steps;
+    const ox = horizontal ? xMin + t*w : (xMin+xMax)/2;
+    const oz = horizontal ? (zMin+zMax)/2 : zMin + t*d;
+    obstacles.push({x:ox, z:oz, r: thickness/2 + 1.3});
+  }
+}
+
+function buildFortressInterior(){
+  TEX.wallTex.wrapS = TEX.wallTex.wrapT = THREE.RepeatWrapping;
+  TEX.wallTex.repeat.set(5, 2);
+  TEX.wallTex.colorSpace = THREE.SRGBColorSpace;
+
+  const xMin = FORT_CX - FORT_W/2, xMax = FORT_CX + FORT_W/2;
+  const gateHalf = FORT_GATE_W/2;
+
+  // front wall (facing spawn/courtyard, less-negative Z), split around the
+  // gate opening the player walks through
+  addWall(xMin, FORT_CX-gateHalf, FORT_FRONT_Z-3, FORT_FRONT_Z, FORT_H);
+  addWall(FORT_CX+gateHalf, xMax, FORT_FRONT_Z-3, FORT_FRONT_Z, FORT_H);
+  // back wall (deepest, most-negative Z) and side walls close off the hall
+  addWall(xMin, xMax, FORT_BACK_Z, FORT_BACK_Z+3, FORT_H);
+  addWall(xMin-3, xMin, FORT_BACK_Z, FORT_FRONT_Z, FORT_H);
+  addWall(xMax, xMax+3, FORT_BACK_Z, FORT_FRONT_Z, FORT_H);
+
+  const floorMat = new THREE.MeshStandardMaterial({ map: TEX.wallTex, roughness:1, color:0x6a6f7c });
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(FORT_W, FORT_FRONT_Z-FORT_BACK_Z+3), floorMat);
+  floor.rotation.x = -Math.PI/2;
+  floor.position.set(FORT_CX, 0.05, (FORT_BACK_Z+FORT_FRONT_Z)/2);
+  scene.add(floor);
+
+  // banners flanking the gate, just outside on the courtyard side
+  const bannerMat = new THREE.MeshBasicMaterial({ color: 0x8a63ff, side:THREE.DoubleSide });
+  for(const side of [-1,1]){
+    const banner = new THREE.Mesh(new THREE.PlaneGeometry(4,10), bannerMat);
+    banner.position.set(FORT_CX + side*(gateHalf+3), FORT_H*0.5, FORT_FRONT_Z+1);
+    scene.add(banner);
+  }
+
+  // interior pillars for visual interest and cover
+  const pillarMat = new THREE.MeshStandardMaterial({ map: TEX.wallTex, roughness:0.9 });
+  for(const px of [FORT_CX-30, FORT_CX+30]){
+    for(const pz of [FORT_FRONT_Z-25, FORT_BACK_Z+18]){
+      const pillar = new THREE.Mesh(new THREE.BoxGeometry(4,FORT_H,4), pillarMat);
+      pillar.position.set(px, FORT_H/2, pz);
+      scene.add(pillar);
+      obstacles.push({x:px, z:pz, r:3.2});
+    }
   }
 }
 
@@ -630,18 +706,18 @@ function damagePlayer(dmg){
 
 /* --- weapon viewmodel: a simple low-poly rifle parented to the camera --- */
 const weaponRig = new THREE.Group();
-(function buildWeapon(){
-  const dark = new THREE.MeshStandardMaterial({color:0x17171b, roughness:0.5});
-  const metal = new THREE.MeshStandardMaterial({color:0x4a4a55, roughness:0.4});
-  const body = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.62), dark);
-  body.position.set(0.34,-0.32,-0.85);
-  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.34,8), metal);
-  barrel.rotation.x = Math.PI/2; barrel.position.set(0.34,-0.3,-1.32);
-  const mag = new THREE.Mesh(new THREE.BoxGeometry(0.065,0.22,0.09), dark);
-  mag.position.set(0.34,-0.5,-0.72); mag.rotation.x = 0.25;
-  weaponRig.add(body, barrel, mag);
-  camera.add(weaponRig);
-})();
+camera.add(weaponRig);
+// Deferred until TEX.rifleTex is loaded (called from the loadAssets
+// callback) — building it here at script-init time would bake in an
+// undefined texture the same way the fortress backdrop bug did.
+function buildWeaponViewmodel(){
+  const aspect = TEX.rifleTex.image.width / TEX.rifleTex.image.height;
+  const h = 0.95, w = h * aspect;
+  const mat = new THREE.MeshBasicMaterial({ map: TEX.rifleTex, transparent:true });
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+  plane.position.set(0.32, -0.4, -0.9);
+  weaponRig.add(plane);
+}
 
 const raycaster = new THREE.Raycaster();
 function fireWeapon(){
@@ -960,6 +1036,8 @@ document.getElementById("btn-resume").addEventListener("click", togglePause);
 // texture that arrives after construction unless you explicitly reassign it.
 loadAssets(() => {
   buildWorld();
+  buildFortressInterior();
+  buildWeaponViewmodel();
   buildCapturePoints();
   buildVehicles();
   const btn = document.getElementById("btn-start");
