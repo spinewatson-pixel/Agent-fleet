@@ -75,6 +75,7 @@
   .overlay{
     position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
     background:radial-gradient(ellipse at center, #14121ecc 0%, #050508f0 80%);
+    background-size:cover; background-position:center;
     z-index:10; text-align:center; gap:14px; padding:20px;
   }
   .hidden{display:none !important;}
@@ -98,6 +99,13 @@
   }
   button.play-btn:hover{transform:translateY(-2px); box-shadow:0 0 34px #8a63ffaa;}
   #overlay-start, #overlay-gameover, #overlay-pause{pointer-events:all;}
+  #overlay-start{background-image:radial-gradient(ellipse at center, #14121edd 0%, #050508f5 85%), url('assets/fortress-hero.png');}
+  #overlay-gameover{background-image:radial-gradient(ellipse at center, #1c0d0ddd 0%, #05050af5 85%), url('assets/fortress-hero.png');}
+  .commander-avatar{
+    width:36px; height:36px; border-radius:50%; object-fit:cover; object-position:top center;
+    border:1.5px solid var(--violet); box-shadow:0 0 10px #8a63ff77; vertical-align:middle;
+  }
+  #hud-topleft .label-row{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
   .stats-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px 30px; font-size:15px; margin:6px 0;}
   .stats-grid span.v{color:var(--violet-glow); font-weight:700; float:right; margin-left:16px;}
   .go-title{font-size:40px; font-weight:800; letter-spacing:4px; color:var(--crimson); text-shadow:0 0 24px #ff5a3c66;}
@@ -109,7 +117,10 @@
 
   <div id="hud">
     <div class="hud-panel" id="hud-topleft">
-      <div class="label">Commander // Vitals</div>
+      <div class="label-row">
+        <img class="commander-avatar" src="assets/commander-portrait.png" alt="" />
+        <div class="label" style="margin:0;">Commander // Vitals</div>
+      </div>
       <div class="bar-track"><div class="bar-fill" id="hp-fill" style="width:100%"></div></div>
       <div class="stat-row"><span>Ammo</span><span id="ammo-num">28 / 28</span></div>
     </div>
