@@ -155,6 +155,36 @@ JOBS = [
         ),
     ),
     dict(
+        out="terrain-ground.png",
+        refs=["2a9a5cce-IMG_8931.jpeg"],
+        cutout=False,
+        prompt=(
+            "Using this snowy mountain valley photo as reference for ground "
+            "material, generate a photorealistic aerial/top-down texture of "
+            "rocky, snow-patched mountain valley ground: churned snow, dirt, "
+            "exposed rock and gravel, tire and foot tracks, cold overcast "
+            "lighting with no strong directional shadows so it reads evenly "
+            "from any angle. Seamless, uniformly-distributed detail edge to "
+            "edge with no single focal object, so it can tile as a repeating "
+            "ground texture. Square image, no text, no logos, no people or "
+            "vehicles in the shot."
+        ),
+    ),
+    dict(
+        out="mountain-skyline.png",
+        refs=["f7a0ab15-IMG_8928.jpeg", "2a9a5cce-IMG_8931.jpeg"],
+        cutout=False,
+        prompt=(
+            "Using these two images as reference, paint a wide panoramic "
+            "photorealistic mountain skyline: jagged snow-capped peaks under "
+            "a heavy overcast stormy sky, matching the cold, dramatic "
+            "mountain range visible behind the fortress in the first image. "
+            "Very wide aspect ratio horizon backdrop, no foreground "
+            "buildings, no people, no vehicles, no text or logos — just the "
+            "mountains and sky, suitable as a horizon backdrop panel."
+        ),
+    ),
+    dict(
         out="sprite-player.png",
         refs=["e8423460-IMG_8933.jpeg"],
         cutout=True,
