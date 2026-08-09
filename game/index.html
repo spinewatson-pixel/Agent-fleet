@@ -172,7 +172,7 @@
       <div><b>Click (hold)</b> Fire</div><div><b>R</b> Reload</div>
       <div><b>Q</b> Artillery Strike</div><div><b>P / Esc</b> Pause</div>
     </div>
-    <button class="play-btn" id="btn-start">Man the Wall</button>
+    <button class="play-btn" id="btn-start" disabled>Loading…</button>
   </div>
 
   <div class="overlay hidden" id="overlay-gameover">
@@ -213,13 +213,35 @@ const angleTo = (a,b) => Math.atan2(b.y-a.y, b.x-a.x);
 const rand = (a,b) => a + Math.random()*(b-a);
 const choice = (arr) => arr[(Math.random()*arr.length)|0];
 
+/* --------------------------------------------------------------- assets
+   Generated from the reference photos (see game/tools/generate_assets.py):
+   a top-down arena backdrop and three character sprites. Loaded once up
+   front; the start button stays disabled until every image is ready. */
+const ASSET_PATHS = {
+  arenaBg: "assets/arena-background.png",
+  player: "assets/sprite-player.png",
+  ally: "assets/sprite-ally.png",
+  enemy: "assets/sprite-enemy.png",
+};
+const ASSETS = {};
+function loadAssets(onDone){
+  const keys = Object.keys(ASSET_PATHS);
+  let remaining = keys.length;
+  const settle = () => { if(--remaining <= 0) onDone(); };
+  keys.forEach(key => {
+    const img = new Image();
+    img.onload = settle;
+    img.onerror = settle;
+    img.src = ASSET_PATHS[key];
+    ASSETS[key] = img;
+  });
+}
+
 /* -------------------------------------------------------------- palette */
 const PAL = {
-  concreteA:"#232530", concreteB:"#181920", floorLine:"#2c2e3a",
-  violet:"#8a63ff", violetGlow:"#c3b0ff", violetDim:"#4b3a86",
-  crimson:"#ff5a3c", crimsonDim:"#8a2f1f",
-  ally:"#161721", allyTrim:"#7c5cff",
-  enemy:"#241416", enemyTrim:"#ff6a3d",
+  concreteB:"#181920",
+  violet:"#8a63ff", violetGlow:"#c3b0ff",
+  crimson:"#ff5a3c",
   heavy:"#2c1418", heavyTrim:"#ff3d3d",
 };
 
@@ -228,14 +250,15 @@ const PAL = {
    wall (top); the command core sits at the near wall (bottom); the
    commander roams the courtyard between them. */
 function arena(){
+  const gateY = H * 0.17;
   return {
     coreY: H - 130,
     coreX: W/2,
-    wallY: 90,
+    wallY: gateY,
     gates: [
-      {x: W*0.18, y: 90, name:"WEST GATE"},
-      {x: W*0.50, y: 60, name:"MAIN GATE A-01"},
-      {x: W*0.82, y: 90, name:"EAST GATE"},
+      {x: W*0.18, y: gateY, name:"WEST GATE"},
+      {x: W*0.50, y: gateY - 20, name:"MAIN GATE A-01"},
+      {x: W*0.82, y: gateY, name:"EAST GATE"},
     ],
   };
 }
@@ -670,29 +693,21 @@ function updateHUD(){
 }
 
 /* ---------------------------------------------------------------- draw */
+function drawImageCover(img, w, h){
+  const ir = img.width / img.height, cr = w / h;
+  let dw, dh;
+  if(ir > cr){ dh = h; dw = h * ir; } else { dw = w; dh = w / ir; }
+  ctx.drawImage(img, (w-dw)/2, (h-dh)/2, dw, dh);
+}
+
 function drawBackground(){
   const ar = arena();
-  ctx.fillStyle = PAL.concreteB;
-  ctx.fillRect(0,0,W,H);
-  const grad = ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,"#1a1c26");
-  grad.addColorStop(1,"#0d0e14");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,W,H);
-
-  // floor grid
-  ctx.strokeStyle = PAL.floorLine;
-  ctx.lineWidth = 1;
-  ctx.globalAlpha = 0.35;
-  for(let x=0;x<W;x+=64){ ctx.beginPath(); ctx.moveTo(x,ar.wallY); ctx.lineTo(x,H); ctx.stroke(); }
-  for(let y=ar.wallY;y<H;y+=64){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-  ctx.globalAlpha = 1;
-
-  // far wall
-  ctx.fillStyle = "#14151d";
-  ctx.fillRect(0,0,W,ar.wallY);
-  ctx.fillStyle = "#0a0a10";
-  ctx.fillRect(0,ar.wallY-6,W,6);
+  if(ASSETS.arenaBg && ASSETS.arenaBg.complete && ASSETS.arenaBg.naturalWidth){
+    drawImageCover(ASSETS.arenaBg, W, H);
+  } else {
+    ctx.fillStyle = PAL.concreteB;
+    ctx.fillRect(0,0,W,H);
+  }
 
   // gates
   for(const g of ar.gates){
@@ -740,67 +755,40 @@ function drawEmblem(cx,cy,size,color,glow){
 }
 
 function drawGate(g){
-  const w = g === arena().gates[1] ? 150 : 110;
+  // the archway itself is baked into the background art; this just labels it
   ctx.save();
   ctx.translate(g.x, g.y);
-  // archway recess
-  const grad = ctx.createLinearGradient(0,-40,0,20);
-  grad.addColorStop(0,"#000000");
-  grad.addColorStop(1,"#1c1d26");
-  ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.roundRect(-w/2,-40,w,60,[10,10,0,0]);
-  ctx.fill();
-  ctx.strokeStyle = "#3a3c4a"; ctx.lineWidth = 3;
-  ctx.stroke();
-
-  // banner
-  ctx.fillStyle = "#1b1030";
-  ctx.beginPath();
-  ctx.moveTo(-14,-38); ctx.lineTo(14,-38); ctx.lineTo(14,20); ctx.lineTo(0,30); ctx.lineTo(-14,20);
-  ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = PAL.violet; ctx.lineWidth = 1.5; ctx.stroke();
-  drawEmblem(0,-14,9,PAL.violetGlow,true);
-
-  // label
-  ctx.fillStyle = "#8f8ba8";
-  ctx.font = "bold 10px Segoe UI";
+  ctx.font = "bold 11px Segoe UI";
   ctx.textAlign = "center";
-  ctx.fillText(g.name, 0, 34);
+  ctx.shadowColor = "#000"; ctx.shadowBlur = 6;
+  ctx.fillStyle = "#d8d3ec";
+  ctx.fillText(g.name, 0, 44);
+  ctx.shadowBlur = 0;
   ctx.restore();
 }
 
 function drawCore(ar){
+  // the console/altar is baked into the background art; this overlays the
+  // live fortress-integrity readout above it
   ctx.save();
-  ctx.translate(ar.coreX, ar.coreY+20);
+  ctx.translate(ar.coreX, ar.coreY - 30);
   const pct = game.fortressHP/game.fortressMax;
-  ctx.fillStyle = "#15141d";
-  ctx.beginPath();
-  ctx.roundRect(-90,-10,180,46,8);
-  ctx.fill();
-  ctx.strokeStyle = pct>0.3 ? PAL.violet : PAL.crimson;
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  drawEmblem(0,-26,16, pct>0.3?PAL.violetGlow:PAL.crimson, true);
-  ctx.fillStyle = "#7d7996";
-  ctx.font = "bold 9px Segoe UI";
-  ctx.textAlign = "center";
-  ctx.fillText("COMMAND CORE", 0, 20);
-  // integrity lights
+  const glowColor = pct>0.3 ? PAL.violetGlow : PAL.crimson;
+  drawEmblem(0,-14,10, glowColor, true);
   const n = 10;
   for(let i=0;i<n;i++){
     const lit = i < Math.round(pct*n);
-    ctx.fillStyle = lit ? (pct>0.3?PAL.violetGlow:PAL.crimson) : "#26232f";
+    ctx.fillStyle = lit ? glowColor : "#26232f88";
     ctx.beginPath();
-    ctx.roundRect(-80 + i*16, 30, 12, 6, 2);
+    ctx.roundRect(-80 + i*16, 4, 12, 6, 2);
     ctx.fill();
   }
   ctx.restore();
 }
 
-/* Articulated soldier: legs w/ walk cycle, torso, two arms gripping a
-   rifle, gas-masked head, optional cap/helmet, backpack+hose, sidearm.
-   Drawn in local space where local -y is "forward" (the aim/move angle). */
+/* drawLeg is shared with the still-procedural heavy trooper below; the
+   regular player/ally/enemy troopers are drawn from generated sprite
+   images (see drawSpriteSoldier) instead of built up from primitives. */
 function drawLeg(xOff, swing, bootColor, legColor){
   const step = swing*5;
   ctx.fillStyle = legColor;
@@ -815,138 +803,23 @@ function drawLeg(xOff, swing, bootColor, legColor){
   ctx.fillRect(xOff-3.9, 17.5+step, 7.8, 1.4);
 }
 
-function drawArmsAndRifle(st){
-  // rear arm (trigger hand, tucked near chest)
-  ctx.fillStyle = st.coatDark;
-  ctx.beginPath();
-  ctx.moveTo(-12,-9); ctx.lineTo(-3,-5); ctx.lineTo(-2,4); ctx.lineTo(-11,2);
-  ctx.closePath(); ctx.fill();
-  // front arm (extended foregrip)
-  ctx.beginPath();
-  ctx.moveTo(11,-9); ctx.lineTo(8,-18); ctx.lineTo(4,-15); ctx.lineTo(7,-6);
-  ctx.closePath(); ctx.fill();
-
-  // rifle: gunmetal body/barrel with a highlight edge, stock, magazine
-  ctx.save();
-  ctx.lineCap = "round";
-  ctx.strokeStyle = "#4a4a55"; ctx.lineWidth = 3.6;
-  ctx.beginPath(); ctx.moveTo(-2,3); ctx.lineTo(7,-27); ctx.stroke();
-  ctx.strokeStyle = "#8f8f9c"; ctx.lineWidth = 0.9;
-  ctx.beginPath(); ctx.moveTo(-1.3,1.5); ctx.lineTo(6.6,-25.5); ctx.stroke();
-  ctx.strokeStyle = "#38383f"; ctx.lineWidth = 2.6;
-  ctx.beginPath(); ctx.moveTo(-5,5.5); ctx.lineTo(-1,-0.5); ctx.stroke();
-  ctx.fillStyle = "#38383f";
-  ctx.beginPath(); ctx.moveTo(1.5,-7); ctx.lineTo(-3,-1.5); ctx.lineTo(0,4.5); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = "#55555f"; ctx.lineWidth = 1.4;
-  ctx.beginPath(); ctx.moveTo(3.4,-16); ctx.lineTo(5.6,-16); ctx.stroke();
-  ctx.restore();
-
-  // gloved hands over the grips
-  ctx.fillStyle = "#26262c";
-  ctx.beginPath(); ctx.arc(-1.5,2,2.5,0,7); ctx.fill();
-  ctx.beginPath(); ctx.arc(5,-15.5,2.5,0,7); ctx.fill();
-}
-
-function drawHead(st, r){
-  ctx.fillStyle = "#1c1c24";
-  ctx.beginPath(); ctx.arc(0,-24,r,0,7); ctx.fill();
-  ctx.strokeStyle = st.trim; ctx.lineWidth = 1; ctx.stroke();
-
-  // filter canister at the mouth
-  ctx.fillStyle = "#101014";
-  ctx.beginPath(); ctx.arc(0,-19.2,2.3,0,7); ctx.fill();
-  ctx.strokeStyle = "#000"; ctx.lineWidth = 0.5;
-  ctx.beginPath(); ctx.arc(0,-19.2,1.2,0,7); ctx.stroke();
-
-  if(st.backpack){
-    ctx.strokeStyle = "#101014"; ctx.lineWidth = 1.8;
-    ctx.beginPath(); ctx.moveTo(4,-20.5); ctx.quadraticCurveTo(9,-16.5,7.5,-10); ctx.stroke();
-  }
-
-  // glowing lenses with a highlight glint
-  ctx.shadowColor = st.visor; ctx.shadowBlur = 6;
-  ctx.fillStyle = st.visor;
-  ctx.beginPath(); ctx.ellipse(-3,-25.6,1.9,2.3,0,0,7); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(3,-25.6,1.9,2.3,0,0,7); ctx.fill();
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = "rgba(255,255,255,0.55)";
-  ctx.beginPath(); ctx.arc(-3.6,-26.3,0.65,0,7); ctx.fill();
-  ctx.beginPath(); ctx.arc(2.4,-26.3,0.65,0,7); ctx.fill();
-}
-
-function drawSoldier(x,y,angle,scale,animT,moving,st){
+function drawSpriteSoldier(x,y,angle,heightPx,animT,moving,img){
+  if(!img || !img.complete || !img.naturalWidth) return;
+  const h = heightPx, w = h * (img.width / img.height);
+  const bob = moving ? Math.sin(animT*2) * 1.5 : 0;
   ctx.save();
   ctx.translate(x,y);
-  ctx.rotate(angle + Math.PI/2);
-  ctx.scale(scale,scale);
 
-  const swingA = moving ? Math.sin(animT) : 0;
-  const swingB = moving ? Math.sin(animT+Math.PI) : 0;
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
+  ctx.beginPath(); ctx.ellipse(0, h*0.36, w*0.22, w*0.1, 0, 0, 7); ctx.fill();
 
-  // ground shadow
-  ctx.fillStyle = "rgba(0,0,0,0.32)";
-  ctx.beginPath(); ctx.ellipse(0,22,13,5.5,0,0,7); ctx.fill();
-
-  drawLeg(-6, swingA, "#0a0a0d", st.legs);
-  drawLeg(6, swingB, "#0a0a0d", st.legs);
-
-  if(st.backpack){
-    ctx.fillStyle = st.coatDark;
-    ctx.beginPath(); ctx.roundRect(-8,-15,16,15,4); ctx.fill();
-  }
-
-  if(st.coatLength === "long"){
-    const sway = swingA*2.2;
-    ctx.fillStyle = st.coatDark;
-    ctx.beginPath();
-    ctx.moveTo(-16,3); ctx.quadraticCurveTo(-19+sway,19,-14,26); ctx.lineTo(-9,20); ctx.lineTo(-10,5); ctx.closePath(); ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(16,3); ctx.quadraticCurveTo(19-sway,19,14,26); ctx.lineTo(9,20); ctx.lineTo(10,5); ctx.closePath(); ctx.fill();
-  }
-
-  // torso: V-tapered, shaded light-to-dark across the chest (no outline —
-  // volume comes from the gradient, not a traced edge)
-  const tg = ctx.createLinearGradient(-16,-18,16,9);
-  tg.addColorStop(0, st.coatLight);
-  tg.addColorStop(1, st.coatDark);
-  ctx.fillStyle = tg;
-  ctx.beginPath();
-  ctx.moveTo(0,-18); ctx.lineTo(15,-9); ctx.lineTo(11,9);
-  ctx.lineTo(-11,9); ctx.lineTo(-15,-9);
-  ctx.closePath(); ctx.fill();
-
-  ctx.fillStyle = "#0c0c10";
-  ctx.fillRect(-11,5,22,3);
-  ctx.fillStyle = "#000000aa";
-  ctx.fillRect(-8,-5,5.5,7);
-  ctx.fillRect(2.5,-5,5.5,7);
-
-  // muted shoulder seams (fabric, not a bright accent block)
-  ctx.fillStyle = st.coatDark;
-  ctx.fillRect(-16,-12,6,3.5);
-  ctx.fillRect(10,-12,6,3.5);
-
-  drawArmsAndRifle(st);
-  drawHead(st, 7.6);
-
-  if(st.capStyle === "peaked"){
-    ctx.fillStyle = "#14121c";
-    ctx.beginPath(); ctx.ellipse(0,-29.5,7.8,3.6,0,Math.PI,0); ctx.fill();
-    ctx.fillRect(-7.8,-30.4,15.6,2.6);
-    ctx.fillStyle = st.trim;
-    ctx.fillRect(-7.8,-28.9,15.6,0.9);
-    ctx.fillStyle = "#dcd4ff";
-    ctx.beginPath(); ctx.arc(0,-30.8,1.1,0,7); ctx.fill();
-  } else if(st.capStyle === "helmet"){
-    ctx.fillStyle = "#1c1c24";
-    ctx.beginPath(); ctx.arc(0,-27,6,Math.PI,0); ctx.fill();
-    ctx.fillStyle = st.trim;
-    ctx.fillRect(-6,-27,12,0.9);
-  } else if(st.capStyle === "hood"){
-    ctx.strokeStyle = st.coatLight; ctx.lineWidth = 1.4;
-    ctx.beginPath(); ctx.arc(0,-24,8.6,Math.PI*0.15,Math.PI*0.85); ctx.stroke();
-  }
-
+  // These are single front-facing renders, not an 8-direction sprite sheet,
+  // so a full rotate() would flip the character upside-down whenever they
+  // face down-screen. Mirror left/right instead — always upright, still
+  // gives a left/right facing cue.
+  const facingLeft = Math.cos(angle) < 0;
+  if(facingLeft) ctx.scale(-1,1);
+  ctx.drawImage(img, -w/2, -h/2 + bob, w, h);
   ctx.restore();
 }
 
@@ -1077,32 +950,16 @@ function healthBarAbove(e, w, colorGood){
   ctx.restore();
 }
 
-const STYLE_PLAYER = {
-  coat:"#1c1730", coatLight:"#332a56", coatDark:"#100c1a", legs:"#241d3d",
-  trim:PAL.violet, visor:PAL.violetGlow,
-  capStyle:"peaked", coatLength:"long", backpack:false,
-};
-const STYLE_ALLY = {
-  coat:"#181926", coatLight:"#2a2c42", coatDark:"#0e0f18", legs:"#1c1e2e",
-  trim:PAL.allyTrim, visor:"#b79bff",
-  capStyle:"helmet", coatLength:"short", backpack:true,
-};
-const STYLE_ENEMY = {
-  coat:"#241416", coatLight:"#3d2621", coatDark:"#150b0c", legs:"#2a1917",
-  trim:PAL.enemyTrim, visor:"#ff9d6a",
-  capStyle:"hood", coatLength:"short", backpack:false,
-};
-
 function drawPlayer(){
   const p = game.player;
   if(!p.alive) return;
-  drawSoldier(p.x,p.y,p.angle,1.7,p.animT,p.moving,STYLE_PLAYER);
+  drawSpriteSoldier(p.x,p.y,p.angle,72,p.animT,p.moving,ASSETS.player);
 }
 
 function drawAllies(){
   for(const a of game.allies){
     if(!a.alive) continue;
-    drawSoldier(a.x,a.y,a.angle,1.2,a.animT,a.moving,STYLE_ALLY);
+    drawSpriteSoldier(a.x,a.y,a.angle,52,a.animT,a.moving,ASSETS.ally);
     healthBarAbove(a,26,"#7c5cff");
   }
 }
@@ -1111,7 +968,7 @@ function drawEnemies(){
   for(const e of game.enemies){
     if(!e.alive) continue;
     if(e.type==="trooper"){
-      drawSoldier(e.x,e.y,e.angle,1.2,e.animT,e.moving,STYLE_ENEMY);
+      drawSpriteSoldier(e.x,e.y,e.angle,52,e.animT,e.moving,ASSETS.enemy);
       healthBarAbove(e,26,"#ff6a3d");
     } else if(e.type==="heavy"){
       drawHeavy(e,e.moving);
@@ -1252,6 +1109,12 @@ function startGame(){
 document.getElementById("btn-start").addEventListener("click", startGame);
 document.getElementById("btn-restart").addEventListener("click", startGame);
 document.getElementById("btn-resume").addEventListener("click", togglePause);
+
+loadAssets(() => {
+  const btn = document.getElementById("btn-start");
+  btn.disabled = false;
+  btn.textContent = "Man the Wall";
+});
 
 })();
 </script>

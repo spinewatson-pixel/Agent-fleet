@@ -12,6 +12,11 @@ import sys
 import urllib.request
 from pathlib import Path
 
+from PIL import Image
+
+CHROMA_KEY = (255, 0, 255)  # magenta backdrop for sprite cutouts
+CHROMA_TOLERANCE = 60
+
 MODEL = "gemini-3.1-flash-image"
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
@@ -69,10 +74,38 @@ def generate(api_key, prompt, ref_images, out_path):
     return False
 
 
+def cut_out_chroma_key(path: Path):
+    """Turn the magenta backdrop into real alpha transparency and crop to content."""
+    img = Image.open(path).convert("RGBA")
+    data = img.getdata()
+    kr, kg, kb = CHROMA_KEY
+    new_data = []
+    for r, g, b, a in data:
+        dist = ((r - kr) ** 2 + (g - kg) ** 2 + (b - kb) ** 2) ** 0.5
+        if dist < CHROMA_TOLERANCE:
+            new_data.append((r, g, b, 0))
+        else:
+            new_data.append((r, g, b, a))
+    img.putdata(new_data)
+    bbox = img.getbbox()
+    if bbox:
+        img = img.crop(bbox)
+    img.save(path)
+    print(f"cut out chroma key + cropped {path} -> {img.size}")
+
+
+CHROMA_PROMPT_SUFFIX = (
+    " Full body, standing pose, isolated on a completely flat solid magenta "
+    "background (#FF00FF), no shadow, no scenery, no floor, no vignette, no "
+    "gradient — a single flat magenta fill behind the character only. "
+    "No text or logos in the image."
+)
+
 JOBS = [
     dict(
         out="fortress-hero.png",
-        refs=["f7a0ab15-IMG_8928.jpeg", "2a9a5cce-IMG_8931.jpeg"],
+        refs=["f7a0ab15-IMG_8928.jpeg", "8abc7558-IMG_8929.jpeg"],
+        cutout=False,
         prompt=(
             "Combine these two fortress reference images into a single cinematic "
             "hero shot of one fortress: keep the concrete mountain-bunker "
@@ -86,6 +119,7 @@ JOBS = [
     dict(
         out="commander-portrait.png",
         refs=["e8423460-IMG_8933.jpeg"],
+        cutout=False,
         prompt=(
             "Redraw this commander as a clean character portrait: same "
             "peaked cap, gas mask with glowing purple lenses, long black "
@@ -94,17 +128,90 @@ JOBS = [
             "game HUD portrait. No text or logos in the image."
         ),
     ),
+    dict(
+        out="arena-background.png",
+        refs=["f7a0ab15-IMG_8928.jpeg", "8abc7558-IMG_8929.jpeg"],
+        cutout=False,
+        prompt=(
+            "Using these two fortress images as architectural reference, paint "
+            "a top-down bird's-eye view (looking straight down, like a video "
+            "game map, NOT a front or side elevation) of the fortress's main "
+            "courtyard interior: a wide stone-and-concrete plaza with three "
+            "large gated tunnel entrances arranged along the far edge (one "
+            "centered and larger, one to each side) that raiders could pour "
+            "through, and a raised command console/altar with the purple "
+            "winged emblem at the near edge where a commander would stand. "
+            "Same gothic-industrial concrete architecture, purple glowing "
+            "accents and banners, dusted with snow, dramatic top-down "
+            "lighting. 16:9 aspect ratio. No text, no logos, no people or "
+            "characters in the shot."
+        ),
+    ),
+    dict(
+        out="sprite-player.png",
+        refs=["e8423460-IMG_8933.jpeg"],
+        cutout=True,
+        prompt=(
+            "Redraw this commander as a top-down bird's-eye-view video game "
+            "character sprite, in the same inked / cel-shaded game-art style "
+            "as a top-down shooter sprite. Camera is elevated above and in "
+            "FRONT of the character looking down at a steep angle so the "
+            "character's face, gas mask, and chest face the camera directly "
+            "— this is a FRONT view from above, explicitly NOT a view of "
+            "the character's back. Same peaked cap, gas mask with glowing "
+            "purple lenses, long black coat with purple piping, holding a "
+            "rifle pointed toward the camera/forward."
+            + CHROMA_PROMPT_SUFFIX
+        ),
+    ),
+    dict(
+        out="sprite-ally.png",
+        refs=["d5972bba-IMG_8932.jpeg"],
+        cutout=True,
+        prompt=(
+            "Redraw the right-hand soldier (the one in the plain black "
+            "coat with the tank-and-hose gas mask, no purple pattern gear) "
+            "as a top-down bird's-eye-view video game character sprite: "
+            "viewed from directly above and slightly behind at a steep "
+            "downward angle (like an isometric top-down shooter), holding a "
+            "rifle, same coat and gas mask design."
+            + CHROMA_PROMPT_SUFFIX
+        ),
+    ),
+    dict(
+        out="sprite-enemy.png",
+        refs=["d5972bba-IMG_8932.jpeg"],
+        cutout=True,
+        prompt=(
+            "Using the soldier's silhouette, gear, and gas-mask design in "
+            "this photo as a starting point, redesign it as a RIVAL hostile "
+            "faction trooper: same style of military coat, webbing and gas "
+            "mask, but recolor all purple/blue accents to a burnt "
+            "orange/red color scheme instead, as if it belongs to an enemy "
+            "raider faction. Top-down bird's-eye-view video game character "
+            "sprite, viewed from directly above and slightly behind at a "
+            "steep downward angle (like an isometric top-down shooter), "
+            "holding a rifle."
+            + CHROMA_PROMPT_SUFFIX
+        ),
+    ),
 ]
 
 
 def main():
+    only = set(sys.argv[1:])
     api_key = load_api_key()
     ASSETS_DIR.mkdir(parents=True, exist_ok=True)
     ok = True
     for job in JOBS:
+        if only and job["out"] not in only:
+            continue
         refs = [UPLOADS / name for name in job["refs"]]
         out_path = ASSETS_DIR / job["out"]
-        ok = generate(api_key, job["prompt"], refs, out_path) and ok
+        success = generate(api_key, job["prompt"], refs, out_path)
+        if success and job.get("cutout"):
+            cut_out_chroma_key(out_path)
+        ok = success and ok
     sys.exit(0 if ok else 1)
 
 
