@@ -75,7 +75,8 @@ def generate(api_key, prompt, ref_images, out_path):
 
 
 def cut_out_chroma_key(path: Path):
-    """Turn the magenta backdrop into real alpha transparency and crop to content."""
+    """Turn the magenta backdrop into real alpha transparency, suppress the
+    magenta spill left on anti-aliased edge pixels, and crop to content."""
     img = Image.open(path).convert("RGBA")
     data = img.getdata()
     kr, kg, kb = CHROMA_KEY
@@ -84,8 +85,14 @@ def cut_out_chroma_key(path: Path):
         dist = ((r - kr) ** 2 + (g - kg) ** 2 + (b - kb) ** 2) ** 0.5
         if dist < CHROMA_TOLERANCE:
             new_data.append((r, g, b, 0))
-        else:
-            new_data.append((r, g, b, a))
+            continue
+        # despill: magenta contamination shows as R and B both running
+        # ahead of G; pull them back toward G so edge pixels stop reading pink/purple
+        excess = min(r, b) - g
+        if excess > 0:
+            r = max(0, r - excess)
+            b = max(0, b - excess)
+        new_data.append((r, g, b, a))
     img.putdata(new_data)
     bbox = img.getbbox()
     if bbox:
@@ -152,15 +159,14 @@ JOBS = [
         refs=["e8423460-IMG_8933.jpeg"],
         cutout=True,
         prompt=(
-            "Redraw this commander as a top-down bird's-eye-view video game "
-            "character sprite, in the same inked / cel-shaded game-art style "
-            "as a top-down shooter sprite. Camera is elevated above and in "
-            "FRONT of the character looking down at a steep angle so the "
-            "character's face, gas mask, and chest face the camera directly "
-            "— this is a FRONT view from above, explicitly NOT a view of "
-            "the character's back. Same peaked cap, gas mask with glowing "
-            "purple lenses, long black coat with purple piping, holding a "
-            "rifle pointed toward the camera/forward."
+            "Redraw this commander as a photorealistic full-body render in "
+            "the same cinematic, realistic rendering style as the reference "
+            "photo itself — not a cartoon, not cel-shaded, not a comic/ink "
+            "style, but photoreal detail, materials, and lighting like a "
+            "high-end game cinematic. Eye-level, straight-on front view, "
+            "standing pose, same peaked cap, gas mask with glowing purple "
+            "lenses, long black coat with purple piping, holding a rifle "
+            "aimed toward the camera."
             + CHROMA_PROMPT_SUFFIX
         ),
     ),
@@ -171,10 +177,11 @@ JOBS = [
         prompt=(
             "Redraw the right-hand soldier (the one in the plain black "
             "coat with the tank-and-hose gas mask, no purple pattern gear) "
-            "as a top-down bird's-eye-view video game character sprite: "
-            "viewed from directly above and slightly behind at a steep "
-            "downward angle (like an isometric top-down shooter), holding a "
-            "rifle, same coat and gas mask design."
+            "as a photorealistic full-body render in the same cinematic, "
+            "realistic rendering style as the reference photo itself — not "
+            "a cartoon, not cel-shaded, not a comic/ink style. Eye-level, "
+            "straight-on front view, standing pose, holding a rifle aimed "
+            "toward the camera, same coat and gas mask design."
             + CHROMA_PROMPT_SUFFIX
         ),
     ),
@@ -188,10 +195,11 @@ JOBS = [
             "faction trooper: same style of military coat, webbing and gas "
             "mask, but recolor all purple/blue accents to a burnt "
             "orange/red color scheme instead, as if it belongs to an enemy "
-            "raider faction. Top-down bird's-eye-view video game character "
-            "sprite, viewed from directly above and slightly behind at a "
-            "steep downward angle (like an isometric top-down shooter), "
-            "holding a rifle."
+            "raider faction. Photorealistic full-body render in the same "
+            "cinematic, realistic rendering style as the reference photo "
+            "itself — not a cartoon, not cel-shaded, not a comic/ink style. "
+            "Eye-level, straight-on front view, standing pose, holding a "
+            "rifle aimed toward the camera."
             + CHROMA_PROMPT_SUFFIX
         ),
     ),

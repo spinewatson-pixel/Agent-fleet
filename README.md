@@ -4,7 +4,7 @@ One integrated, **read-only / advisory-only** architecture control plane. Import
 
 ## Fortress Siege (game/)
 
-A standalone, single-file browser game unrelated to the product above — open `game/index.html` directly, or serve it (`npx serve game`). You command Fortress Kaldris against endless waves of raiders: WASD to move, mouse to aim, click to fire, `R` to reload, `Q` for an artillery strike. No build step required.
+A standalone first-person 3D browser game unrelated to the product above — must be served over HTTP, not opened as a `file://` URL (`npx serve game` or `python3 -m http.server` from `game/`). Push out from Fortress Kaldris and capture/hold objectives against the Ashfall Raiders in a large combined-arms skirmish: WASD + mouse to move/look, click to fire, right-click to aim, `R` to reload, `E` to enter/exit the jeeps and boat staged near your lines. Built with Three.js (vendored in `game/vendor/`, no build step, no CDN dependency). Soldier art is generated from reference photos via `game/tools/generate_assets.py` (needs a `GEMINI_API_KEY` in `.env`).
 
 ## Clean clone → runnable product
 
